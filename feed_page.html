@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script type="text/javascript" src="./assets/js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="./assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./assets/js/angular.min.js"></script>
+    <script type="text/javascript" src="./assets/js/friends_controller.js"></script>
    </head>
 
-   <body>
+   <body ng-app="friends" ng-controller="friends_control">
            <div class="row" id="feedP">
              <div class="col-sm-3 col-sm-offset-1">
-                <h2>Zacebook</h2>
+                <h2>Zacebook {{friends.length}}</h2>
              </div>
              <div class="col-sm-3 col-lg-offset-4" id="search">
                  <div class="input-group">
@@ -35,13 +37,14 @@
      				    <li class="dropdpwn"><a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"><span style="color:#ffffff"><span class=" glyphicon glyphicon-user"></span>   Profile<span class="caret"></span></a>
    					       <ul class="dropdown-menu">
    		      			     <li><a href="#">Settings</a></li>
-   		      			     <li><a href="#">Log out</a></li>
+   		      			     <li><a href="log_out.php">Log out</a></li>
    		      			     <li class="divider"></li>
    		      			     <li><a href="#">Help</a></li>
    		    		    </ul>
      				    </li>
-     				    <li class="active"> <a href="#"><span style="color:#ffffff"> <span class="glyphicon glyphicon-globe">  News Feed</a></li>
-     				    <li class=""> <a href="#"><span style="color:#ffffff">Friends</a></li>
+     				    <li class=""> <a href="user_profile.html"><span style="color:#ffffff">
+                  <span class="glyphicon glyphicon-globe">News Feed</a></li>
+     				    <li class="active"> <a href="#"><span style="color:#ffffff">Friends</a></li>
    			      </ul>
              </div>
 
@@ -63,13 +66,13 @@
 
 
 
-                 <div class="row">
+                 <div class="row" ng-repeat="friend in friends">
                      <div class="col-lg-1 col-lg-offset-1" >
                        <img src="./assets/images/user2.png" alt="User1" style="float:left;width:50px;height:50px;  border-radius: 50%; margin-top:30px;">
                      </div>
                      <div class="col-lg-10" id="posts">
-                       <h5><b>Username1</b></h5>
-                       <h6 style="color:#838384" >Today 05:00 PM</h6>
+                       <h5><b>{{friend.id}} : {{friend.username}}</b></h5>
+                       <h6 style="color:#838384" >{{friend.created_at}}</h6>
                      </div>
 
                      <div class="col-lg-9 col-lg-offset-2">
@@ -84,7 +87,7 @@
                  </div>
 
 
-                 <div class="row">
+                 <!-- <div class="row">
                      <div class="col-lg-1 col-lg-offset-1" >
                        <img src="./assets/images/user3.png" alt="User1" style="float:left;width:50px;height:50px;  border-radius: 50%; margin-top:30px;">
                      </div>
@@ -102,7 +105,7 @@
                          proident, sunt in culpa qui officia deserunt mollit anim id est labor
                          um.
                      </div>
-                 </div>
+                 </div> -->
 
              </div>
              </div>

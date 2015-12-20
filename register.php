@@ -30,7 +30,7 @@
   $min = 3;
   $max = 70;
   $username_regex = '/^[\w.-]*$/';
-  $genders = array("male", "female");
+  $genders = array("Male", "Female");
   $marital_status = array("Single", "Engaged", "Married");
 
   $v->required('firstName')->lengthBetween($min, $max)->alpha();

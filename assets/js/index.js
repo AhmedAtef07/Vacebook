@@ -53,7 +53,7 @@ $(document).ready(function() {
     return true;
   }
 
-  $("#registration_form").submit(function(event) {
+  $(".registration_form").submit(function(event) {
     event.preventDefault();
     var formData = $("#registration_form").serializeArray();
     if (checkRegistration()) {
@@ -66,7 +66,7 @@ $(document).ready(function() {
         success: function(response) {
           console.log(response);
           if (response.succeeded && response.registered) {
-            window.location.href = "profile.php";
+            window.location.href = "user_profile.html";
           } else {
             response.errors.forEach(function(element) {
               alert(element);
@@ -77,10 +77,11 @@ $(document).ready(function() {
     }
   });
 
-  $("#login_form").submit(function(event) {
+  $(".login_form").submit(function(event) {
     event.preventDefault();
     var formData = $("#login_form").serializeArray();
     if (checkLogin()) {
+      console.log("login");
       console.log(formData);
       $.ajax({
         url: "login.php",
@@ -90,7 +91,7 @@ $(document).ready(function() {
         success: function(response) {
           console.log(response);
           if (response.succeeded && response.logined) {
-            window.location.href = "profile.php";
+            window.location.href = "user_profile.html";
           } else {
             response.messages.forEach(function(element) {
               console.log(element);
