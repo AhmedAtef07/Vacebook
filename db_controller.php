@@ -24,6 +24,31 @@
     return convertToArray($res);
   }
 
+  function getUserFriends($userId) {
+    $res = conn()->query("SELECT * FROM friends WHERE user_id='$userId'");
+    return convertToArray($res);
+  }
+
+  function searchByEmail($email) {
+    $res = conn()->query("SELECT * FROM users WHERE e_mail='$email'");
+    return $res;
+  }
+
+  function searchByName($firstName , $lastName) {
+    $res = conn()->query("SELECT * FROM users WHERE first_name='$firstName' AND last_name ='$lastName'");
+    return $res;
+  }
+
+  function searchByPhone($phoneNumber) {
+    $res = conn()->query("SELECT * FROM users WHERE phone_number='$phoneNumber'");
+    return $res;
+  }
+
+  function searchByCaption($text) {
+    $res = conn()->query("SELECT * FROM users JOIN posts ON users.user_id = posts.user_id WHERE caption LIKE '%'$text'%'");
+    return convertToArray($res);
+  }
+
   /*
    * Returns user_id if created, or false in case of an error.
    */
