@@ -1,0 +1,5 @@
+{
+    "require": {
+        "particle/validator": "^2.0"
+    }
+}

@@ -1,0 +1,53 @@
+body{
+	background-image: url(../images/green_theme.png);
+	background-attachment: fill;
+	background-size: cover;
+	height: 500px;
+	width :100%;
+
+}
+#header{
+	color: #ffffff;
+	font-size: 120%;
+	margin-top: 20px;
+}
+#tab {
+
+	background-color: #ffffff;
+	opacity:0.9;
+	border-radius: 15px 15px 15px 15px;
+	float:center;
+}
+#SignUp , #Login {
+	padding: 20px;
+}
+#feedP {
+	background-color: #00cc66;
+	color: #ffffff;
+	font-size: 120%;
+	padding: 10px;
+}
+#search{
+	padding-top: 15px;
+}
+#nav
+{
+    background-color:#00cc66;
+    height:850px;
+	color: #ffffff;
+}
+#body {
+	background-color:#ffffff;
+    height:850px;
+	color: #000000;
+	opacity: 0.9;
+}
+.green a:hover,
+.green .active a,
+.active a:hover {
+    background-color: #148b3b !important;
+     }
+#textArea , #btn , #posts
+{
+	margin-top: 15px;
+}
