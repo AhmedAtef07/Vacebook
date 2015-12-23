@@ -51,4 +51,6 @@ html,body { height:100%; }
     background-repeat: no-repeat;
 }
 
-
+.info-point {
+  display: none
+}
