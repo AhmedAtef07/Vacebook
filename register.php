@@ -11,15 +11,15 @@
   // session_start();
 
   $user = [
-    'firstName' => trim($_POST['first_name']),
-    'lastName' => trim($_POST['last_name']),
+    'first_name' => trim($_POST['first_name']),
+    'last_name' => trim($_POST['last_name']),
     'username' => trim($_POST['username']),
     'email' => trim($_POST['email']),
     'password' => $_POST['password'],
     'gender' => trim($_POST['gender']),
     'birthdate' => trim($_POST['birthdate']),
-    'phoneNumber' => trim($_POST['phone_number']),
-    'profilePicturePath' => trim($_POST['profile_picture_path']),
+    'phone_number' => trim($_POST['phone_number']),
+    'profile_picture' => trim($_POST['profile_picture_path']),
     'hometown' => trim($_POST['hometown']),
     'maritalStatus' => trim($_POST['maritalStatus']),
     'about' => trim($_POST['about'])
@@ -28,23 +28,23 @@
   $v = new Validator();
 
   $min = 3;
-  $max = 70;
+  $max = 50;
   $username_regex = '/^[\w.-]*$/';
   $genders = array("Male", "Female");
   $marital_status = array("Single", "Engaged", "Married");
 
-  $v->required('firstName')->lengthBetween($min, $max)->alpha();
-  $v->required('lastName')->lengthBetween($min, $max)->alpha();
+  $v->required('first_name')->lengthBetween($min, $max)->alpha();
+  $v->required('last_name')->lengthBetween($min, $max)->alpha();
   $v->required('username')->lengthBetween($min, $max)->regex($username_regex);
   $v->required('email')->email();
   $v->required('password');
   $v->required('gender')->inArray($genders);
   $v->required('birthdate')->datetime('Y-m-d');
-  $v->optional('phoneNumber')->length(11)->digits();
-  $v->optional('profilePicturePath');
+  $v->optional('phone_number')->lengthBetween(9, 20)->digits();
+  $v->optional('profile_picture');
   $v->optional('hometown')->lengthBetween($min, $max);
   $v->optional('maritalStatus')->inArray($marital_status);
-  $v->optional('about')->lengthBetween($min, $max);
+  $v->optional('about');
   $result = $v->validate($user);
 
   $response['succeeded'] = $result->isValid();

@@ -31,30 +31,37 @@
 
   function searchByEmail($email) {
     $res = conn()->query("SELECT * FROM users WHERE e_mail='$email'");
-    return $res;
+    return convertToArray($res);
   }
 
-  function searchByName($firstName , $lastName) {
+  function searchByName($firstName, $lastName) {
     $res = conn()->query("SELECT * FROM users WHERE first_name='$firstName' AND last_name ='$lastName'");
-    return $res;
+    return convertToArray($res);
   }
 
   function searchByPhone($phoneNumber) {
     $res = conn()->query("SELECT * FROM users WHERE phone_number='$phoneNumber'");
-    return $res;
+    return convertToArray($res);
   }
 
   function searchByCaption($text) {
-    $res = conn()->query("SELECT * FROM users JOIN posts ON users.user_id = posts.user_id WHERE caption LIKE '%'$text'%'");
+    $res = conn()->query("SELECT * FROM users JOIN posts ON users.id = posts.user_id
+        WHERE caption LIKE '%'$text'%'");
     return convertToArray($res);
   }
 
   /*
    * Returns user_id if created, or false in case of an error.
    */
-  function isUserExists($username, $password) {
+  function isUserExists($username_or_email, $password) {
     $password = sha1($password);
-    $res = conn()->query("SELECT * FROM users WHERE username='$username' AND password='$password'");
+    if (strpos($username_or_email, '@') !== false) {
+      $res = conn()->query("SELECT * FROM users WHERE
+        email='$username_or_email' AND password='$password'");
+    } else {
+      $res = conn()->query("SELECT * FROM users WHERE
+        username='$username_or_email' AND password='$password'");
+    }
 
     if($res->num_rows == 1) return $res->fetch_assoc()['id'];
     else                    return false;
@@ -64,8 +71,23 @@
    * Returns user_id if created, or false in case of an error.
    */
   function tryCreateUser($user) {
-    $query = conn()->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-    $query->bind_param('ss', $user['username'], sha1($user['password']));
+    $query = conn()->prepare("INSERT INTO users
+        (username, first_name, last_name, gender, birthdate, email, password, phone_number,
+          hometown, marital_status, about_me, profile_pic)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $query->bind_param('ssssssssssss',
+      $user['username'],
+      $user['first_name'],
+      $user['last_name'],
+      $user['gender'],
+      $user['birthdate'],
+      $user['email'],
+      sha1($user['password']),
+      $user['phone_number'],
+      $user['hometown'],
+      $user['marital_status'],
+      $user['about_me'],
+      $user['profile_pic']);
     $query->execute();
     $query_insert_id = $query->insert_id;
     $query->close();
