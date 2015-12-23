@@ -38,12 +38,11 @@ $(document).ready(function() {
   }
 
   function checkLogin() {
-    var email_username = $('.login #email_username').val();
+    var email_or_username = $('.login #email_or_username').val();
     var password = $('.login #password').val();
-    var username_regex = /^[\w.-]*$/;
-    var email_regex = /\S+@\S+\.\S+/;
-    if (email_username === null || email_username.trim().length === 0 ||
-        (!email_regex.test(email_username) && !username_regex.test(email_username))) {
+    var username_or_email_regex = /^[\w.-]*$|\S+@\S+\.\S+/;
+    if (email_or_username === null || email_or_username.trim().length === 0 ||
+    (!username_or_email_regex.test(email_or_username))) {
       alert("Please Enter Valid Email or Username");
       return false;
     } else if (password === null || password.length === 0) {

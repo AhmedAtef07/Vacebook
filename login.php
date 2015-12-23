@@ -11,25 +11,25 @@
   // session_start();
 
   $user = [
-    'email_username' => trim($_POST['email_username']),
+    'email_or_username' => trim($_POST['email_or_username']),
     'password' => $_POST['password'],
   ];
 
   $v = new Validator();
 
   $min = 3;
-  $max = 70;
-  $username_regex = '/^[\w.-]*$/';
+  $max = 50;
+  $username_email_regex = '/^[\w.-]*$|\S+@\S+\.\S+/';
 
-  $v->required('email_username')->lengthBetween($min, $max)->regex($username_regex);
-  // $v->optional('email')->email();
+  $v->required('email_or_username')->lengthBetween($min, $max)->regex($username_email_regex);
   $v->required('password');
+
   $result = $v->validate($user);
 
   if ($result->isValid()) {
     $response['succeeded'] = true;
     if ($response['succeeded']) {
-      $_SESSION['user_id'] = isUserExists($user['email_username'], $user['password']);
+      $_SESSION['user_id'] = isUserExists($user['email_or_username'], $user['password']);
       if ($_SESSION['user_id']) {
         $response['logined'] = true;
         // echo $_SESSION['user_id'];
