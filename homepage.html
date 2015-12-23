@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Sign-Up/Login Form</title>
+    <link type="text/css" rel="stylesheet" href="./assets/css/font.css">
+    <link type="text/css" rel="stylesheet" href="./assets/css/normalize.css">
+    <link type="text/css" rel="stylesheet" href="./assets/css/style_2.css">
+    <script type="text/javascript" src="./assets/js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="./assets/js/index.js"></script>
+    <script type="text/javascript" src="./assets/js/angular.min.js"></script>
+    <script type="text/javascript" src="./assets/js/register_login_controller.js"></script>
+  </head>
+
+  <body ng-app="register_login" ng-controller="register_login_control">
+
+    <div class="form">
+      <ul class="tab-group">
+        <li class="tab active"><a href="#signup">Sign Up</a></li>
+        <li class="tab"><a href="#login">Log In</a></li>
+      </ul>
+      <div class="tab-content">
+
+
+
+        <div id="signup" class="signup registration_form">
+          <h1>Sign Up for Free</h1>
+          <form method="post" id="registration_form">
+
+          <div class="top-row">
+            <div class="field-wrap">
+              <label>
+                First Name<span class="req">*</span>
+              </label>
+              <input type="text" required autocomplete="off" id="first_name" name="first_name"/>
+            </div>
+
+            <div class="field-wrap">
+              <label>
+                Last Name<span class="req">*</span>
+              </label>
+              <input type="text" required autocomplete="off" id="last_name" name="last_name"/>
+            </div>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Username<span class="req">*</span>
+            </label>
+            <input type="text" required autocomplete="off" id="username" name="username"/>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Email Address<span class="req">*</span>
+            </label>
+            <input type="email" required autocomplete="off" id="email" name="email"/>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Set A Password<span class="req">*</span>
+            </label>
+            <input type="password" required autocomplete="off" id="password" name="password"/>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Gender<span class="req">*</span>
+            </label>
+            <input type="text" required autocomplete="off" id="gender" name="gender"/>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Birthdate<span class="req">*</span>
+            </label>
+            <input type="date" required autocomplete="off" id="birthdate" name="birthdate" />
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Phone number
+            </label>
+            <input type="text" autocomplete="off" id="phone_number" name="phone_number"/>
+          </div>
+
+            <div class="field-wrap">
+              <label>
+                Profile Picture
+              </label>
+              <input type="text" autocomplete="off" id="profile_picture_path"
+                name="profile_picture_path">
+            </div>
+
+            <div class="field-wrap">
+              <label>
+                Hometown
+              </label>
+              <input type="text" autocomplete="off" id="hometown" name="hometown">
+            </div>
+
+            <div class="field-wrap">
+              <label>
+                Marital Status
+              </label>
+              <input type="text" autocomplete="off" id="maritalStatus" name="maritalStatus">
+            </div>
+
+            <div class="field-wrap">
+              <label>
+                Enter about:
+              </label>
+              <input type="text" autocomplete="off" id="about" name="about">
+            </div>
+            <br/>
+
+          <button type="submit" class="button button-block">Get Started</button>
+
+          </form>
+
+        </div>
+
+
+
+        <div id="login" class="login login_form">
+          <h1>Welcome Back!</h1>
+          <form method="post" id="login_form">
+
+            <div class="field-wrap">
+            <label>
+              Email Address or Username<span class="req">*</span>
+            </label>
+            <input type="text" required autocomplete="off" id="email_username" name="email_username"/>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Password<span class="req">*</span>
+            </label>
+            <input type="password" required autocomplete="off" id="password" name="password"/>
+          </div>
+
+          <p class="forgot"><a href="#">Forgot Password?</a></p>
+
+          <button type="submit" class="button button-block">Log In</button>
+
+          </form>
+
+        </div>
+
+      </div><!-- tab-content -->
+  </div> <!-- /form -->
+
+  </body>
+</html>

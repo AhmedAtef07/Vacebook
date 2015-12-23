@@ -1,156 +1,118 @@
 <!DOCTYPE html>
-<html >
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <title>Sign-Up/Login Form</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Write anything, format it, then download as an image with a single click.">
+    <meta name="author" content="Ahmed Atef">
+    <title>Imagify</title>
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href="assets/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.0/css/bootstrap-colorpicker.css"> -->
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.css">
+    <link href="assets/css/index.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="./assets/css/font.css">
-    <link type="text/css" rel="stylesheet" href="./assets/css/normalize.css">
-    <link type="text/css" rel="stylesheet" href="./assets/css/style_2.css">
-    <script type="text/javascript" src="./assets/js/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="./assets/js/index.js"></script>
-    <script type="text/javascript" src="./assets/js/angular.min.js"></script>
-    <script type="text/javascript" src="./assets/js/register_login_controller.js"></script>
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
+  <body onload="runOnce()">
+    <div class="" id="app" style="padding: 0; width: 100%;">
+      <!-- Header -->
+      <div class="row" style="background-color: #FAFAFA; color: #2C5D87; margin: 0;">
+        <div class="col-xs-12 text-center">
+          <h1 class="text-center">Vacebook</h1>
+        </div>
+      </div>
+      <!-- ./Header -->
 
-  <body ng-app="register_login" ng-controller="register_login_control">
-
-    <div class="form">
-      <ul class="tab-group">
-        <li class="tab active"><a href="#signup">Sign Up</a></li>
-        <li class="tab"><a href="#login">Log In</a></li>
-      </ul>
-      <div class="tab-content">
-
-
-
-        <div id="signup" class="signup registration_form">
-          <h1>Sign Up for Free</h1>
-          <form method="post" id="registration_form">
-
-          <div class="top-row">
-            <div class="field-wrap">
-              <label>
-                First Name<span class="req">*</span>
-              </label>
-              <input type="text" required autocomplete="off" id="first_name" name="first_name"/>
-            </div>
-
-            <div class="field-wrap">
-              <label>
-                Last Name<span class="req">*</span>
-              </label>
-              <input type="text" required autocomplete="off" id="last_name" name="last_name"/>
-            </div>
+      <!-- TopBar -->
+      <div class="row" style="background-color: #13141A; height: 100px; margin: 0;">
+      <!-- <div class="row" style="height: 100px; margin: 0;"> -->
+        <div class="btn btn-primary top-button">
+          <div>
+            <i class="fa fa-user button-img"></i>
+            <br>
+            Profile
           </div>
-
-          <div class="field-wrap">
-            <label>
-              Username<span class="req">*</span>
-            </label>
-            <input type="text" required autocomplete="off" id="username" name="username"/>
+        </div>
+        <div class="btn btn-primary top-button">
+          <div>
+            <i class="fa fa-users button-img"></i>
+            <br>
+            Friends
           </div>
-
-          <div class="field-wrap">
-            <label>
-              Email Address<span class="req">*</span>
-            </label>
-            <input type="email" required autocomplete="off" id="email" name="email"/>
+        </div>
+        <div class="btn btn-primary top-button" style="background-color: #2D5F8A;">
+          <div>
+            <i class="fa fa-home button-img"></i>
+            <br>
+            Home
           </div>
-
-          <div class="field-wrap">
-            <label>
-              Set A Password<span class="req">*</span>
-            </label>
-            <input type="password" required autocomplete="off" id="password" name="password"/>
+        </div>
+        <div class="btn btn-primary top-button">
+          <div>
+            <i class="fa fa-plus button-img"></i>
+            <br>
+            Requsts
           </div>
-
-          <div class="field-wrap">
-            <label>
-              Gender<span class="req">*</span>
-            </label>
-            <input type="text" required autocomplete="off" id="gender" name="gender"/>
+        </div>
+        <div class="btn btn-primary top-button">
+          <div>
+            <i class="fa fa-globe button-img"></i>
+            <br>
+            Notifications
           </div>
+        </div>
+      </div>
+      <!-- ./TopBar -->
 
-          <div class="field-wrap">
-            <label>
-              Birthdate<span class="req">*</span>
-            </label>
-            <input type="date" required autocomplete="off" id="birthdate" name="birthdate" />
+      <!-- Body -->
+      <div class="row" style="background-color: #FFFFFF; margin: 0;">
+        <div class="left-col">
+          <strong>About</strong>
+          <div class="text-center profile-info top-10">
+            <div class="circle-image" style="background-image:url('http://placekitten.com/g/200/400');"></div>
+            <br>
+            <strong style="font-size: 25px;">Ahmed Atef</strong>
+            <br>  
+            <p style="color: #557998; font-size: small;">
+              @AhmedAtef07
+            </p>
+            <br>
+            <div class="btn btn-success">Add Friend</div>
           </div>
-
-          <div class="field-wrap">
-            <label>
-              Phone number
-            </label>
-            <input type="text" autocomplete="off" id="phone_number" name="phone_number"/>
-          </div>
-
-            <div class="field-wrap">
-              <label>
-                Profile Picture
-              </label>
-              <input type="text" autocomplete="off" id="profile_picture_path"
-                name="profile_picture_path">
-            </div>
-
-            <div class="field-wrap">
-              <label>
-                Hometown
-              </label>
-              <input type="text" autocomplete="off" id="hometown" name="hometown">
-            </div>
-
-            <div class="field-wrap">
-              <label>
-                Marital Status
-              </label>
-              <input type="text" autocomplete="off" id="maritalStatus" name="maritalStatus">
-            </div>
-
-            <div class="field-wrap">
-              <label>
-                Enter about:
-              </label>
-              <input type="text" autocomplete="off" id="about" name="about">
-            </div>
-            <br/>
-
-          <button type="submit" class="button button-block">Get Started</button>
-
-          </form>
 
         </div>
-
-
-
-        <div id="login" class="login login_form">
-          <h1>Welcome Back!</h1>
-          <form method="post" id="login_form">
-
-            <div class="field-wrap">
-            <label>
-              Email Address or Username<span class="req">*</span>
-            </label>
-            <input type="text" required autocomplete="off" id="email_username" name="email_username"/>
-          </div>
-
-          <div class="field-wrap">
-            <label>
-              Password<span class="req">*</span>
-            </label>
-            <input type="password" required autocomplete="off" id="password" name="password"/>
-          </div>
-
-          <p class="forgot"><a href="#">Forgot Password?</a></p>
-
-          <button type="submit" class="button button-block">Log In</button>
-
-          </form>
-
+        <div class="middle-col">
+          subtenure insphere succuss avolate overripen hypertorrid cocking Anomalurus emollient opdalite dorsabdominal ambience automorphic undarken blotchy mammalgia passover malkin giobertite nonvegetative palpably spermatoid reprosecution chevalier
         </div>
+        <div class="right-col">
+          <strong>Suggestions</strong>
+        </div>
+      </div>
+      <!-- ./Body -->
 
-      </div><!-- tab-content -->
-  </div> <!-- /form -->
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="./assets/js/index_atef.js"></script>
+    <!-- Bootstrap Colorpicker JavaScript -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.0/js/bootstrap-colorpicker.js"></script> -->
+    <!-- VueJS -->
 
   </body>
-</html>
+</html>   
+

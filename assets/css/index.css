@@ -1,0 +1,54 @@
+@import url(https://fonts.googleapis.com/css?family=Amiri&subset=arabic,latin);
+
+.top-5  { margin-top:  5px; }
+.top-10 { margin-top: 10px; }
+.top-15 { margin-top: 15px; }
+.top-20 { margin-top: 20px; }
+.top-30 { margin-top: 30px; }
+
+html,body { height:100%; }
+
+*, h1, h2, h3, h4, h5, h6, p, div, body, html {
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.top-button {
+  height: 100%;
+  width: 20%;
+  float: left;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: #13141A;
+  color: #EBEFF2;;
+}
+
+.top-button .button-img {
+  font-size: 35px;
+  padding-bottom: 5px;
+}
+
+.left-col, .right-col {
+  background-color: #FAFAFA;
+  width: 20%;
+  padding: 20px;
+  float: left;
+}
+.middle-col {
+  background-color: #FFFFFF;
+  width: 60%;
+  padding: 20px;
+  float: left;
+}
+
+.circle-image{
+    width: 100%;
+    border-radius: 50%;
+    display: block;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
