@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Write anything, format it, then download as an image with a single click.">
+    <meta name="author" content="Ahmed Atef">
+    <link type="text/css" rel="stylesheet" href="post.css">
+    <title>Imagify</title>
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href="assets/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.0/css/bootstrap-colorpicker.css"> -->
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.css">
+    <link href="assets/css/index.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="./assets/css/font.css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body onload="runOnce()">
+    <div class="" id="app" style="padding: 0; width: 100%;">
+      <!-- Header -->
+      <div class="row" style="background-color: #FAFAFA; color: #2C5D87; margin: 0;">
+        <div class="col-xs-12 text-center">
+          <h1 class="text-center">Vacebook</h1>
+        </div>
+      </div>
+      <!-- ./Header -->
+
+      <!-- TopBar -->
+      <div class="row" style="background-color: #13141A; height: 100px; margin: 0;">
+      <!-- <div class="row" style="height: 100px; margin: 0;"> -->
+        <div class="btn btn-primary top-button">
+          <div>
+            <i class="fa fa-user button-img"></i>
+            <br>
+            Profile
+          </div>
+        </div>
+        <div class="btn btn-primary top-button">
+          <div>
+            <i class="fa fa-users button-img"></i>
+            <br>
+            Friends
+          </div>
+        </div>
+        <div class="btn btn-primary top-button" style="background-color: #2D5F8A;">
+          <div>
+            <i class="fa fa-home button-img"></i>
+            <br>
+            Home
+          </div>
+        </div>
+        <div class="btn btn-primary top-button">
+          <div>
+            <i class="fa fa-plus button-img"></i>
+            <br>
+            Requsts
+          </div>
+        </div>
+        <div class="btn btn-primary top-button">
+          <div>
+            <i class="fa fa-globe button-img"></i>
+            <br>
+            Notifications
+          </div>
+        </div>
+      </div>
+      <!-- ./TopBar -->
+
+      <!-- Body -->
+      <div class="row" style="background-color: #FFFFFF; margin: 0;">
+        <div class="left-col">
+          <strong>About</strong>
+          <div class="text-center profile-info top-10">
+            <div class="circle-image" style="background-image:url('http://placekitten.com/g/200/400');"></div>
+            <br>
+            <strong style="font-size: 25px;">Ahmed Atef</strong>
+            <br>  
+            <p style="color: #557998; font-size: small;">
+              @AhmedAtef07
+            </p>
+            <br>
+            <div class="btn btn-success">Add Friend</div>
+          </div>
+
+        </div>
+        <div class="middle-col">
+        <div class="well well-lg" id="post">
+        <!--post header-->
+        <div class="row" id="post_header">
+          <div class="col-lg-1">
+                  <img src="images/user1.png" alt="User1" class="header_pic" >
+          </div>
+          <div class="col-lg-4">
+                <h5 class="header_user"><b>Username1</b></h5>
+                <h6 class="header_date">23-Dec-15 05:00 PM</h6>
+          </div>
+        </div>
+        
+        <!--post body-->
+        <div class="row" id = "post_body">
+          <div class="col-lg-12" id="post_caption">
+              <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+          </div>
+        </div> 
+        
+        <!--comment_control-->
+        <hr class="hr">
+        <div id="comment_control">
+        <div class="btn-group" role="group" >
+              
+                <button type="button" class="btn btn-default" id="btn_like" onfocus="this.blur();"><i class="fa fa-thumbs-o-up fa-lg"></i>  
+                  Like</button>
+                <button type="button" class="btn btn-default" id="btn_comment" onfocus="this.blur();"><i class="fa fa-commenting-o fa-lg"></i>  Comment</button>
+              
+        </div>
+        </div>
+        <hr class="hr">
+        
+        <!--comments-->
+        <div class="row" id="comments_body">
+          
+          <div class="row" id="comments_header">
+            <div class="col-lg-1">
+                  <img src="images/user1.png" alt="User1" class="header_pic" >
+            </div>
+            <div class="col-lg-4">
+                <h5 class="header_user"><b>Username1</b></h5>
+                <h6 class="header_date">23-Dec-15 05:00 PM</h6>
+            </div>
+
+            <div class="col-lg-1 col-lg-offset-6">
+              <button type="button" class="btn btn-default" id="btn_delete" onfocus="this.blur();"><span class="glyphicon glyphicon-trash">
+              </span>
+              </button>
+            </div>
+
+          </div>
+
+          <div class="col-lg-11" id="comments_caption">
+              <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+          </div>
+        
+        </div> 
+        <div class="row" id="comments_body">
+          
+          <div class="row" id="comments_header">
+            <div class="col-lg-1">
+                  <img src="images/user1.png" alt="User1" class="header_pic" >
+            </div>
+            <div class="col-lg-4">
+                <h5 class="header_user"><b>Username1</b></h5>
+                <h6 class="header_date">23-Dec-15 05:00 PM</h6>
+            </div>
+
+          <div class="col-lg-1 col-lg-offset-6">
+              <button type="button" class="btn btn-default" id="btn_delete" onfocus="this.blur();"><span class="glyphicon glyphicon-trash">
+              </span>
+              </button>
+          </div>
+
+          </div>
+
+
+          <div class="col-lg-11" id="comments_caption">
+              <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+          </div>
+        </div> 
+        
+        <!--commenting-->
+        <div class="row" id="commenting_body">
+          <div class="col-lg-1">
+                <img src="images/user1.png" alt="User1" style="float:left; width:45px; height:45px;border-radius: 30%;">
+          </div>
+        
+          <div class="col-lg-11" >
+            <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Comment" id="comment_caption">
+                  
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onfocus="this.blur();" id="btn_pic">
+                        <i class="fa fa-camera-retro fa-lg"></i>
+                    </button>
+
+                    <button class="btn btn-default" type="button" onfocus="this.blur();" id="btn_emoji">
+                        <i class="fa fa-smile-o fa-lg"></i>
+                    </button>
+                  </span>
+            </div>
+          </div>
+        
+        </div>
+  
+    </div>
+
+
+
+        </div>
+        <div class="right-col">
+          <strong>Suggestions</strong>
+        </div>
+      </div>
+      <!-- ./Body -->
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="./assets/js/index_atef.js"></script>
+    <!-- Bootstrap Colorpicker JavaScript -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.0/js/bootstrap-colorpicker.js"></script> -->
+    <!-- VueJS -->
+
+  </body>
+</html>   
+

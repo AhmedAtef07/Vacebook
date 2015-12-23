@@ -1,0 +1,85 @@
+#post
+{
+	margin:5px;
+}
+h6.header_date
+{
+
+	margin-top: 5px;
+	color: #797a79;
+}
+#post_header
+{
+	background-color: #ffffff;
+	margin: 0px;
+	padding: 10px;
+	border-radius: 10px 10px 0px 0px;
+
+}
+#post_body
+{
+	margin: 0px;
+	background-color: #ffffff;
+}
+
+.hr{
+	margin: 0px;
+	color: #ffffff;
+}
+.header_pic
+{
+	margin-top: 10px; 
+	float:center;
+	width:45px; 
+	height:45px; 
+	border-radius: 30%;
+}
+
+#comments_header
+{
+	padding: 10px;
+}
+#comments_body
+{
+	margin-left: 10px;
+
+}
+#commenting_body
+{
+	margin: 10px;
+	padding-top: 5px;
+}
+#comment_control
+{
+	background-color: #2C5D87;
+}
+#btn_delete
+{
+	margin-right:20px; 
+	float:right;
+	background-color: #ECF0F1;
+	border-color: #ECF0F1;
+	color: #cfd1d2;
+}
+#btn_delete:hover
+{ 
+    color:#22496b ;
+    border-color: #ECF0F1;
+}
+#btn_like , #btn_comment 
+{
+	width: 150px;
+	background-color: #2C5D87;
+	border-color: #2C5D87;
+}
+#btn_pic ,#btn_emoji
+{
+	background-color: #2C5D87;
+	border-width: 0.1px;
+	border-color: #2C5D87;
+}
+#btn_like:hover , #btn_comment:hover ,  #btn_pic:hover , #btn_emoji:hover
+{ 
+    color:#ffffff ;
+    background-color: #22496b;
+}
