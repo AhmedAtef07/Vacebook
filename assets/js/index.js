@@ -58,7 +58,7 @@ $(document).ready(function() {
     if (checkRegistration()) {
       console.log(formData);
       $.ajax({
-        url: "register.php",
+        url: "php/register.php",
         type: "POST",
         dataType: "JSON",
         data: formData,

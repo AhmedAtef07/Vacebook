@@ -75,6 +75,7 @@ function toggleInfoPoints(target) {
 
 
 angular.module('app', ['ui.router'])
+
 .config(function($stateProvider, $urlRouterProvider) {
 
   $urlRouterProvider.otherwise("/home");
@@ -94,12 +95,37 @@ angular.module('app', ['ui.router'])
       templateUrl: "partials/home.html"
     });
 })
-.controller('home_controller', ['$scope', function($scope) {
-  $scope.customer = {
-    name: 'Naomi',
-    address: '1600 Amphitheatre'
-  };
-}])
+
+.controller('friendsController', function($scope, $http, $interval) {
+  $http.get('php/friends.php')
+    .success(function(response, status, headers, config) {
+      $scope.userId = response.user_id;
+      $scope.friends = response.friends;
+      console.log($scope.friends.length);
+    })
+    .error(function(response, status, headers, config) {
+      console.log(response);
+      console.log(status);
+    });
+
+  $interval(function() {
+    load_pictures();
+  }, 5000);
+
+  function load_pictures() {
+    $http.get('php/friends.php')
+      .success(function(response, status, headers, config) {
+        $scope.userId = response.user_id;
+        $scope.friends = response.friends;
+      })
+      .error(function(response, status, headers, config) {
+        console.log(response);
+        console.log(status);
+      });
+  }
+
+})
+
 .directive('suggestedFriend', function() {
   return {
     templateUrl: 'directives/suggestion_friend_block.html'
