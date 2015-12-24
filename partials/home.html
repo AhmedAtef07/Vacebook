@@ -1,2 +1,6 @@
-<post></post>
-<post></post>
+<div ng-controller="postsController">
+  {{ posts.length }}
+  <div ng-repeat="post in posts">
+    <post></post>
+  </div>
+</div>

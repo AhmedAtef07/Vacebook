@@ -99,6 +99,7 @@ angular.module('app', ['ui.router'])
 .controller('friendsController', function($scope, $http, $interval) {
   $http.get('php/friends.php')
     .success(function(response, status, headers, config) {
+      // console.log(response);
       $scope.userId = response.user_id;
       $scope.friends = response.friends;
       console.log($scope.friends.length);
@@ -109,10 +110,10 @@ angular.module('app', ['ui.router'])
     });
 
   $interval(function() {
-    load_pictures();
+    load_friends();
   }, 5000);
 
-  function load_pictures() {
+  function load_friends() {
     $http.get('php/friends.php')
       .success(function(response, status, headers, config) {
         $scope.userId = response.user_id;
@@ -123,7 +124,43 @@ angular.module('app', ['ui.router'])
         console.log(status);
       });
   }
+})
 
+.controller('postsController', function($scope, $http, $interval) {
+  $http.get('php/user_posts.php').
+    success(function(response, status, headers, config) {
+      console.log(response);
+      if (!response.signed) {
+        window.location.href = "index.html";
+      } else {
+        $scope.userId = response.user_id;
+        $scope.posts = response.posts;
+      }
+    }).
+    error(function(response, status, headers, config) {
+      console.log(response);
+      console.log(status);
+    });
+
+  $interval(function(){
+    load_posts();
+  },5000);
+  function load_posts(){
+    $http.get('php/user_posts.php').
+      success(function(response, status, headers, config) {
+        // console.log(response);
+        if (!response.signed) {
+          window.location.href = "index.html";
+        } else {
+          $scope.userId = response.user_id;
+          $scope.posts = response.posts;
+        }
+      }).
+      error(function(response, status, headers, config) {
+        console.log(response);
+        console.log(status);
+      });
+  }
 })
 
 .directive('suggestedFriend', function() {

@@ -65,7 +65,7 @@ $(document).ready(function() {
         success: function(response) {
           console.log(response);
           if (response.succeeded && response.registered) {
-            window.location.href = "user_profile.html";
+            window.location.href = "index.html";
           } else {
             response.errors.forEach(function(element) {
               alert(element);
@@ -83,7 +83,7 @@ $(document).ready(function() {
       console.log("login");
       console.log(formData);
       $.ajax({
-        url: "login.php",
+        url: "php/login.php",
         type: "POST",
         dataType: "JSON",
         data: formData,
