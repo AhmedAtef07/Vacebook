@@ -1,6 +1,8 @@
 <?php
   require 'db_connect.php';
 
+  // getAllPostswithComments();
+
   function convertToArray(&$response) {
     $queryArray = array();
     while ($row = $response->fetch_assoc()) {
@@ -16,6 +18,28 @@
 
   function getAllPosts() {
     $res = conn()->query("SELECT * FROM posts");
+    return convertToArray($res);
+  }
+
+  function getAllPostswithComments() {
+    $res = conn()->query("SELECT * FROM posts");
+    $posts = convertToArray($res);
+    foreach ($posts as $ind => $post ) {
+      // print_r($post);
+      // echo $post['id'];
+      $posts[$ind]['comments'] = getPostComments($post['id']);
+      // $post['comments'] = getPostComments($post['id']);
+      // foreach ($post as $key => $value) {
+      //   echo $key;
+      //   echo $value + "\n";
+      // }
+    }
+    // print_r($posts);
+    return $posts;
+  }
+
+  function getPostComments($postId) {
+    $res = conn()->query("SELECT * FROM comments WHERE post_id='$postId'");
     return convertToArray($res);
   }
 

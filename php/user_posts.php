@@ -11,7 +11,8 @@
     $user_id = $_SESSION["user_id"];
     $response['signed'] = true;
     $response['user_id'] = $user_id;
-    $response['posts'] = getUserPosts($user_id);
+    $response['posts'] = getAllPostswithComments();
+    // $response['posts'] = getUserPosts($user_id);
     // $response['posts'] = getAllPosts();
   } else {
     header("Location: index.html");
