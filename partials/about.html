@@ -21,13 +21,13 @@
     <p class="info-point">
       <strong>{{ user.birthdate }}</strong>
     </p>
-    <p class="info-point" ng-if="user.phone_number!=''&&user.phone_number!=NULL">
+    <p class="info-point" ng-if="user.phone_number">
       <strong>{{ user.phone_number }}</strong>
     </p>
-    <p class="info-point" ng-if="user.hometown!=''&&user.hometown!=NULL">
+    <p class="info-point" ng-if="user.hometown">
       <strong>{{ user.hometown }}</strong>
     </p>
-    <p class="info-point" ng-if="user.marital_status!=''&&user.marital_status!=NULL">
+    <p class="info-point" ng-if="user.marital_status">
       <strong>{{ user.marital_status }}</strong>
     </p>
   </div>

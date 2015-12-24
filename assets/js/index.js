@@ -65,7 +65,7 @@ $(document).ready(function() {
         success: function(response) {
           console.log(response);
           if (response.succeeded && response.registered) {
-            window.location.href = "index.html";
+            window.location.href = "/";
           } else {
             response.errors.forEach(function(element) {
               alert(element);
@@ -90,7 +90,7 @@ $(document).ready(function() {
         success: function(response) {
           console.log(response);
           if (response.succeeded && response.logined) {
-            window.location.href = "user_profile.html";
+            window.location.href = "/";
           } else {
             response.messages.forEach(function(element) {
               console.log(element);
