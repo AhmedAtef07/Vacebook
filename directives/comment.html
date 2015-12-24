@@ -7,9 +7,10 @@
       <h5 class="header_user"><b>User {{comment.user_id}}</b></h5>
       <h6 class="header_date">{{comment.created_at}}</h6>
     </div>
-    <div class="col-lg-1 col-lg-offset-6">
-      <button type="button" class="btn btn-default" id="btn_delete" onfocus="this.blur();"><span class="glyphicon glyphicon-trash">
-      </span>
+    <div class="col-lg-1 col-lg-offset-6" ng-if="comment.user_id===user.id">
+      <button type="button" class="btn btn-default" id="btn_delete" onfocus="this.blur();"
+        ng-click="deletePost(comment.id)">
+        <span class="glyphicon glyphicon-trash"></span>
       </button>
     </div>
   </div>

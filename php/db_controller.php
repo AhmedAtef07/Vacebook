@@ -2,6 +2,7 @@
   require 'db_connect.php';
 
   // getAllPostswithComments();
+  // getUserInfo('1');
 
   function convertToArray(&$response) {
     $queryArray = array();
@@ -14,6 +15,13 @@
   function getAllUsers() {
     $res = conn()->query("SELECT * FROM users");
     return convertToArray($res);
+  }
+
+  function getUserInfo($userId) {
+    $res = conn()->query("SELECT id, username, first_name, last_name, gender, birthdate, email,
+      phone_number, hometown, marital_status, about_me, profile_pic FROM users WHERE id='$userId'");
+      // print_r(convertToArray($res));
+    return convertToArray($res)[0];
   }
 
   function getAllPosts() {

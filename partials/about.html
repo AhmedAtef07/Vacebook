@@ -2,25 +2,36 @@
 <div class="text-center profile-info top-10">
   <div class="circle-image" style="background-image:url('http://placekitten.com/g/200/400');"></div>
   <br>
-  <strong style="font-size: 25px;">Ahmed Atef</strong>
-  <br>  
+  <strong style="font-size: 25px;">{{ user.first_name }} {{ user.last_name }}</strong>
+  <br>
   <p style="color: #557998; font-size: small;">
-    @AhmedAtef07
+    @{{ user.username }}
   </p>
   <p><strong>720 posts</strong></p>
   <div class="btn btn-success">Add Friend</div>
-  
+
 
   <div id="extra-content">
-    <p class="info-point"><strong><i>xerophagia hardware kiddish omnifidel sarcodous Charruan mesocephal anastomotic derision aphrodisiac dorser talpicide hypodermoclysis voluminosity</i></strong></p>
-    <p class="info-point"><strong>Male</strong></p>
-    <p class="info-point"><strong>26/5/1994</strong></p>
-    <p class="info-point"><strong>011117772255</strong></p>
-    <p class="info-point"><strong>Alexandria</strong></p>
-    <p class="info-point"><strong>Single</strong></p>
+    <p class="info-point">
+      <strong><i>xerophagia hardware kiddish omnifidel sarcodous Charruan mesocephal anastomotic derision aphrodisiac dorser talpicide hypodermoclysis voluminosity {{user.about_me}}</i></strong>
+    </p>
+    <p class="info-point">
+      <strong>{{ user.gender }}</strong>
+    </p>
+    <p class="info-point">
+      <strong>{{ user.birthdate }}</strong>
+    </p>
+    <p class="info-point" ng-if="user.phone_number!=''&&user.phone_number!=NULL">
+      <strong>{{ user.phone_number }}</strong>
+    </p>
+    <p class="info-point" ng-if="user.hometown!=''&&user.hometown!=NULL">
+      <strong>{{ user.hometown }}</strong>
+    </p>
+    <p class="info-point" ng-if="user.marital_status!=''&&user.marital_status!=NULL">
+      <strong>{{ user.marital_status }}</strong>
+    </p>
   </div>
-  
+
   <div id="show-more-btn" class="btn btn-link" onclick="return toggleInfoPoints(this);">Show More</div>
 
 </div>
-

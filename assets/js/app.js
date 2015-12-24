@@ -7,7 +7,6 @@ angular.module('app', ['ui.router'])
 .config(function($stateProvider, $urlRouterProvider) {
 
   $urlRouterProvider.otherwise("/home");
-
   $stateProvider
     .state('friends', {
       url: "/friends",
@@ -27,6 +26,22 @@ angular.module('app', ['ui.router'])
 })
 
 .controller('friendsController', function($rootScope, $scope, $http, $interval) {
+
+  if (!$rootScope.user) {
+    $http.get('php/user_info.php').
+      success(function(response, status, headers, config) {
+        console.log(response);
+        if (!response.signed) {
+          window.location.href = "index.html";
+        } else {
+          $rootScope.user = response.user;
+        }
+      }).
+      error(function(response, status, headers, config) {
+        console.log(response);
+        console.log(status);
+      });
+  }
   $http.get('php/friends.php')
     .success(function(response, status, headers, config) {
       // console.log(response);
@@ -57,6 +72,20 @@ angular.module('app', ['ui.router'])
 })
 
 .controller('postsController', function($rootScope, $scope, $http, $interval) {
+  $http.get('php/user_info.php').
+    success(function(response, status, headers, config) {
+      console.log(response);
+      if (!response.signed) {
+        window.location.href = "index.html";
+      } else {
+        $rootScope.user = response.user;
+      }
+    }).
+    error(function(response, status, headers, config) {
+      console.log(response);
+      console.log(status);
+    });
+
   $http.get('php/user_posts.php').
     success(function(response, status, headers, config) {
       console.log(response);
@@ -72,9 +101,14 @@ angular.module('app', ['ui.router'])
       console.log(status);
     });
 
+    $scope.deletePost = function(commentId){
+      console.log(commentId);
+    };
+
   $interval(function(){
     load_posts();
   },5000);
+
   function load_posts(){
     $http.get('php/user_posts.php').
       success(function(response, status, headers, config) {
