@@ -1,6 +1,6 @@
 <div ng-controller="postsController">
   {{ posts.length }}
-  <div ng-repeat="post in posts">
+  <div ng-repeat="post in posts | orderBy:'-created_at'">
     <post></post>
     <br>
   </div>

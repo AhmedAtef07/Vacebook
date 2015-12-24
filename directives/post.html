@@ -1,17 +1,24 @@
 <div class="well well-lg" id="post">
+
   <!--post header-->
   <div class="row" id="post_header">
     <div class="col-lg-1">
-      <img src="assets/images/user1.png" alt="User1" class="header_pic" >
+      <img alt="User1" class="header_pic" src="assets/images/user1.png">
     </div>
     <div class="col-lg-4">
-      <h5 class="header_user"><b>User {{post.user_id}}</b></h5>
-      <h6 class="header_date">{{post.created_at}}</h6>
+      <h5 class="header_user">
+        <b>
+          User {{ post.user_id }}
+        </b>
+      </h5>
+      <h6 class="header_date">
+        {{ post.created_at }}
+      </h6>
     </div>
   </div>
 
   <!--post body-->
-  <div class="row" id = "post_body">
+  <div class="row" id="post_body">
     <div class="col-lg-12" id="post_caption">
       <p>{{post.caption}}</p>
     </div>
@@ -20,55 +27,36 @@
   <!--comment_control-->
   <hr class="hr">
   <div id="comment_control">
-    <div class="btn-group" role="group" >
-
-      <button type="button" class="btn btn-default" id="btn_like" onfocus="this.blur();"><i class="fa fa-thumbs-o-up fa-lg"></i>
-      Like</button>
-      <button type="button" class="btn btn-default" id="btn_comment" onfocus="this.blur();"><i class="fa fa-commenting-o fa-lg"></i>  Comment</button>
-
+    <div class="btn-group" role="group">
+      <button class="btn btn-default" id="btn_like" onfocus="this.blur();" type="button">
+        <i class="fa fa-thumbs-o-up fa-lg"></i>
+        Like</button>
+      <button class="btn btn-default" id="btn_comment" onfocus="this.blur();" type="button">
+        <i class="fa fa-commenting-o fa-lg"></i>
+        Comment</button>
     </div>
   </div>
   <hr class="hr">
 
   <!--comments-->
-  <div ng-repeat="comment in post.comments">
-    <div class="row" id="comments_body">
-      <div class="row" id="comments_header">
-        <div class="col-lg-1">
-          <img src="assets/images/user1.png" alt="User1" class="header_pic" >
-        </div>
-        <div class="col-lg-4">
-          <h5 class="header_user"><b>User {{comment.user_id}}</b></h5>
-          <h6 class="header_date">{{comment.created_at}}</h6>
-        </div>
-        <div class="col-lg-1 col-lg-offset-6">
-          <button type="button" class="btn btn-default" id="btn_delete" onfocus="this.blur();"><span class="glyphicon glyphicon-trash">
-          </span>
-          </button>
-        </div>
-      </div>
-      <div class="col-lg-11" id="comments_caption">
-        <p>{{comment.caption}}</p>
-      </div>
-    </div>
+  <div ng-repeat="comment in post.comments | orderBy:'created_at'">
+    <comment></comment>
   </div>
 
   <!--commenting-->
   <div class="row" id="commenting_body">
     <div class="col-lg-1">
-      <img src="assets/images/user1.png" alt="User1" style="float:left; width:45px; height:45px;border-radius: 30%;">
+      <img alt="User1" src="assets/images/user1.png" style="float:left; width:45px; height:45px;border-radius: 30%;">
     </div>
-
-    <div class="col-lg-11" >
+    <div class="col-lg-11">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Comment" id="comment_caption">
-
+        <input class="form-control" id="comment_caption" placeholder="Comment" type="text">
         <span class="input-group-btn">
-          <button class="btn btn-default" type="button" onfocus="this.blur();" id="btn_pic">
-          <i class="fa fa-camera-retro fa-lg"></i>
+          <button class="btn btn-default" id="btn_pic" onfocus="this.blur();" type="button">
+            <i class="fa fa-camera-retro fa-lg"></i>
           </button>
-          <button class="btn btn-default" type="button" onfocus="this.blur();" id="btn_emoji">
-          <i class="fa fa-smile-o fa-lg"></i>
+          <button class="btn btn-default" id="btn_emoji" onfocus="this.blur();" type="button">
+            <i class="fa fa-smile-o fa-lg"></i>
           </button>
         </span>
       </div>

@@ -173,6 +173,11 @@ angular.module('app', ['ui.router'])
     templateUrl: 'directives/post.html'
   };
 })
+.directive('comment', function() {
+  return {
+    templateUrl: 'directives/comment.html'
+  };
+})
 .directive('friend', function() {
   return {
     templateUrl: 'directives/friend_block.html'
