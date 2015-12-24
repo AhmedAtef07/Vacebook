@@ -1,4 +1,4 @@
-<div ng-controller="postsController">
+<div>
   {{ posts.length }}
   <div ng-repeat="post in posts | orderBy:'-created_at'">
     <post></post>
