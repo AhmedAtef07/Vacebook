@@ -102,16 +102,16 @@ angular.module('app', ['ui.router'])
 }])
 .directive('suggestedFriend', function() {
   return {
-    templateUrl: 'directories/suggestion_friend_block.html'
+    templateUrl: 'directives/suggestion_friend_block.html'
   };
 })
 .directive('post', function() {
   return {
-    templateUrl: 'directories/post.html'
+    templateUrl: 'directives/post.html'
   };
 })
 .directive('friend', function() {
   return {
-    templateUrl: 'directories/friend_block.html'
+    templateUrl: 'directives/friend_block.html'
   };
 });
