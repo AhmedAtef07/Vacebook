@@ -4,6 +4,7 @@
 
 angular.module('app', ['ui.router'])
 
+
 .config(function($stateProvider, $urlRouterProvider) {
 
   $urlRouterProvider.otherwise("/home");
@@ -24,6 +25,7 @@ angular.module('app', ['ui.router'])
       controller: "postsController"
     });
 })
+
 
 .controller('friendsController', function($rootScope, $scope, $http, $interval) {
 
@@ -70,7 +72,30 @@ angular.module('app', ['ui.router'])
       });
   }
 })
+.controller('newPostController', function($rootScope, $scope, $http) {
+  $scope.caption = "";
 
+  $scope.addPost = function () {
+    console.log($scope.caption);
+    var req = {
+      method: 'POST',
+      url: 'php/posts.php',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: { 
+        caption: $scope.caption
+      }
+    };
+
+    $http(req).then(function success(response) {
+      $scope.caption = "";
+      console.log(response);
+    }, function error(response) {
+      alert("Coudn't post for some strange reason!");
+    });
+  };
+})
 .controller('postsController', function($rootScope, $scope, $http, $interval) {
   $http.get('php/user_info.php').
     success(function(response, status, headers, config) {
@@ -127,6 +152,7 @@ angular.module('app', ['ui.router'])
   }
 })
 
+
 .directive('suggestedFriend', function() {
   return {
     templateUrl: 'directives/suggestion_friend_block.html'
@@ -135,6 +161,12 @@ angular.module('app', ['ui.router'])
 .directive('post', function() {
   return {
     templateUrl: 'directives/post.html'
+  };
+})
+.directive('newPost', function() {
+  return {
+    templateUrl: 'directives/new_post.html',
+    controller: 'newPostController'
   };
 })
 .directive('comment', function() {

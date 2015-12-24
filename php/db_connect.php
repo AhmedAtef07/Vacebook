@@ -37,7 +37,7 @@
     id              INT              AUTO_INCREMENT,
     user_id         INT              NOT NULL,
     caption         TEXT             NOT NULL,
-    image           VARCHAR(300)             ,
+    image_path      VARCHAR(300)             ,
     created_at      TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY(id),

@@ -82,6 +82,18 @@
     return convertToArray($res);
   }
 
+  function addPost($userId, $post) {
+    $query = conn()->prepare("INSERT INTO posts (user_id, caption, image) VALUES (?, ?, ?)");
+
+    $query->bind_param('iss',
+      $userId,
+      $post['caption'],
+      $post['image_path']);
+
+    $query->execute();
+    $query->close();
+  }
+
   /*
    * Returns user_id if created, or false in case of an error.
    */
@@ -107,6 +119,7 @@
         (username, first_name, last_name, gender, birthdate, email, password, phone_number,
           hometown, marital_status, about_me, profile_pic)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
     $query->bind_param('ssssssssssss',
       $user['username'],
       $user['first_name'],
@@ -120,6 +133,7 @@
       $user['marital_status'],
       $user['about_me'],
       $user['profile_pic']);
+    
     $query->execute();
     $query_insert_id = $query->insert_id;
     $query->close();
