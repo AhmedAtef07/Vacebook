@@ -1,7 +1,7 @@
 <?php
 
   require __DIR__.'/vendor/autoload.php';
-  use Particle\Validator\Validator;
+  use ..\Particle\Validator\Validator;
   require 'db_controller.php';
 
   $response['succeeded'] = false;
