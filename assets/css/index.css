@@ -44,13 +44,25 @@ html,body { height:100%; }
 }
 
 .circle-image{
-    width: 100%;
-    border-radius: 50%;
-    display: block;
-    background-size: cover;
-    background-repeat: no-repeat;
+  width: 100%;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.circle-image-fh{
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .info-point {
   display: none
+}
+
+.logo-img path {
+  fill: red;
 }
