@@ -77,7 +77,12 @@ function searchByName($firstName, $lastName) {
   $res = conn()->query("SELECT * FROM users WHERE first_name='$firstName' AND last_name ='$lastName'");
   return convertToArray($res);
 }
-
+/*using auto-complete*/
+function searchByPartOfName($name)
+{
+  $res = conn()->query("SELECT * FROM users WHERE first_name LIKE '%'$firstName'%' OR last_name LIKE '%'$lastName'%' ");
+  return convertToArray($res);  
+}
 function searchByPhone($phoneNumber) {
   $res = conn()->query("SELECT * FROM users WHERE phone_number='$phoneNumber'");
   return convertToArray($res);
@@ -149,3 +154,45 @@ function tryCreateUser($user) {
   if ($query_insert_id != 0) return $query_insert_id;
   else                       return false;
 }
+
+  function suggestedPeople($my_id) {
+    $res = conn()->query("SELECT * FROM users WHERE id 
+                          IN (SELECT f1.user2_id FROM friends f1,friends f2 
+                          WHERE f1.state = 'friends'
+                          AND f1.user1_id = f2.user2_id
+                          AND f2.user1_id ='$my_id'
+                          AND f2.state ='friends')
+                          ");
+    return convertToArray($res);
+  }
+  function newsFeed($my_id) {
+    $res = conn()->query(" SELECT * FROM posts WHERE user_id = '$my_id'
+                           UNION
+                           SELECT * FROM posts WHERE user_id IN (SELECT user2_id FROM friends WHERE user1_id ='$my_id' AND state ='friends')
+                           ORDER BY created_at
+                        ");
+    return convertToArray($res);
+  }
+
+  function commentNotifications($my_id) {
+    $res = conn()->query("SELECT c1.id , c1.post_id , c1.user_id , c1.caption , c1.created_at FROM comments c1,comments c2 
+                          WHERE c1.post_id = c2.post_id 
+                          AND c2.user_id ='$my_id' 
+                          AND c1.created_at > c2.created_at
+                        
+                          UNION
+
+                          SELECT * FROM comments 
+                          WHERE post_id IN (SELECT id FROM posts WHERE user_id ='$my_id')
+                          
+                          ORDER BY created_at
+                          ");
+    return convertToArray($res);
+  }
+  function likeNotifications($my_id) {
+    $res = conn()->query("SELECT * FROM likes 
+                          WHERE post_id IN (SELECT id FROM posts WHERE user_id ='$my_id')
+                          ORDER BY created_at
+                          ");
+    return convertToArray($res);
+  }
