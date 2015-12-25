@@ -2,7 +2,7 @@
 
   require '../../vendor/autoload.php';
   use Particle\Validator\Validator;
-  
+
   require 'db_controller.php';
 
   $response['succeeded'] = false;
@@ -33,6 +33,7 @@
       $_SESSION['user_id'] = isUserExists($user['email_or_username'], $user['password']);
       if ($_SESSION['user_id']) {
         $response['logined'] = true;
+        setcookie("user_id", $_SESSION['user_id'], time() + (86400 * 30), '/');
         // echo $_SESSION['user_id'];
       }
     }

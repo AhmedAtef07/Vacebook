@@ -1,5 +1,21 @@
 $(document).ready(function() {
 
+  $.fn.serializeObject = function()
+  {
+      var o = {};
+      var a = this.serializeArray();
+      $.each(a, function() {
+          if (o[this.name] !== undefined) {
+              if (!o[this.name].push) {
+                  o[this.name] = [o[this.name]];
+              }
+              o[this.name].push(this.value || '');
+          } else {
+              o[this.name] = this.value || '';
+          }
+      });
+      return o;
+  };
 
   function checkRegistration() {
     var firstName = $('.signup #first_name').val();
@@ -55,21 +71,20 @@ $(document).ready(function() {
   $(".registration_form").submit(function(event) {
     event.preventDefault();
     var formData = $("#registration_form").serializeArray();
+    var jsonData = JSON.stringify($('#registration_form').serializeObject());
     if (checkRegistration()) {
       console.log(formData);
+      console.log(jsonData);
       $.ajax({
-        url: "php/register.php",
+        url: "home/register",
         type: "POST",
+        contentType: "application/x-www-form-urlencoded",
         dataType: "JSON",
-        data: formData,
+        data: jsonData,
         success: function(response) {
           console.log(response);
           if (response.succeeded && response.registered) {
-            window.location.href = "/vacebook";
-          } else {
-            response.errors.forEach(function(element) {
-              alert(element);
-            });
+            window.location.href = "/vacebook/public";
           }
         },
       });
@@ -79,25 +94,21 @@ $(document).ready(function() {
   $(".login_form").submit(function(event) {
     event.preventDefault();
     var formData = $("#login_form").serializeArray();
+    var jsonDate = JSON.stringify($('#login_form').serializeObject());
     if (checkLogin()) {
       console.log("login");
       console.log(formData);
+      console.log(jsonDate);
       $.ajax({
-        url: "php/login.php",
+        url: "home/login",
         type: "POST",
+        contentType: "application/x-www-form-urlencoded",
         dataType: "JSON",
-        data: formData,
+        data: jsonDate,
         success: function(response) {
           console.log(response);
           if (response.succeeded && response.logined) {
             window.location.href = "/vacebook/public";
-          } else {
-            response.messages.forEach(function(element) {
-              console.log(element);
-            });
-            response.errors.forEach(function(element) {
-              console.log(element);
-            });
           }
         },
       });

@@ -30,11 +30,11 @@ angular.module('app', ['ui.router'])
 .controller('friendsController', function($rootScope, $scope, $http, $interval) {
 
   if (!$rootScope.user) {
-    $http.get('php/user_info.php').
+    $http.get('home/getUserInfo').
       success(function(response, status, headers, config) {
         console.log(response);
         if (!response.signed) {
-          window.location.href = "index.html";
+          window.location.href = "/vacebook/public/homepage.html";
         } else {
           $rootScope.user = response.user;
         }
@@ -44,7 +44,7 @@ angular.module('app', ['ui.router'])
         console.log(status);
       });
   }
-  $http.get('php/friends.php')
+  $http.get('home/getFriends')
     .success(function(response, status, headers, config) {
       // console.log(response);
       $scope.userId = response.user_id;
@@ -57,11 +57,11 @@ angular.module('app', ['ui.router'])
     });
 
   $interval(function() {
-    load_friends();
+    // load_friends();
   }, 5000);
 
   function load_friends() {
-    $http.get('php/friends.php')
+    $http.get('home/getFriends')
       .success(function(response, status, headers, config) {
         $scope.userId = response.user_id;
         $scope.friends = response.friends;
@@ -73,6 +73,22 @@ angular.module('app', ['ui.router'])
   }
 })
 .controller('newPostController', function($rootScope, $scope, $http) {
+
+  if (!$rootScope.user) {
+    $http.get('home/getUserInfo').
+      success(function(response, status, headers, config) {
+        console.log(response);
+        if (!response.signed) {
+          window.location.href = "/vacebook/public/homepage.html";
+        } else {
+          $rootScope.user = response.user;
+        }
+      }).
+      error(function(response, status, headers, config) {
+        console.log(response);
+        console.log(status);
+      });
+  }
   $scope.caption = "";
 
   $scope.addPost = function () {
@@ -83,7 +99,7 @@ angular.module('app', ['ui.router'])
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      data: { 
+      data: {
         caption: $scope.caption
       }
     };
@@ -99,11 +115,11 @@ angular.module('app', ['ui.router'])
   };
 })
 .controller('postsController', function($rootScope, $scope, $http, $interval) {
-  $http.get('php/user_info.php').
+  $http.get('home/getUserInfo').
     success(function(response, status, headers, config) {
       console.log(response);
       if (!response.signed) {
-        window.location.href = "index.html";
+        window.location.href = "/vacebook/public/homepage.html";
       } else {
         $rootScope.user = response.user;
       }
@@ -113,11 +129,11 @@ angular.module('app', ['ui.router'])
       console.log(status);
     });
 
-  $http.get('php/user_posts.php').
+  $http.get('home/getPosts').
     success(function(response, status, headers, config) {
       console.log(response);
       if (!response.signed) {
-        window.location.href = "index.html";
+        window.location.href = "/vacebook/public/homepage.html";
       } else {
         $scope.userId = response.user_id;
         $scope.posts = response.posts;
@@ -133,15 +149,15 @@ angular.module('app', ['ui.router'])
     };
 
   $interval(function(){
-    load_posts();
+    // load_posts();
   },5000);
 
   function load_posts(){
-    $http.get('php/user_posts.php').
+    $http.get('home/getUserInfo').
       success(function(response, status, headers, config) {
         // console.log(response);
         if (!response.signed) {
-          window.location.href = "index.html";
+          window.location.href = "/vacebook/public/homepage.html";
         } else {
           $scope.userId = response.user_id;
           $scope.posts = response.posts;

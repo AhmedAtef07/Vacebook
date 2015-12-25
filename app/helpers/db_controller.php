@@ -1,6 +1,6 @@
 <?php
 
-require_once '../app/helpers/db_connect.php';
+require '../app/helpers/db_connect.php';
 
 function convertToArray(&$response) {
   $queryArray = array();
@@ -104,8 +104,9 @@ function isUserExists($username_or_email, $password) {
     $res = conn()->query("SELECT * FROM users WHERE
       username='$username_or_email' AND password='$password'");
   }
+  $rows = $res->num_rows;
 
-  if($res->num_rows == 1) return $res->fetch_assoc()['id'];
+  if($rows == 1) return $res->fetch_assoc()['id'];
   else                    return false;
 }
 
@@ -131,7 +132,7 @@ function tryCreateUser($user) {
     $user['marital_status'],
     $user['about_me'],
     $user['profile_pic']);
-  
+
   $query->execute();
   $query_insert_id = $query->insert_id;
   $query->close();
