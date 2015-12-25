@@ -90,7 +90,7 @@ $(document).ready(function() {
         success: function(response) {
           console.log(response);
           if (response.succeeded && response.logined) {
-            window.location.href = "/vacebook";
+            window.location.href = "/vacebook/public";
           } else {
             response.messages.forEach(function(element) {
               console.log(element);
@@ -103,6 +103,27 @@ $(document).ready(function() {
       });
     }
   });
+
+  $("#mock_data").click(function() {
+    $.ajax({
+      url: "php/mock_data.php",
+      type: "GET",
+      dataType: "JSON",
+      success: function(response) {
+        console.log(response);
+        if (response.succeeded && response.logined) {
+          window.location.href = "/vacebook/public";
+        } else {
+          response.messages.forEach(function(element) {
+            console.log(element);
+          });
+          response.errors.forEach(function(element) {
+            console.log(element);
+          });
+        }
+      },
+    });
+});
 
   $('.form').find('input, textarea').on('keyup blur focus', function (e) {
     var $this = $(this),
