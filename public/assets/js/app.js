@@ -79,7 +79,7 @@ angular.module('app', ['ui.router'])
     console.log($scope.caption);
     var req = {
       method: 'POST',
-      url: 'php/posts.php',
+      url: 'home/add',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -87,6 +87,8 @@ angular.module('app', ['ui.router'])
         caption: $scope.caption
       }
     };
+
+    console.log(req);
 
     $http(req).then(function success(response) {
       $scope.caption = "";
