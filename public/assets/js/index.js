@@ -117,8 +117,9 @@ $(document).ready(function() {
 
   $("#mock_data").click(function() {
     $.ajax({
-      url: "php/mock_data.php",
+      url: "home/addMockData",
       type: "GET",
+      contentType: "application/x-www-form-urlencoded",
       dataType: "JSON",
       success: function(response) {
         console.log(response);
