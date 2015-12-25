@@ -1,20 +1,24 @@
-<div class="row" id="comments_body">
-  <div class="row" id="comments_header">
-    <div class="col-lg-1">
-      <img src="assets/images/user1.png" alt="User1" class="header_pic" >
-    </div>
-    <div class="col-lg-4">
-      <h5 class="header_user"><b>User {{comment.user_id}}</b></h5>
-      <h6 class="header_date">{{comment.created_at}}</h6>
-    </div>
-    <div class="col-lg-1 col-lg-offset-6" ng-if="comment.user_id===user.id">
-      <button type="button" class="btn btn-default" id="btn_delete" onfocus="this.blur();"
-        ng-click="deletePost(comment.id)">
-        <span class="glyphicon glyphicon-trash"></span>
-      </button>
-    </div>
-  </div>
-  <div class="col-lg-11" id="comments_caption">
-    <p>{{comment.caption}}</p>
-  </div>
-</div>
+      <div class="card-block">
+          <div class="collapse" id="comments_body">  
+                <div class="row" id="comments_header">
+                  <div class="col-lg-1">
+                        <img src="images/user1.png" alt="User1" class="comment_pic" >
+                  </div>
+                  <div class="col-lg-4">
+                      <h5 class="card-title"><b>User {{comment.user_id}}</b></h5>
+                      <h6 class="card-subtitle text-muted">{{comment.created_at}}</h6>
+                  </div>
+                  <div class="col-lg-1 col-lg-offset-6">
+                      <button type="button" class="btn btn-default" id="btn_deleteC" onfocus="this.blur();">
+                        <span class="glyphicon glyphicon-trash"></span>
+                      </button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-10 col-lg-offset-1" id="comments_caption">
+                    <p> {{comment.caption}} </p>
+                  </div>
+                </div>
+          </div>
+      </div> 
+        

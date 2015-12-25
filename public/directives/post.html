@@ -1,67 +1,83 @@
-<div class="well well-lg" id="post">
+  <div class="card" id="post_card" >
+      <div class="card-header" id="post_body">
+        <!--post header-->
+          <div class="row" id="post_header">
+              <div class="col-lg-1">
+                    <img src="images/user1.png" alt="User1" class="header_pic" >
+              </div>
+              <div class="col-lg-4">
+                  <h5 class="card-title">
+                    <b> User {{ post.user_id }} </b>
+                  </h5>
+                  <h6 class="card-subtitle text-muted">
+                    {{ post.created_at }}
+                  </h6>
+              </div>
+              <div class="col-lg-1 col-lg-offset-6">
+                <button type="button" class="btn btn-default" id="btn_delete" onfocus="this.blur();">
+                  <i class="fa fa-times fa-lg"></i>
+                  </button>
+              </div>
+          </div>  
 
-  <!--post header-->
-  <div class="row" id="post_header">
-    <div class="col-lg-1">
-      <img alt="User1" class="header_pic" src="assets/images/user1.png">
-    </div>
-    <div class="col-lg-4">
-      <h5 class="header_user">
-        <b>
-          User {{ post.user_id }}
-        </b>
-      </h5>
-      <h6 class="header_date">
-        {{ post.created_at }}
-      </h6>
-    </div>
-  </div>
+          <!--post caption-->
+          <div class="row" id="post_caption">
+              <div class="card-text">
+                {{post.caption}}
+              </div>
+          </div>  
 
-  <!--post body-->
-  <div class="row" id="post_body">
-    <div class="col-lg-12" id="post_caption">
-      <p>{{post.caption}}</p>
-    </div>
-  </div>
-
-  <!--comment_control-->
-  <hr class="hr">
-  <div id="comment_control">
-    <div class="btn-group" role="group">
-      <button class="btn btn-default" id="btn_like" onfocus="this.blur();" type="button">
-        <i class="fa fa-thumbs-o-up fa-lg"></i>
-        Like</button>
-      <button class="btn btn-default" id="btn_comment" onfocus="this.blur();" type="button">
-        <i class="fa fa-commenting-o fa-lg"></i>
-        Comment</button>
-    </div>
-  </div>
-  <hr class="hr">
-
-  <!--comments-->
-  <div ng-repeat="comment in post.comments | orderBy:'created_at'">
-    <comment></comment>
-  </div>
-
-  <!--commenting-->
-  <div class="row" id="commenting_body">
-    <div class="col-lg-1">
-      <img alt="User1" src="assets/images/user1.png" style="float:left; width:45px; height:45px;border-radius: 30%;">
-    </div>
-    <div class="col-lg-11">
-      <div class="input-group">
-        <input class="form-control" id="comment_caption" placeholder="Comment" type="text">
-        <span class="input-group-btn">
-          <button class="btn btn-default" id="btn_pic" onfocus="this.blur();" type="button">
-            <i class="fa fa-camera-retro fa-lg"></i>
-          </button>
-          <button class="btn btn-default" id="btn_emoji" onfocus="this.blur();" type="button">
-            <i class="fa fa-smile-o fa-lg"></i>
-          </button>
-        </span>
+          <!--group buttons-->
+          <div class="row">
+              <span class="input-group-btn"  id="comment_control">
+                      <div class="col-lg-10"  id="comments_control">
+                        <button data-toggle="collapse" data-target="#commenting_body" class="btn btn-default btn-block" id="btn_commenting" 
+                        onfocus="this.blur();">
+                          <i class="fa fa-commenting-o fa-lg"></i>  Comment
+                        </button>
+                      </div>
+                      <div class="col-lg-1"   id="like_control">
+                        <button data-toggle="collapse" data-target="#" class="btn btn-default btn-block" id="btn_like" onfocus="this.blur();">
+                          <i class="fa fa-thumbs-o-up fa-lg"></i>
+                        </button>
+                      </div>
+                      <div class="col-lg-1"  id="commenting_control">
+              <button data-toggle="collapse" data-target="#comments_body" class="btn btn-default btn-block" id="btn_comments" onfocus="this.blur();">
+                <i class="fa fa-comment fa-lg"></i> 
+                <span class="badge" id="C_num"><b>2</b></span>
+              </button>
+            </div>
+          </span>
+            </div>
+          
       </div>
+      
+      <div ng-repeat="comment in post.comments | orderBy:'created_at'">
+        <comment></comment>
+      </div>
+        
+      <div class="row collapse"   id="commenting_body">
+                <div class="col-lg-1">
+                    <img src="images/user1.png" alt="User1" style="float:right; width:45px; height:45px;border-radius: 5%;">
+                </div>
+        
+                <div class="col-lg-11" id="commenting" >
+                  <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Comment" id="comment_caption">
+                  
+                      <span class="input-group-btn">
+                          <button class="btn btn-default" type="button" onfocus="this.blur();" id="btn_pic">
+                              <i class="fa fa-camera-retro fa-lg"></i>
+                          </button>
+
+                          <button class="btn btn-default" type="button" onfocus="this.blur();" id="btn_emoji">
+                              <i class="fa fa-smile-o fa-lg"></i>
+                          </button>
+                        </span>
+                  </div>
+                </div>
+            </div>
+
+          </div>
+
     </div>
-
-  </div>
-
-</div>
