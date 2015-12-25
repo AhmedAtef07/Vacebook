@@ -17,7 +17,8 @@ angular.module('app', ['ui.router'])
     })
     .state('profile', {
       url: "/profile",
-      templateUrl: "partials/profile.html"
+      templateUrl: "partials/profile.html",
+      controller: "userPorfileController"
     })
     .state('home', {
       url: "/home",
@@ -114,7 +115,7 @@ angular.module('app', ['ui.router'])
     });
   };
 })
-.controller('postsController', function($rootScope, $scope, $http, $interval) {
+.controller('postsController', function($rootScope, $scope, $http) {
   $http.get('home/getUserInfo').
     success(function(response, status, headers, config) {
       console.log(response);
@@ -144,30 +145,44 @@ angular.module('app', ['ui.router'])
       console.log(status);
     });
 
-    $scope.deletePost = function(commentId){
-      console.log(commentId);
-    };
+  $scope.deletePost = function(commentId){
+    console.log(commentId);
+  };
 
-  $interval(function(){
-    // load_posts();
-  },5000);
-
-  function load_posts(){
-    $http.get('home/getUserInfo').
-      success(function(response, status, headers, config) {
-        // console.log(response);
-        if (!response.signed) {
-          window.location.href = "/vacebook/public/homepage.html";
-        } else {
-          $scope.userId = response.user_id;
-          $scope.posts = response.posts;
-        }
+})
+.controller('userPorfileController', function($rootScope, $scope, $http) {
+  $http.get('home/getUserInfo').
+    success(function(response, status, headers, config) {
+      console.log(response);
+      if (!response.signed) {
+        window.location.href = "/vacebook/public/homepage.html";
+      } else {
+        $rootScope.user = response.user;
+      }
+    }).
+    error(function(response, status, headers, config) {
+      console.log(response);
+      console.log(status);
+    })
+  .then(function() {
+    $http.get('home/getUserPostswithComments/' + $rootScope.user.id)
+      .success(function(response, status, headers, config) {
+        $scope.posts = response.posts;
       }).
       error(function(response, status, headers, config) {
         console.log(response);
         console.log(status);
       });
-  }
+  }, function() {
+    console.log("Error while getting user info");
+  });
+
+  
+
+  $scope.deletePost = function(commentId){
+    console.log(commentId);
+  };
+
 })
 
 

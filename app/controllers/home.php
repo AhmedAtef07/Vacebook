@@ -417,4 +417,14 @@ class Home extends Controller
     echo json_encode($response);
   }
 
+  public function getUserPostswithComments($userId) {
+    $response['posts'] = array();
+    $response['signed'] = false;
+
+    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      $response['posts'] = getAllUserPostswithComments($userId);
+    }
+    echo json_encode($response);
+  }
 }

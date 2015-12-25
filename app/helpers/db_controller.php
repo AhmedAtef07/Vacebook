@@ -44,6 +44,15 @@ function getAllPostswithComments() {
   return $posts;
 }
 
+function getAllUserPostswithComments($userId) {
+  $res = conn()->query("SELECT * FROM posts WHERE user_id = '$userId'");
+  $posts = convertToArray($res);
+  foreach ($posts as $ind => $post ) {
+    $posts[$ind]['comments'] = getPostComments($post['id']);
+  }
+  return $posts;
+}
+
 function getPostComments($postId) {
   $res = conn()->query("SELECT * FROM comments WHERE post_id='$postId'");
   return convertToArray($res);
