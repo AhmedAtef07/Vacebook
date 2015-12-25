@@ -23,7 +23,7 @@ class Home extends Controller
     // echo "home/test";
   }
 
-  public function addPost() {
+  public function addNewPost() {
     $response['valid'] = false;
     $response['succeeded'] = false;
 
@@ -32,7 +32,7 @@ class Home extends Controller
 
     $post = [
       'caption' => $caption = $request->caption,
-      'image_path' => null
+      'image_path' => ""
     ];
 
     $v = new Validator();

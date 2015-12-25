@@ -95,7 +95,7 @@ angular.module('app', ['ui.router'])
     console.log($scope.caption);
     var req = {
       method: 'POST',
-      url: 'home/add',
+      url: 'home/addNewPost',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

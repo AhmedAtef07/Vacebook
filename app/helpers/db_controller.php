@@ -81,8 +81,8 @@ function searchByCaption($text) {
 }
 
 function addPost($userId, $post) {
-  $query = conn()->prepare("INSERT INTO posts (user_id, caption, image) VALUES (?, ?, ?)");
-
+  $query = conn()->prepare("INSERT INTO posts (user_id, caption, image_path) VALUES (?, ?, ?)");
+  var_dump($query);
   $query->bind_param('iss',
     $userId,
     $post['caption'],
