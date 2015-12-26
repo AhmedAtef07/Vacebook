@@ -4,38 +4,49 @@
 
 angular.module('app', ['ui.router'])
 
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////// CONFIGURING ROUTES //////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 .config(function($stateProvider, $urlRouterProvider) {
 
-  $urlRouterProvider.otherwise("/home");
+  $urlRouterProvider.otherwise('/home');
   $stateProvider
     .state('friends', {
-      url: "/friends",
-      templateUrl: "partials/friends.html",
-      controller: "friendsController"
-      // template: "<h1>Hello</h1>"
+      url: '/friends',
+      templateUrl: 'partials/friends.html',
+      controller: 'friendsController'
+      // template: '<h1>Hello</h1>'
+    })
+    // .state('profile', {
+    //   url: '/profile',
+    //   templateUrl: 'partials/profile.html',
+    //   controller: 'userPorfileController'
+    // })
+    .state('home', {
+      url: '/home',
+      templateUrl: 'partials/home.html',
+      controller: 'postsController'
     })
     .state('profile', {
-      url: "/profile",
-      templateUrl: "partials/profile.html",
-      controller: "userPorfileController"
-    })
-    .state('home', {
-      url: "/home",
-      templateUrl: "partials/home.html",
-      controller: "postsController"
-    });
+        url: '/people/:userId',
+        templateUrl: 'partials/profile.html',
+        controller: 'userPorfileController'
+      });
 })
 
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////// DEFINING CONTROLLERS //////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
-.controller('friendsController', function($rootScope, $scope, $http, $interval) {
+.controller('friendsController', function($rootScope, $scope, $http) {
 
   if (!$rootScope.user) {
     $http.get('home/getUserInfo').
       success(function(response, status, headers, config) {
         console.log(response);
         if (!response.signed) {
-          window.location.href = "/vacebook/public/homepage.html";
+          window.location.href = '/vacebook/public/homepage.html';
         } else {
           $rootScope.user = response.user;
         }
@@ -56,22 +67,6 @@ angular.module('app', ['ui.router'])
       console.log(response);
       console.log(status);
     });
-
-  $interval(function() {
-    // load_friends();
-  }, 5000);
-
-  function load_friends() {
-    $http.get('home/getFriends')
-      .success(function(response, status, headers, config) {
-        $scope.userId = response.user_id;
-        $scope.friends = response.friends;
-      })
-      .error(function(response, status, headers, config) {
-        console.log(response);
-        console.log(status);
-      });
-  }
 })
 .controller('newPostController', function($rootScope, $scope, $http) {
 
@@ -80,7 +75,7 @@ angular.module('app', ['ui.router'])
       success(function(response, status, headers, config) {
         console.log(response);
         if (!response.signed) {
-          window.location.href = "/vacebook/public/homepage.html";
+          window.location.href = '/vacebook/public/homepage.html';
         } else {
           $rootScope.user = response.user;
         }
@@ -90,7 +85,7 @@ angular.module('app', ['ui.router'])
         console.log(status);
       });
   }
-  $scope.caption = "";
+  $scope.caption = '';
 
   $scope.addPost = function () {
     console.log($scope.caption);
@@ -108,7 +103,7 @@ angular.module('app', ['ui.router'])
     console.log(req);
 
     $http(req).then(function success(response) {
-      $scope.caption = "";
+      $scope.caption = '';
       console.log(response);
     }, function error(response) {
       alert("Coudn't post for some strange reason!");
@@ -120,7 +115,7 @@ angular.module('app', ['ui.router'])
     success(function(response, status, headers, config) {
       console.log(response);
       if (!response.signed) {
-        window.location.href = "/vacebook/public/homepage.html";
+        // window.location.href = '/vacebook/public/homepage.html';
       } else {
         $rootScope.user = response.user;
       }
@@ -134,7 +129,7 @@ angular.module('app', ['ui.router'])
     success(function(response, status, headers, config) {
       console.log(response);
       if (!response.signed) {
-        window.location.href = "/vacebook/public/homepage.html";
+        window.location.href = '/vacebook/public/homepage.html';
       } else {
         $scope.userId = response.user_id;
         $scope.posts = response.posts;
@@ -150,14 +145,17 @@ angular.module('app', ['ui.router'])
   };
 
 })
-.controller('userPorfileController', function($rootScope, $scope, $http) {
-  $http.get('home/getUserInfo').
-    success(function(response, status, headers, config) {
+.controller('userPorfileController', function($rootScope, $scope, $http, $stateParams) {
+
+  console.log($stateParams.userId);
+
+  $http.get('home/getUserInfo/' + $stateParams.userId)
+    .success(function(response, status, headers, config) {
       console.log(response);
       if (!response.signed) {
-        window.location.href = "/vacebook/public/homepage.html";
+        window.location.href = '/vacebook/public/homepage.html';
       } else {
-        $rootScope.user = response.user;
+        $rootScope.visitedUser = response.user;
       }
     }).
     error(function(response, status, headers, config) {
@@ -165,19 +163,18 @@ angular.module('app', ['ui.router'])
       console.log(status);
     })
   .then(function() {
-    $http.get('home/getUserPostswithComments/' + $rootScope.user.id)
+    $http.get('home/getUserPostswithComments/' + $rootScope.visitedUser.id)
       .success(function(response, status, headers, config) {
         $scope.posts = response.posts;
+        console.log("##", response.posts);
       }).
       error(function(response, status, headers, config) {
         console.log(response);
         console.log(status);
       });
   }, function() {
-    console.log("Error while getting user info");
+    console.log('Error while getting user info');
   });
-
-  
 
   $scope.deletePost = function(commentId){
     console.log(commentId);
@@ -185,6 +182,9 @@ angular.module('app', ['ui.router'])
 
 })
 
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////// DEFINING DIRECTIVES ///////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 .directive('suggestedFriend', function() {
   return {

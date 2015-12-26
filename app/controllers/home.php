@@ -79,13 +79,19 @@ class Home extends Controller
     echo json_encode($response);
   }
 
-  public function getUserInfo() {
+  public function getUserInfo($userId = -1) {
+    // var_dump(getUserInfo($userId));
     $response['user'] = array();
     $response['signed'] = false;
 
-    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      if ($userId = -1) $userId = $_SESSION["user_id"];
       $response['signed'] = true;
-      $response['user'] = getUserInfo($_SESSION["user_id"]);
+      if(isUserIdExists($userId)) {
+        $response['user'] = getUserInfo($userId);
+      } else {
+        $response['errors'] = ["message" => "user_id does not exists."];
+      }
     }
     echo json_encode($response);
   }
