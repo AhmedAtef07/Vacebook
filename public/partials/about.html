@@ -2,10 +2,10 @@
 <div class="text-center profile-info top-10">
   <div class="circle-image" style="background-image:url('assets/images/cat.jpg');"></div>
   <br>
-  <strong style="font-size: 25px;">{{ user.first_name }} {{ user.last_name }}</strong>
+  <strong style="font-size: 25px;">{{ visitedUser.first_name }} {{ visitedUser.last_name }}</strong>
   <br>
   <p style="color: #557998; font-size: small;">
-    @{{ user.username }}
+    @{{ visitedUser.username }}
   </p>
   <p><strong>720 posts</strong></p>
   <div class="btn btn-success">Add Friend</div>
@@ -13,22 +13,22 @@
 
   <div id="extra-content">
     <p class="info-point">
-      <strong><i>xerophagia hardware kiddish omnifidel sarcodous Charruan mesocephal anastomotic derision aphrodisiac dorser talpicide hypodermoclysis voluminosity {{user.about_me}}</i></strong>
+      <strong><i>xerophagia hardware kiddish omnifidel sarcodous Charruan mesocephal anastomotic derision aphrodisiac dorser talpicide hypodermoclysis voluminosity {{visitedUser.about_me}}</i></strong>
     </p>
     <p class="info-point">
-      <strong>{{ user.gender }}</strong>
+      <strong>{{ visitedUser.gender }}</strong>
     </p>
     <p class="info-point">
-      <strong>{{ user.birthdate }}</strong>
+      <strong>{{ visitedUser.birthdate }}</strong>
     </p>
-    <p class="info-point" ng-if="user.phone_number">
-      <strong>{{ user.phone_number }}</strong>
+    <p class="info-point" ng-if="visitedUser.phone_number">
+      <strong>{{ visitedUser.phone_number }}</strong>
     </p>
-    <p class="info-point" ng-if="user.hometown">
-      <strong>{{ user.hometown }}</strong>
+    <p class="info-point" ng-if="visitedUser.hometown">
+      <strong>{{ visitedUser.hometown }}</strong>
     </p>
-    <p class="info-point" ng-if="user.marital_status">
-      <strong>{{ user.marital_status }}</strong>
+    <p class="info-point" ng-if="visitedUser.marital_status">
+      <strong>{{ visitedUser.marital_status }}</strong>
     </p>
   </div>
 

@@ -40,7 +40,6 @@ angular.module('app', ['ui.router'])
 //////////////////////////////////////////////////////////////////////////
 
 .controller('friendsController', function($rootScope, $scope, $http) {
-
   if (!$rootScope.user) {
     $http.get('home/getUserInfo').
       success(function(response, status, headers, config) {
@@ -49,6 +48,7 @@ angular.module('app', ['ui.router'])
           window.location.href = '/vacebook/public/homepage.html';
         } else {
           $rootScope.user = response.user;
+          $rootScope.visitedUser = $rootScope.user;
         }
       }).
       error(function(response, status, headers, config) {
@@ -56,6 +56,7 @@ angular.module('app', ['ui.router'])
         console.log(status);
       });
   }
+  $rootScope.visitedUser = $rootScope.user;
   $http.get('home/getFriends')
     .success(function(response, status, headers, config) {
       // console.log(response);
@@ -68,23 +69,8 @@ angular.module('app', ['ui.router'])
       console.log(status);
     });
 })
-.controller('newPostController', function($rootScope, $scope, $http) {
 
-  if (!$rootScope.user) {
-    $http.get('home/getUserInfo').
-      success(function(response, status, headers, config) {
-        console.log(response);
-        if (!response.signed) {
-          window.location.href = '/vacebook/public/homepage.html';
-        } else {
-          $rootScope.user = response.user;
-        }
-      }).
-      error(function(response, status, headers, config) {
-        console.log(response);
-        console.log(status);
-      });
-  }
+.controller('newPostController', function($rootScope, $scope, $http) {
   $scope.caption = '';
 
   $scope.addPost = function () {
@@ -101,7 +87,6 @@ angular.module('app', ['ui.router'])
     };
 
     console.log(req);
-
     $http(req).then(function success(response) {
       $scope.caption = '';
       console.log(response);
@@ -110,20 +95,26 @@ angular.module('app', ['ui.router'])
     });
   };
 })
+
 .controller('postsController', function($rootScope, $scope, $http) {
-  $http.get('home/getUserInfo').
-    success(function(response, status, headers, config) {
-      console.log(response);
-      if (!response.signed) {
-        // window.location.href = '/vacebook/public/homepage.html';
-      } else {
-        $rootScope.user = response.user;
-      }
-    }).
-    error(function(response, status, headers, config) {
-      console.log(response);
-      console.log(status);
-    });
+  if (!$rootScope.user) {
+    $http.get('home/getUserInfo').
+      success(function(response, status, headers, config) {
+        console.log(response);
+        if (!response.signed) {
+          // window.location.href = '/vacebook/public/homepage.html';
+        } else {
+          $rootScope.user = response.user;
+          $rootScope.visitedUser = $rootScope.user;
+        }
+      }).
+      error(function(response, status, headers, config) {
+        console.log(response);
+        console.log(status);
+      });
+  }
+
+  $rootScope.visitedUser = $rootScope.user;
 
   $http.get('home/getPosts').
     success(function(response, status, headers, config) {
@@ -143,12 +134,10 @@ angular.module('app', ['ui.router'])
   $scope.deletePost = function(commentId){
     console.log(commentId);
   };
-
 })
+
 .controller('userPorfileController', function($rootScope, $scope, $http, $stateParams) {
-
   console.log($stateParams.userId);
-
   $http.get('home/getUserInfo/' + $stateParams.userId)
     .success(function(response, status, headers, config) {
       console.log(response);
@@ -166,7 +155,7 @@ angular.module('app', ['ui.router'])
     $http.get('home/getUserPostswithComments/' + $rootScope.visitedUser.id)
       .success(function(response, status, headers, config) {
         $scope.posts = response.posts;
-        console.log("##", response.posts);
+        // console.log("##", response.posts);
       }).
       error(function(response, status, headers, config) {
         console.log(response);
@@ -176,10 +165,9 @@ angular.module('app', ['ui.router'])
     console.log('Error while getting user info');
   });
 
-  $scope.deletePost = function(commentId){
-    console.log(commentId);
+  $scope.deletePost = function(postId){
+    console.log(postId);
   };
-
 })
 
 ////////////////////////////////////////////////////////////////////////////

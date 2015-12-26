@@ -85,7 +85,7 @@ class Home extends Controller
     $response['signed'] = false;
 
     if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
-      if ($userId = -1) $userId = $_SESSION["user_id"];
+      if ($userId == -1) $userId = $_SESSION["user_id"];
       $response['signed'] = true;
       if(isUserIdExists($userId)) {
         $response['user'] = getUserInfo($userId);
