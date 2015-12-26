@@ -23,7 +23,7 @@ angular.module('app').controller('newPostController', function($rootScope, $scop
         $scope.caption = '';
       }
     }, function error(response) {
-      alert("Coudn't post for some strange reason!");
+      console.log("Coudn't post for some strange reason!");
     });
   };
 

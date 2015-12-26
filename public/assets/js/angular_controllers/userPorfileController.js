@@ -39,7 +39,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
         $rootScope.visitedUser.state = 'waitingAccept';
       }
     }, function error(response) {
-      alert("Coudn't post for some strange reason!");
+      alert("Coudn't add friend!");
     });
   };
 
@@ -81,41 +81,52 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
         $rootScope.visitedUser.state = '';
       }
     }, function error(response) {
-      alert("Coudn't post for some strange reason!");
+      alert("Coudn't Delete!");
     });
   };
 
 
   function update() {
-    $http.get('home/getUserInfo/' + $stateParams.userId).
-      success(function(response, status, headers, config) {
-        console.log(response);
-        if (!response.signed) {
-          window.location.href = '/vacebook/public/homepage.html';
-        } else {
-          $rootScope.visitedUser = response.user;
-          if (!$stateParams.userId) {
-            $rootScope.user = response.user;
-          }
+    var req = {
+      method: 'GET',
+      url: 'home/getUserInfo/' + $stateParams.userId,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    console.log(req);
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        $rootScope.visitedUser = response.data.user;
+        if (!$stateParams.userId) {
+          $rootScope.user = response.data.user;
         }
-      }).
-      error(function(response, status, headers, config) {
-        console.log(response);
-        console.log(status);
-      }).
-      then(function() {
-        $http.get('home/getUserPostswithComments/' + $rootScope.visitedUser.id)
-        .success(function(response, status, headers, config) {
-          $scope.posts = response.posts;
-          // console.log("##", response.posts);
-        }).
-        error(function(response, status, headers, config) {
-          console.log(response);
-          console.log(status);
-        });
-      }, function() {
-        console.log('Error while getting user info');
+      }
+    }, function error(response) {
+      alert("Coudn't get user info!");
+    }).
+    then(function () {
+      var req2 = {
+        method: 'GET',
+        url: 'home/getUserPostswithComments/' + $rootScope.visitedUser.id,
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: {
+        }
+      };
+      $http(req2).then(function success(response) {
+        console.log(response.data);
+        $scope.posts = response.data.posts;
+      }, function error(response) {
+        alert("Coudn't get posts with comments!");
       });
+    });
   }
 
 });

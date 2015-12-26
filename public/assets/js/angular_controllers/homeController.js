@@ -1,19 +1,25 @@
 angular.module('app').controller('homeController', function($rootScope, $scope, $http) {
 
   if (!$rootScope.user) {
-    $http.get('home/getUserInfo').
-    success(function(response, status, headers, config) {
-      console.log(response);
-      if (!response.signed) {
+    var req = {
+      method: 'GET',
+      url: 'home/getUserInfo',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
         window.location.href = '/vacebook/public/homepage.html';
       } else {
-        $rootScope.user = response.user;
+        $rootScope.user = response.data.user;
         $rootScope.visitedUser = $rootScope.user;
       }
-    }).
-    error(function(response, status, headers, config) {
-      console.log(response);
-      console.log(status);
+    }, function error(response) {
+      console.log("Coudn't get user info!");
     });
   }
 
@@ -43,7 +49,6 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
     }, function error(response) {
       console.log("Coudn't post for some strange reason!");
     });
-
   };
 
   $scope.addComment = function (postId, commentCaption) {
@@ -81,24 +86,31 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
 
 
   function update() {
-    $http.get('home/getPosts').
-      success(function(response, status, headers, config) {
-        // console.log(response);
-        if (!response.signed) {
-          window.location.href = '/vacebook/public/homepage.html';
-        } else {
-          $scope.userId = response.user_id;
-          $scope.posts = response.posts;
-          $scope.posts.forEach(function(entry) {
-            entry.comment = '';
-          });
-          console.log($scope.posts);
-        }
-      }).
-      error(function(response, status, headers, config) {
-        console.log(response);
-        console.log(status);
-      });
+    var req = {
+      method: 'GET',
+      url: 'home/getPosts',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    console.log(req);
+    $http(req).then(function success(response) {
+      // console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        $scope.userId = response.data.user_id;
+        $scope.posts = response.data.posts;
+        $scope.posts.forEach(function(entry) {
+          entry.comment = '';
+        });
+        console.log($scope.posts);
+      }
+    }, function error(response) {
+      console.log("Coudn't get posts!");
+    });
   }
 
 });
