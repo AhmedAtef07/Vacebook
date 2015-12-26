@@ -26,17 +26,22 @@ function getUserInfo($userId) {
       $user2Id = max($userId, $_SESSION["user_id"]);
       $res2 = conn()->query("SELECT state, requester_id FROM friends
         WHERE user1_id='$user1Id' AND user2_id='$user2Id'");
-      $relation = convertToArray($res2)[0];
-      // print_r($relation);
-      if ($relation['state'] == 'request') {
-        if ($relation['requester_id'] == $userId) {
-          $user['state'] = 'requested';
-        } else {
-          $user['state'] = 'waitingAccept';
+      // error_reporting(0);
+      // print_r(convertToArray($res2));
+      $relation = convertToArray($res2);
+      if (count($relation) > 0) {
+        $relation = $relation[0];
+        if ($relation['state'] == 'request') {
+          if ($relation['requester_id'] == $userId) {
+            $user['state'] = 'requested';
+          } else {
+            $user['state'] = 'waitingAccept';
+          }
+        } else if ($relation['state'] == 'friend') {
+          $user['state'] = 'friend';
         }
-      } else {
-        $user['state'] = $relation['state'];
       }
+      
       return $user;
     }
 }
