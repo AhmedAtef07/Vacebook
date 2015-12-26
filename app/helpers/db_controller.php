@@ -111,6 +111,10 @@ function addPost($userId, $post) {
   $query->close();
 }
 
+function deleteComment($commentId) {
+  $res = conn()->query("DELETE FROM comments WHERE id='$commentId'");
+}
+
 function addComment($userId, $comment) {
   $query = conn()->prepare("INSERT INTO comments (user_id, post_id, caption) VALUES (?, ?, ?)");
   $query->bind_param('iis',

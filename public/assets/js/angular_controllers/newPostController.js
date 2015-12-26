@@ -15,7 +15,7 @@ angular.module('app').controller('newPostController', function($rootScope, $scop
         caption: $scope.caption
       }
     };
-    // console.log(req);
+    console.log(req);
     $http(req).then(function success(response) {
       $scope.caption = '';
       console.log(response);

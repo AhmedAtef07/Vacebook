@@ -18,16 +18,20 @@ angular.module('app').controller('friendsController', function($rootScope, $scop
   }
 
   $rootScope.visitedUser = $rootScope.user;
+  update();
 
-  $http.get('home/getFriends').
-  success(function(response, status, headers, config) {
-    console.log(response);
-    $scope.userId = response.user_id;
-    $scope.friends = response.friends;
-  }).
-  error(function(response, status, headers, config) {
-    console.log(response);
-    console.log(status);
-  });
+
+  function update() {
+    $http.get('home/getFriends').
+      success(function(response, status, headers, config) {
+        console.log(response);
+        $scope.userId = response.user_id;
+        $scope.friends = response.friends;
+      }).
+      error(function(response, status, headers, config) {
+        console.log(response);
+        console.log(status);
+      });
+  }
 
 });

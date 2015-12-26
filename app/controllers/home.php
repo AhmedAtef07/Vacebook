@@ -13,15 +13,6 @@ class Home extends Controller
     $this->view('index.html');
   }
 
-  public function test()
-  {
-    // echo "home/index and here is the name you passed: " . $name;
-    // var_dump($_POST);
-    $postdata = file_get_contents("php://input");
-    $request = json_decode($postdata);
-    // var_dump($request);
-    // echo "home/test";
-  }
 
   public function addNewPost() {
     $response['valid'] = false;
@@ -40,17 +31,20 @@ class Home extends Controller
     $v->required('caption')->lengthBetween(1, 1000);
     // $v->optional('image_path')->lengthBetween($min, $max)->alpha();
     $result = $v->validate($post);
+    $response['valid'] = $result->isValid();
 
-    $response['succeeded'] = $result->isValid();
-
-    if ($response['valid'] = $result->isValid()) {
-      addPost($_SESSION['user_id'], $post);
-    } else {
-      print_r($result->getFailures());
+    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+      if ($response['valid']) {
+        addPost($_SESSION['user_id'], $post);
+        $response['succeeded'] = true;
+      } else {
+        print_r($result->getFailures());
+      }
     }
 
     echo json_encode($response);
   }
+
 
   public function addNewComment() {
     $response['valid'] = false;
@@ -60,7 +54,7 @@ class Home extends Controller
     $request = json_decode($postdata);
 
     $comment = [
-      'post_id' => $post_id = $request->post_id,
+      'post_id' => $comment_id = $request->post_id,
       'caption' => $caption = $request->caption
     ];
 
@@ -69,17 +63,50 @@ class Home extends Controller
     $v->required('post_id')->digits();
     $v->required('caption')->lengthBetween(1, 1000);
     $result = $v->validate($comment);
+    $response['valid'] = $result->isValid();
 
-
-    if ($response['valid'] = $result->isValid()) {
-      addComment($_SESSION['user_id'], $comment);
-      $response['succeeded'] = true;
-    } else {
-      // print_r($result->getFailures());
+    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+      if ($response['valid']) {
+        addComment($_SESSION['user_id'], $comment);
+        $response['succeeded'] = true;
+      } else {
+        print_r($result->getFailures());
+      }
     }
 
     echo json_encode($response);
   }
+
+
+  public function deleteComment() {
+    $response['valid'] = false;
+    $response['succeeded'] = false;
+
+    $postdata = file_get_contents("php://input");
+    $request = json_decode($postdata);
+
+    $comment = [
+      'comment_id' => $comment_id = $request->comment_id,
+    ];
+
+    $v = new Validator();
+
+    $v->required('comment_id')->digits();
+    $result = $v->validate($comment);
+    $response['valid'] = $result->isValid();
+
+    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+      if ($response['valid']) {
+        deleteComment($comment['comment_id']);
+        $response['succeeded'] = true;
+      } else {
+        print_r($result->getFailures());
+      }
+    }
+
+    echo json_encode($response);
+  }
+
 
   public function getFriends() {
     $response['friends'] = array();
@@ -92,6 +119,7 @@ class Home extends Controller
     }
     echo json_encode($response);
   }
+
 
   public function getPosts() {
     $response['posts'] = array();
@@ -107,6 +135,7 @@ class Home extends Controller
     }
     echo json_encode($response);
   }
+
 
   public function getUserInfo($userId = -1) {
     // var_dump(getUserInfo($userId));
@@ -124,6 +153,7 @@ class Home extends Controller
     }
     echo json_encode($response);
   }
+
 
   public function addMockData() {
     $response['succeeded'] = false;
@@ -352,6 +382,8 @@ class Home extends Controller
     }
     echo json_encode($response);
   }
+
+
   public function login() {
     $response['succeeded'] = false;
     $response['logined'] = false;
@@ -377,21 +409,20 @@ class Home extends Controller
       $response['succeeded'] = true;
       if ($response['succeeded']) {
         $_SESSION['user_id'] = isUserExists($user['email_or_username'], $user['password']);
-        // echo $_SESSION['user_id'];
         if ($_SESSION['user_id']) {
           $response['logined'] = true;
           setcookie("user_id", $_SESSION['user_id'], time() + (86400 * 30), '/');
-        //   // echo $_SESSION['user_id'];
         }
       }
     }
     else {
-      // print_r($result->getFailures());
+      print_r($result->getFailures());
       $response['errors'] = $result->getFailures();
       $response['succeeded'] = $result->isValid();
     }
     echo json_encode($response);
   }
+
 
   public function register() {
     $response['succeeded'] = false;
@@ -446,7 +477,7 @@ class Home extends Controller
         setcookie("user_id", $_SESSION['user_id'], time() + (86400 * 30), '/');
       }
     } else {
-      // print_r($result->getFailures());
+      print_r($result->getFailures());
       $response['errors'] = $result->getFailures();
     }
     echo json_encode($response);
