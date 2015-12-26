@@ -46,11 +46,11 @@ function getAllPostswithComments() {
 
 function getAllUserPostswithComments($userId) {
   $res = conn()->query(
-    "SELECT posts.*, users.username 
+    "SELECT posts.*, users.username
      FROM posts INNER JOIN users ON (users.id = posts.user_id)
      HAVING user_id ='$userId'
     ");
-  
+
   $posts = convertToArray($res);
   foreach ($posts as $ind => $post) {
     $posts[$ind]['comments'] = getPostComments($post['id']);
@@ -86,7 +86,7 @@ function searchByName($firstName, $lastName) {
 function searchByPartOfName($name)
 {
   $res = conn()->query("SELECT * FROM users WHERE first_name LIKE '%'$firstName'%' OR last_name LIKE '%'$lastName'%' ");
-  return convertToArray($res);  
+  return convertToArray($res);
 }
 function searchByPhone($phoneNumber) {
   $res = conn()->query("SELECT * FROM users WHERE phone_number='$phoneNumber'");
@@ -101,13 +101,25 @@ function searchByCaption($text) {
 
 function addPost($userId, $post) {
   $query = conn()->prepare("INSERT INTO posts (user_id, caption, image_path) VALUES (?, ?, ?)");
-  var_dump($query);
+  // var_dump($query);
   $query->bind_param('iss',
     $userId,
     $post['caption'],
     $post['image_path']);
 
   $query->execute();
+  $query->close();
+}
+
+function addComment($userId, $comment) {
+  $query = conn()->prepare("INSERT INTO comments (user_id, post_id, caption) VALUES (?, ?, ?)");
+  $query->bind_param('iis',
+    $userId,
+    $comment['post_id'],
+    $comment['caption']);
+
+  $query->execute();
+  // var_dump($query);
   $query->close();
 }
 
@@ -161,8 +173,8 @@ function tryCreateUser($user) {
 }
 
 function suggestedPeople($my_id) {
-  $res = conn()->query("SELECT * FROM users WHERE id 
-                        IN (SELECT f1.user2_id FROM friends f1,friends f2 
+  $res = conn()->query("SELECT * FROM users WHERE id
+                        IN (SELECT f1.user2_id FROM friends f1,friends f2
                         WHERE f1.state = 'friends'
                         AND f1.user1_id = f2.user2_id
                         AND f2.user1_id ='$my_id'
@@ -174,7 +186,7 @@ function suggestedPeople($my_id) {
 function newsFeed($my_id) {
   $res = conn()->query("SELECT * FROM posts WHERE user_id = '$my_id'
                         UNION
-                        SELECT * FROM posts WHERE user_id IN (SELECT user2_id FROM friends 
+                        SELECT * FROM posts WHERE user_id IN (SELECT user2_id FROM friends
                                                               WHERE user1_id ='$my_id' AND state ='friends')
                         ORDER BY created_at
                       ");
@@ -182,22 +194,22 @@ function newsFeed($my_id) {
 }
 
 function commentNotifications($my_id) {
-  $res = conn()->query("SELECT c1.id , c1.post_id , c1.user_id , c1.caption , c1.created_at FROM comments c1,comments c2 
-                        WHERE c1.post_id = c2.post_id 
-                        AND c2.user_id ='$my_id' 
+  $res = conn()->query("SELECT c1.id , c1.post_id , c1.user_id , c1.caption , c1.created_at FROM comments c1,comments c2
+                        WHERE c1.post_id = c2.post_id
+                        AND c2.user_id ='$my_id'
                         AND c1.created_at > c2.created_at
-                      
+
                         UNION
 
-                        SELECT * FROM comments 
+                        SELECT * FROM comments
                         WHERE post_id IN (SELECT id FROM posts WHERE user_id ='$my_id')
-                        
+
                         ORDER BY created_at
                         ");
   return convertToArray($res);
 }
 function likeNotifications($my_id) {
-  $res = conn()->query("SELECT * FROM likes 
+  $res = conn()->query("SELECT * FROM likes
                         WHERE post_id IN (SELECT id FROM posts WHERE user_id ='$my_id')
                         ORDER BY created_at
                         ");
@@ -207,9 +219,9 @@ function likeNotifications($my_id) {
 
 function isUserIdExists($userId) {
   $res = conn()->query("SELECT id FROM users WHERE id = '$userId'");
-  
+
   $rows = $res->num_rows;
-  
+
   if($rows == 1) return true;
   else           return false;
 }

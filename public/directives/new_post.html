@@ -1,6 +1,13 @@
 <div class="well well-lg">
   <h3>What's on your mind...</h3>
-  <textarea name="" id="input" class="form-control" rows="3" required="required" maxlength="1000" ng-model="caption"></textarea>
+    <textarea name="" id="messageInput" class="form-control" rows="3" required="required" maxlength="1000" ng-model="caption" ng-keyup="keyPressed($event)"></textarea>
+  <!-- <div emoji-form emoji-message="emojiMessage">
+    <textarea id="messageInput"></textarea>
+    <button id="emojibtn">
+        <i class="icon icon-emoji"></i>
+    </button>
+  </div> -->
+
   <div style="text-align: right;" class="top-10">
     <button class="btn btn-primary" style="" ng-click="addPost()" ng-disabled="!caption">Add</button>
   </div>

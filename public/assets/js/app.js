@@ -2,7 +2,12 @@
 ///////////////////////////////// Angular /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-angular.module('app', ['ui.router'])
+angular.module('app', ['ui.router', 'ngSanitize', 'emojiApp'])
+.filter('html',function($sce){
+    return function(input){
+        return $sce.trustAsHtml(input);
+    };
+})
 
 ////////////////////////////////////////////////////////////////////////////
 /////////////////////////// CONFIGURING ROUTES //////////////////////////
@@ -70,7 +75,7 @@ angular.module('app', ['ui.router'])
     });
 })
 
-.controller('newPostController', function($rootScope, $scope, $http) {
+.controller('newPostController', function($rootScope, $scope, $http, $sce) {
   $scope.caption = '';
 
   $scope.addPost = function () {
@@ -124,6 +129,10 @@ angular.module('app', ['ui.router'])
       } else {
         $scope.userId = response.user_id;
         $scope.posts = response.posts;
+        $scope.posts.forEach(function(entry) {
+            entry.comment = '';
+        });
+        console.log($scope.posts);
       }
     }).
     error(function(response, status, headers, config) {
@@ -131,12 +140,47 @@ angular.module('app', ['ui.router'])
       console.log(status);
     });
 
-  $scope.deletePost = function(commentId){
+  $scope.deleteComment = function(commentId){
     console.log(commentId);
   };
+
+  $scope.addComment = function (postId, commentCaption) {
+    // console.log($scope.caption);
+    console.log(postId);
+    var req = {
+      method: 'POST',
+      url: 'home/addNewComment',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        post_id: postId,
+        caption: commentCaption
+      }
+    };
+    // console.log(req);
+    $http(req).then(function success(response) {
+      $scope.posts.forEach(function(entry) {
+          if (entry.id == postId) {
+            entry.comment = '';
+          }
+      });
+      console.log(response);
+    }, function error(response) {
+      console.log("Coudn't post for some strange reason!");
+    });
+  };
+
+    $scope.keyPressed = function(event, postId, commentCaption){
+      // console.log(event.keyCode);
+      if (event.keyCode == 13) {
+        console.log(postId);
+        $scope.addComment(postId, commentCaption);
+      }
+    };
 })
 
-.controller('userPorfileController', function($rootScope, $scope, $http, $stateParams) {
+.controller('userPorfileController', function($rootScope, $scope, $http, $stateParams, $sce) {
   console.log($stateParams.userId);
   $http.get('home/getUserInfo/' + $stateParams.userId)
     .success(function(response, status, headers, config) {
@@ -164,6 +208,10 @@ angular.module('app', ['ui.router'])
   }, function() {
     console.log('Error while getting user info');
   });
+
+  $scope.keyPressed = function(event){
+    console.log($scope.caption);
+  };
 
   $scope.deletePost = function(postId){
     console.log(postId);

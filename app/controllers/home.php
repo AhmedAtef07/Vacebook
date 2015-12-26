@@ -52,6 +52,35 @@ class Home extends Controller
     echo json_encode($response);
   }
 
+  public function addNewComment() {
+    $response['valid'] = false;
+    $response['succeeded'] = false;
+
+    $postdata = file_get_contents("php://input");
+    $request = json_decode($postdata);
+
+    $comment = [
+      'post_id' => $post_id = $request->post_id,
+      'caption' => $caption = $request->caption
+    ];
+
+    $v = new Validator();
+
+    $v->required('post_id')->digits();
+    $v->required('caption')->lengthBetween(1, 1000);
+    $result = $v->validate($comment);
+
+
+    if ($response['valid'] = $result->isValid()) {
+      addComment($_SESSION['user_id'], $comment);
+      $response['succeeded'] = true;
+    } else {
+      // print_r($result->getFailures());
+    }
+
+    echo json_encode($response);
+  }
+
   public function getFriends() {
     $response['friends'] = array();
     $response['signed'] = false;
