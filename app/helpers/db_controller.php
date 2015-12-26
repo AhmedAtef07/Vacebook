@@ -18,8 +18,56 @@ function getAllUsers() {
 function getUserInfo($userId) {
   $res = conn()->query("SELECT id, username, first_name, last_name, gender, birthdate, email,
     phone_number, hometown, marital_status, about_me, profile_pic FROM users WHERE id='$userId'");
-    // print_r(convertToArray($res));
-  return convertToArray($res)[0];
+    $user = convertToArray($res)[0];
+    if ($userId == $_SESSION["user_id"]) {
+      return $user;
+    } else {
+      $user1Id = min($userId, $_SESSION["user_id"]);
+      $user2Id = max($userId, $_SESSION["user_id"]);
+      $res2 = conn()->query("SELECT state, requester_id FROM friends
+        WHERE user1_id='$user1Id' AND user2_id='$user2Id'");
+      $relation = convertToArray($res2)[0];
+      // print_r($relation);
+      if ($relation['state'] == 'request') {
+        if ($relation['requester_id'] == $userId) {
+          $user['state'] = 'requested';
+        } else {
+          $user['state'] = 'waitingAccept';
+        }
+      } else {
+        $user['state'] = $relation['state'];
+      }
+      return $user;
+    }
+}
+
+function acceptFriendRequest($userId) {
+  $user1Id = min($userId, $_SESSION["user_id"]);
+  $user2Id = max($userId, $_SESSION["user_id"]);
+
+  if (removeRelation($userId)) {
+    $res = conn()->query("INSERT INTO friends (user1_id, user2_id, state, requester_id)
+        VALUES ('$user1Id', '$user2Id', 'friend', '$userId')");
+    if ($res) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+function removeRelation($userId) {
+  $user1Id = min($userId, $_SESSION["user_id"]);
+  $user2Id = max($userId, $_SESSION["user_id"]);
+  $res = conn()->query("DELETE FROM friends
+      WHERE user1_id='$user1Id' AND user2_id='$user2Id'");
+  if ($res) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function getAllPosts() {
@@ -228,4 +276,22 @@ function isUserIdExists($userId) {
 
   if($rows == 1) return true;
   else           return false;
+}
+
+function addFriend($user1Id, $user2Id, $state, $requester_id) {
+  $query = conn()->prepare("INSERT INTO friends (user1_id, user2_id, state, requester_id)
+        VALUES (?, ?, ?, ?)");
+  $query->bind_param('iisi',
+      min($user1Id, $user2Id),
+      max($user1Id, $user2Id),
+      $state,
+      $requester_id);
+
+  $query->execute();
+  $query_errors = count($query->error_list);
+  $query->close();
+
+  if ($query_errors == 0)    return true;
+  else                       return false;
+
 }

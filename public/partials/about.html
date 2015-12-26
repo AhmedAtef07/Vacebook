@@ -8,7 +8,23 @@
     @{{ visitedUser.username }}
   </p>
   <p><strong>720 posts</strong></p>
-  <div class="btn btn-success">Add Friend</div>
+
+  <div ng-if="visitedUser.id!=user.id && !visitedUser.state" class="btn btn-success"
+      ng-click="addFriend(visitedUser.id)">
+    Add friend
+  </div>
+  <div ng-if="visitedUser.state==='waitingAccept'" class="btn btn-success"
+      ng-click="removeRelation(visitedUser.id)">
+    Cancel Request
+  </div>
+  <div ng-if="visitedUser.state==='requested'" class="btn btn-success"
+      ng-click="acceptFriendRequest(visitedUser.id)">
+    Accept Request
+  </div>
+  <div ng-if="visitedUser.state==='friend'" class="btn btn-success"
+      ng-click="removeRelation(visitedUser.id)">
+    Unfriend
+  </div>
 
 
   <div id="extra-content">

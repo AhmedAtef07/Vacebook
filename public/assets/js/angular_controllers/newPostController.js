@@ -2,7 +2,6 @@ angular.module('app').controller('newPostController', function($rootScope, $scop
 
   $scope.caption = '';
 
-
   $scope.addPost = function () {
     console.log($scope.caption);
     var req = {

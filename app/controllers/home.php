@@ -77,6 +77,37 @@ class Home extends Controller
     echo json_encode($response);
   }
 
+  public function addNewFriend() {
+    $response['valid'] = false;
+    $response['succeeded'] = false;
+
+    $postdata = file_get_contents("php://input");
+    $request = json_decode($postdata);
+
+    $user = [
+      'requester_id' => $requester_id = $request->requester_id,
+      'user_id' => $user_id = $request->user_id
+    ];
+
+    $v = new Validator();
+
+    $v->required('requester_id')->digits();
+    $v->required('user_id')->digits();
+    $result = $v->validate($user);
+    $response['valid'] = $result->isValid();
+
+    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+      if ($response['valid'] && $user['requester_id']==$_SESSION["user_id"]) {
+        $response['succeeded'] = addFriend($user['requester_id'], $user['user_id'],
+          'request', $user['requester_id']);
+      } else {
+        print_r($result->getFailures());
+      }
+    }
+
+    echo json_encode($response);
+  }
+
 
   public function deleteComment() {
     $response['valid'] = false;
@@ -147,6 +178,40 @@ class Home extends Controller
       $response['signed'] = true;
       if(isUserIdExists($userId)) {
         $response['user'] = getUserInfo($userId);
+      } else {
+        $response['errors'] = ["message" => "user_id does not exists."];
+      }
+    }
+    echo json_encode($response);
+  }
+
+  public function acceptFriendRequest($userId = -1) {
+    // var_dump(getUserInfo($userId));
+    $response['user'] = array();
+    $response['signed'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0
+        && $userId != -1) {
+      $response['signed'] = true;
+      if(isUserIdExists($userId)) {
+        $response['succeeded'] = acceptFriendRequest($userId);
+      } else {
+        $response['errors'] = ["message" => "user_id does not exists."];
+      }
+    }
+    echo json_encode($response);
+  }
+
+  public function removeRelation($userId = -1) {
+    // var_dump(getUserInfo($userId));
+    $response['user'] = array();
+    $response['signed'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0
+        && $userId != -1) {
+      $response['signed'] = true;
+      if(isUserIdExists($userId)) {
+        $response['succeeded'] = removeRelation($userId);
       } else {
         $response['errors'] = ["message" => "user_id does not exists."];
       }

@@ -20,7 +20,7 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
   $rootScope.visitedUser = $rootScope.user;
   update();
 
-  $scope.deleteComment = function(commentId){
+  $scope.deleteComment = function(commentId) {
     console.log('commentId: ' + commentId);
     var req = {
       method: 'POST',
