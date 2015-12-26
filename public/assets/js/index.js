@@ -107,7 +107,7 @@ $(document).ready(function() {
         data: jsonDate,
         success: function(response) {
           console.log(response);
-          if (response.succeeded && response.logined) {
+          if (response.succeeded && response.signed) {
             window.location.href = "/vacebook/public";
           }
         },
@@ -123,7 +123,7 @@ $(document).ready(function() {
       dataType: "JSON",
       success: function(response) {
         console.log(response);
-        if (response.succeeded && response.logined) {
+        if (response.succeeded && response.signed) {
           window.location.href = "/vacebook/public";
         } else {
           response.messages.forEach(function(element) {

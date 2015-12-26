@@ -25,8 +25,12 @@ angular.module('app').controller('friendsController', function($rootScope, $scop
     $http.get('home/getFriends').
       success(function(response, status, headers, config) {
         console.log(response);
-        $scope.userId = response.user_id;
-        $scope.friends = response.friends;
+        if (!response.signed) {
+          window.location.href = '/vacebook/public/homepage.html';
+        } else {
+          $scope.userId = response.user_id;
+          $scope.friends = response.friends;
+        }
       }).
       error(function(response, status, headers, config) {
         console.log(response);

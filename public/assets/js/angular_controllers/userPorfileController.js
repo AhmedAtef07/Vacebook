@@ -35,7 +35,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
-      if (response.data.succeeded) {
+      if (response.data.signed) {
         $rootScope.visitedUser.state = 'waitingAccept';
       }
     }, function error(response) {
@@ -56,7 +56,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
-      if (response.data.succeeded) {
+      if (response.data.signed) {
         $rootScope.visitedUser.state = 'friend';
       }
     }, function error(response) {
@@ -77,7 +77,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
-      if (response.data.succeeded) {
+      if (response.data.signed) {
         $rootScope.visitedUser.state = '';
       }
     }, function error(response) {
@@ -118,10 +118,4 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
       });
   }
 
-
 });
-
-// $user = [
-//   'requester_id' => $requester_id = $request->requester_id,
-//   'user_id' => $user_id = $request->user_id
-// ];

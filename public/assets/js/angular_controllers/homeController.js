@@ -34,8 +34,12 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
     };
 
     $http(req).then(function success(response) {
-      console.log(response);
-      update();
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        update();
+      }
     }, function error(response) {
       console.log("Coudn't post for some strange reason!");
     });
@@ -57,8 +61,12 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
     };
 
     $http(req).then(function success(response) {
-      console.log(response);
-      update();
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        update();
+      }
     }, function error(response) {
       console.log("Coudn't post for some strange reason!");
     });

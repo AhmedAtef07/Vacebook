@@ -16,8 +16,12 @@ angular.module('app').controller('newPostController', function($rootScope, $scop
     };
     console.log(req);
     $http(req).then(function success(response) {
-      $scope.caption = '';
-      console.log(response);
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        $scope.caption = '';
+      }
     }, function error(response) {
       alert("Coudn't post for some strange reason!");
     });

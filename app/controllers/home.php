@@ -15,6 +15,7 @@ class Home extends Controller
 
 
   public function addNewPost() {
+    $response['signed'] = false;
     $response['valid'] = false;
     $response['succeeded'] = false;
 
@@ -34,6 +35,7 @@ class Home extends Controller
     $response['valid'] = $result->isValid();
 
     if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+      $response['signed'] = true;
       if ($response['valid']) {
         addPost($_SESSION['user_id'], $post);
         $response['succeeded'] = true;
@@ -47,6 +49,7 @@ class Home extends Controller
 
 
   public function addNewComment() {
+    $response['signed'] = false;
     $response['valid'] = false;
     $response['succeeded'] = false;
 
@@ -66,6 +69,7 @@ class Home extends Controller
     $response['valid'] = $result->isValid();
 
     if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+      $response['signed'] = true;
       if ($response['valid']) {
         addComment($_SESSION['user_id'], $comment);
         $response['succeeded'] = true;
@@ -78,6 +82,7 @@ class Home extends Controller
   }
 
   public function addNewFriend() {
+    $response['signed'] = false;
     $response['valid'] = false;
     $response['succeeded'] = false;
 
@@ -97,6 +102,7 @@ class Home extends Controller
     $response['valid'] = $result->isValid();
 
     if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+      $response['signed'] = true;
       if ($response['valid'] && $user['requester_id']==$_SESSION["user_id"]) {
         $response['succeeded'] = addFriend($user['requester_id'], $user['user_id'],
           'request', $user['requester_id']);
@@ -110,6 +116,7 @@ class Home extends Controller
 
 
   public function deleteComment() {
+    $response['signed'] = false;
     $response['valid'] = false;
     $response['succeeded'] = false;
 
@@ -127,6 +134,7 @@ class Home extends Controller
     $response['valid'] = $result->isValid();
 
     if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+      $response['signed'] = true;
       if ($response['valid']) {
         deleteComment($comment['comment_id']);
         $response['succeeded'] = true;
@@ -222,7 +230,7 @@ class Home extends Controller
 
   public function addMockData() {
     $response['succeeded'] = false;
-    $response['logined'] = false;
+    $response['signed'] = false;
 
     $password = sha1('12345');
     $query = conn()->prepare("INSERT INTO users (username, first_name, last_name, gender, birthdate, email, password, phone_number, hometown, marital_status, about_me)
@@ -285,7 +293,7 @@ class Home extends Controller
         echo 'Error';
     } else {
       $response['succeeded'] = true;
-      $response['logined'] = true;
+      $response['signed'] = true;
       $_SESSION['user_id'] = $query_insert_id;
     }
     $query = conn()->prepare("INSERT INTO users (username, first_name, last_name, gender, birthdate, email, password, phone_number, hometown, marital_status, about_me)
@@ -451,7 +459,7 @@ class Home extends Controller
 
   public function login() {
     $response['succeeded'] = false;
-    $response['logined'] = false;
+    $response['signed'] = false;
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata);
 
@@ -475,7 +483,7 @@ class Home extends Controller
       if ($response['succeeded']) {
         $_SESSION['user_id'] = isUserExists($user['email_or_username'], $user['password']);
         if ($_SESSION['user_id']) {
-          $response['logined'] = true;
+          $response['signed'] = true;
           setcookie("user_id", $_SESSION['user_id'], time() + (86400 * 30), '/');
         }
       }
