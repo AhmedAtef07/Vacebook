@@ -91,7 +91,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
       success(function(response, status, headers, config) {
         console.log(response);
         if (!response.signed) {
-          // window.location.href = '/vacebook/public/homepage.html';
+          window.location.href = '/vacebook/public/homepage.html';
         } else {
           $rootScope.visitedUser = response.user;
           if (!$stateParams.userId) {
