@@ -110,7 +110,7 @@ class Home extends Controller
         $response['succeeded'] = true;
 
         // $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
-        // trigger on my_channel' an event called 'my_event' with this payload:
+        // // trigger on my_channel' an event called 'my_event' with this payload:
         // $data['comment'] = json_encode($comment);
         // $pusher->trigger('notifications', 'new_notification', $data);
       } else {

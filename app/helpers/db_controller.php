@@ -90,6 +90,7 @@ function addComment($userId, $comment) {
       FROM comments c JOIN users u ON c.user_id=u.id WHERE c.id='$query_insert_id'");
   if ($query_errors == 0) {
     $following = followPost($userId, $comment['post_id']);
+    trigPostFollowers($comment['post_id'], $userId, 'Comment');
     return convertToArray($res)[0];
   }
   return false;
@@ -108,6 +109,7 @@ function addLike($userId, $postId) {
           WHERE post_id='$postId' AND user_id='$userId'");
   if ($query_errors == 0) {
     $following = followPost($userId, $postId);
+    trigPostFollowers($postId, $userId, 'Like');
     return convertToArray($res)[0];
   }
   return false;
@@ -361,6 +363,17 @@ function seePost($userId, $postId) {
   else                       return false;
 }
 
+function trigPostFollowers($postId, $userId, $state = 'Action') {
+  $res = conn()->query("SELECT follower_id FROM following WHERE post_id='$postId'");
+  $followers = convertToArray($res);
+
+  $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
+  $data['action'] = ('new ' . $state);
+  $data['user_id'] = $userId;
+  foreach ($followers as $ind => $follower) {
+    $pusher->trigger((string)$follower['follower_id'], 'new_notification', $data);
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// Searches ///////////////////////////////

@@ -17,6 +17,7 @@ angular.module('app').controller('notificationsController', function($rootScope,
       } else {
         $rootScope.user = response.data.user;
         $rootScope.visitedUser = $rootScope.user;
+        initializePusher();
       }
     }, function error(response) {
       console.log("Coudn't get user info!");
@@ -61,6 +62,19 @@ angular.module('app').controller('notificationsController', function($rootScope,
         });
       });
     });
+  }
+
+
+  function initializePusher() {
+    if (!$rootScope.pusher) {
+      $rootScope.pusher = new Pusher('f17087409b6bc1746d6e');
+      console.log(''+$rootScope.user.id);
+      $rootScope.notificationsChannel = $rootScope.pusher.subscribe(''+$rootScope.user.id);
+      $rootScope.notificationsChannel.bind('new_notification', function(notification){
+        var message = notification;
+        console.log((message));
+      });
+    }
   }
 
   function update() {
