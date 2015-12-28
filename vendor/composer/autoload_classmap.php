@@ -6,4 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Pusher' => $vendorDir . '/pusher/pusher-php-server/lib/Pusher.php',
+    'PusherException' => $vendorDir . '/pusher/pusher-php-server/lib/Pusher.php',
+    'PusherInstance' => $vendorDir . '/pusher/pusher-php-server/lib/Pusher.php',
 );
