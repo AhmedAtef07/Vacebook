@@ -74,6 +74,11 @@ angular.module('app', ['ui.router', 'ngSanitize', 'emojiApp'])
     templateUrl: 'directives/comment.html'
   };
 })
+.directive('notification', function() {
+  return {
+    templateUrl: 'directives/notification.html'
+  };
+})
 .directive('friend', function() {
   return {
     templateUrl: 'directives/friend_block.html'

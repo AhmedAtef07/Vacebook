@@ -10,7 +10,6 @@ angular.module('app').controller('notificationsController', function($rootScope,
       data: {
       }
     };
-    console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
       if (!response.data.signed) {
@@ -28,9 +27,33 @@ angular.module('app').controller('notificationsController', function($rootScope,
   update();
   initImages();
 
+  $scope.updateSeen = function(postId) {
+    console.log('seen ' + postId);
+    var req = {
+      method: 'POST',
+      url: 'home/updateLastSeen/' + postId,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        if (response.data.succeeded) {
+            update();
+        }
+      }
+    }, function error(response) {
+      console.log("Coudn't like post for some strange reason!");
+    });
+  };
+
 
   function initImages () {
-    console.log("In");
     $(function () {
       $('.circle-image-fh').each(function() {
         $(this).css({
@@ -50,14 +73,14 @@ angular.module('app').controller('notificationsController', function($rootScope,
       data: {
       }
     };
-    console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
       if (!response.data.signed) {
         window.location.href = '/vacebook/public/homepage.html';
       } else {
-        $scope.userId = response.data.user_id;
-        $scope.friends = response.data.friends;
+        if (response.data.succeeded) {
+          $scope.notifications = response.data.notifications;
+        }
       }
     }, function error(response) {
       console.log("Coudn't get friends!");

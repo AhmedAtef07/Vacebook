@@ -233,6 +233,31 @@ class Home extends Controller
     echo json_encode($response);
   }
 
+  public function getNotifications() {
+    $response['notifications'] = array();
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      $response['notifications'] = getNotifications($_SESSION["user_id"]);
+      $response['succeeded'] = true;
+    }
+    echo json_encode($response);
+  }
+
+  public function updateLastSeen($postId = -1) {
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      seePost($_SESSION["user_id"], $postId);
+      $response['succeeded'] = true;
+    }
+    echo json_encode($response);
+  }
+
   public function acceptFriendRequest($userId = -1) {
     // var_dump(getUserInfo($userId));
     $response['user'] = array();

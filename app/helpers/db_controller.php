@@ -146,18 +146,18 @@ function deleteRelation($userId) {
 
 function getNotifications($userId) {
   if (true || $userId == $_SESSION["user_id"]) {
-    $res = conn()->query("SELECT * FROM
-      (SELECT follower_id, post_id, last_seen from following) n JOIN
-      ((SELECT user_id, post_id, created_at, 'comment' as state  FROM comments c
+    $res = conn()->query("SELECT u.*, us.username FROM
+      ((SELECT follower_id, post_id, last_seen FROM following) n JOIN
+      ((SELECT user_id, post_id, created_at, 'commented' as state  FROM comments c
         WHERE created_at > all
-        (select last_seen from following f where f.post_id=c.post_id))
+        (SELECT last_seen FROM following f WHERE f.post_id=c.post_id AND follower_id='$userId'))
       UNION
-      (SELECT user_id, post_id, created_at, 'like' as state  FROM likes l
+      (SELECT user_id, post_id, created_at, 'liked' AS state  FROM likes l
         WHERE created_at > all
-        (select last_seen from following f where f.post_id=l.post_id))) AS u
-        ON n.post_id=u.post_id
-    WHERE follower_id='$userId'
-    ORDER BY u.created_at DESC, state ASC, u.post_id;");
+        (SELECT last_seen FROM following f WHERE f.post_id=l.post_id AND follower_id='$userId')))
+        AS u ON n.post_id=u.post_id) JOIN users us ON u.user_id=us.id
+      WHERE follower_id='$userId' AND follower_id!=user_id
+      ORDER BY u.created_at DESC, state ASC, u.post_id");
   }
   if ($res)       return convertToArray($res);
   else            return false;

@@ -1,0 +1,22 @@
+{{ notifications.length }}
+<table class="table table-hover" id="table">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Action</th>
+      <th>post id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="notification in notifications">
+      <!-- <notification></notification> -->
+      <th scope="row"> {{ notification.username }} </th>
+      <td> {{ notification.state }} </td>
+      <td>
+        <a ng-click="updateSeen(notification.post_id)" ng-href="#/post/{{notification.post_id}}">
+          {{ notification.post_id }}
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
