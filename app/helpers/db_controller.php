@@ -10,6 +10,59 @@ function convertToArray(&$response) {
   return $queryArray;
 }
 
+
+function followPost($userId, $postId) {
+  $query = conn()->prepare("INSERT INTO following (follower_id, post_id)
+        VALUES (?, ?)");
+  if (true || $userId == $_SESSION["user_id"]) {
+    $query->bind_param('ii',
+        $userId,
+        $postId);
+  }
+  $query->execute();
+  $query_errors = count($query->error_list);
+  $query->close();
+
+  if ($query_errors == 0)    return true;
+  else                       return false;
+}
+
+function seePost($userId, $postId) {
+  // update actions set createdat=current_timestamp where post_id=2 and user_id=4;
+  $query = conn()->prepare("UPDATE following SET last_seen=CURRENT_TIMESTAMP
+    WHERE  follower_id=? AND post_id=?");
+  if (true || $userId == $_SESSION["user_id"]) {
+    $query->bind_param('ii',
+        $userId,
+        $postId);
+  }
+  $query->execute();
+  $query_errors = count($query->error_list);
+  $query->close();
+
+  if ($query_errors == 0)    return true;
+  else                       return false;
+}
+
+function getNotifications($userId) {
+  if (true || $userId == $_SESSION["user_id"]) {
+    $res = conn()->query("SELECT * FROM
+      (SELECT follower_id, post_id, last_seen from following) n JOIN
+      ((SELECT user_id, post_id, created_at, 'comment' as state  FROM comments c
+        WHERE created_at > all
+        (select last_seen from following f where f.post_id=c.post_id))
+      UNION
+      (SELECT user_id, post_id, created_at, 'like' as state  FROM likes l
+        WHERE created_at > all
+        (select last_seen from following f where f.post_id=l.post_id))) AS u
+        ON n.post_id=u.post_id
+    WHERE follower_id='$userId'
+    ORDER BY u.created_at DESC, state ASC, u.post_id;");
+  }
+  if ($res)       return convertToArray($res);
+  else            return false;
+}
+
 function getAllUsers() {
   $res = conn()->query("SELECT * FROM users");
   return convertToArray($res);
@@ -41,7 +94,7 @@ function getUserInfo($userId) {
           $user['state'] = 'friend';
         }
       }
-      
+
       return $user;
     }
 }
@@ -166,6 +219,17 @@ function addPost($userId, $post) {
 
 function deleteComment($commentId) {
   $res = conn()->query("DELETE FROM comments WHERE id='$commentId'");
+}
+
+function addLike($userId, $postId) {
+  $query = conn()->prepare("INSERT INTO likes (user_id, post_id) VALUES (?, ?)");
+  $query->bind_param('ii',
+    $userId,
+    $postId);
+
+  $query->execute();
+  // var_dump($query);
+  $query->close();
 }
 
 function addComment($userId, $comment) {

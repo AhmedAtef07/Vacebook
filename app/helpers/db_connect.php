@@ -80,6 +80,16 @@ $conn->query("CREATE TABLE IF NOT EXISTS likes (
   FOREIGN KEY(user_id)       REFERENCES users(id)
   )");
 
+$conn->query("CREATE TABLE IF NOT EXISTS following (
+  follower_id     INT              NOT NULL,
+  post_id         INT              NOT NULL,
+  last_seen       TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at      TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY(follower_id, post_id),
+  FOREIGN KEY(follower_id)   REFERENCES users(id),
+  FOREIGN KEY(post_id)       REFERENCES posts(id)
+  )");
 
 
 function conn() {
