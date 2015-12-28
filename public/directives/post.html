@@ -12,7 +12,10 @@
             </a>
           </b>
       </h4>
-      <h6 class="header_date">
+      <h6 class="header_date" ng-if="link">
+          {{ post.created_at }}
+      </h6>
+      <h6 class="header_date" ng-if="!link">
         <a ng-href="#/post/{{post.id}}" target="_blank" class="header_date">
           {{ post.created_at }}
         </a>
@@ -32,10 +35,19 @@
   <hr class="hr">
   <div id="comment_control">
     <div class="btn-group" role="group">
-      <button class="btn btn-default" id="btn_like" onfocus="this.blur();" type="button">
-        <i class="fa fa-thumbs-o-up fa-lg" ng-if="!post.liked"></i>
-        <i class="fa fa-thumbs-up fa-lg" ng-if="post.liked"></i>
-        Like</button>
+      <button class="btn btn-default" id="btn_like" onfocus="this.blur();"
+        ng-if="!post.liked" type="button" ng-click="likePost(post)">
+        <i class="fa fa-thumbs-o-up fa-lg"></i>
+        Like
+      </button>
+      <button class="btn btn-default" id="btn_like" onfocus="this.blur();"
+        ng-if="post.liked" type="button" ng-click="unlikePost(post)">
+        <i class="fa fa-thumbs-up fa-lg"></i>
+        Liked
+      </button>
+      <!-- <button lass="btn btn-default" id="btn_like" onfocus="this.blur();">
+        {{ post.likes.length }}
+      </button> -->
       <button class="btn btn-default" id="btn_comment" onfocus="this.blur();" type="button">
         <i class="fa fa-commenting-o fa-lg"></i>
         Comment</button>
@@ -55,7 +67,7 @@
     </div>
     <div class="col-lg-11">
       <div class="input-group">
-        <input class="form-control" id="comment_caption" placeholder="Comment" type="text" ng-keyup="keyPressed($event, post.id, post.comment)" ng-model="post.comment">
+        <input class="form-control" id="comment_caption" placeholder="Comment" type="text" ng-keyup="keyPressed($event, post)" ng-model="post.comment">
         <span class="input-group-btn">
           <button class="btn btn-default" id="btn_pic" onfocus="this.blur();" type="button">
             <i class="fa fa-camera-retro fa-lg"></i>

@@ -25,34 +25,18 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
 
   $rootScope.visitedUser = $rootScope.user;
   update();
+  initImages();
 
-  $scope.deleteComment = function(commentId) {
-    console.log('commentId: ' + commentId);
-    var req = {
-      method: 'POST',
-      url: 'home/deleteComment',
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data: {
-        comment_id: commentId
-      }
-    };
+  var pusher = new Pusher('f17087409b6bc1746d6e');
+  var notificationsChannel = pusher.subscribe('notifications');
+  notificationsChannel.bind('new_notification', function(notification){
+    var message = notification.comment;
+    console.log(JSON.parse(message));
+  });
 
-    $http(req).then(function success(response) {
-      console.log(response.data);
-      if (!response.data.signed) {
-        window.location.href = '/vacebook/public/homepage.html';
-      } else {
-        update();
-      }
-    }, function error(response) {
-      console.log("Coudn't post for some strange reason!");
-    });
-  };
 
-  $scope.addComment = function (postId, commentCaption) {
-    console.log(postId);
+  $scope.addComment = function (post) {
+    console.log('comment ' + post.id);
     var req = {
       method: 'POST',
       url: 'home/addNewComment',
@@ -60,8 +44,77 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       data: {
-        post_id: postId,
-        caption: commentCaption
+        post_id: post.id,
+        caption: post.comment
+      }
+    };
+    console.log(req);
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        // update();
+        if (response.data.succeeded) {
+          post.comments.push(response.data.comment);
+          post.comment = '';
+        }
+      }
+    }, function error(response) {
+      console.log("Coudn't comment for some strange reason!");
+    });
+  };
+
+  $scope.deleteComment = function(comment) {
+    var req = {
+      method: 'POST',
+      url: 'home/deleteComment/' + comment.id,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    console.log(req);
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        // update();
+        if (response.data.succeeded) {
+          $scope.posts.forEach(function(postElement, postIndex) {
+            if (postElement.id == comment.post_id) {
+              postElement.comments.forEach(function(commentElement, commentIndex){
+                if(commentElement.id == comment.id){
+                    postElement.comments.splice(commentIndex, 1);
+                }
+              });
+            }
+          });
+        }
+      }
+    }, function error(response) {
+      console.log("Coudn't delete comment for some strange reason!");
+    });
+  };
+
+  $scope.keyPressed = function(event, post) {
+    if (event.keyCode == 13) {
+      console.log(post.id);
+      $scope.addComment(post);
+    }
+  };
+
+  $scope.likePost = function(post) {
+    console.log('like ' + post.id);
+    var req = {
+      method: 'POST',
+      url: 'home/addLike/' + post.id,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
       }
     };
 
@@ -70,20 +123,60 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
       if (!response.data.signed) {
         window.location.href = '/vacebook/public/homepage.html';
       } else {
-        update();
+        // update();
+        if (response.data.succeeded) {
+          post.liked = true;
+          post.likes.push(response.data.like);
+        }
       }
     }, function error(response) {
-      console.log("Coudn't post for some strange reason!");
+      console.log("Coudn't like post for some strange reason!");
     });
   };
 
-  $scope.keyPressed = function(event, postId, commentCaption) {
-    if (event.keyCode == 13) {
-      console.log(postId);
-      $scope.addComment(postId, commentCaption);
-    }
+  $scope.unlikePost = function(post) {
+    console.log('unlike ' + post.id);
+    var req = {
+      method: 'POST',
+      url: 'home/deleteLike/' + post.id,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        // update();
+        if (response.data.succeeded) {
+          post.liked = false;
+          post.likes.forEach(function(likeElement, likeIndex) {
+            if (likeElement.user_id == $rootScope.user.id) {
+              post.likes.splice(likeIndex, 1);
+            }
+          });
+        }
+      }
+    }, function error(response) {
+      console.log("Coudn't unlike post for some strange reason!");
+    });
   };
 
+
+  function initImages () {
+    console.log("In");
+    $(function () {
+      $('.circle-image-fh').each(function() {
+        $(this).css({
+          width: $(this).height() + 'px'
+        });
+      });
+    });
+  }
 
   function update() {
     var req = {
@@ -95,7 +188,7 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
       data: {
       }
     };
-    console.log(req);
+
     $http(req).then(function success(response) {
       // console.log(response.data);
       if (!response.data.signed) {

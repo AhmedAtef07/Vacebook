@@ -1,4 +1,4 @@
-angular.module('app').controller('friendsController', function($rootScope, $scope, $http) {
+angular.module('app').controller('notificationsController', function($rootScope, $scope, $http) {
 
   if (!$rootScope.user) {
     var req = {
@@ -43,7 +43,7 @@ angular.module('app').controller('friendsController', function($rootScope, $scop
   function update() {
     var req = {
       method: 'GET',
-      url: 'home/getFriends',
+      url: 'home/getNotifications',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

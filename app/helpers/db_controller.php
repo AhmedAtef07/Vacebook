@@ -84,10 +84,13 @@ function addComment($userId, $comment) {
 
   $query->execute();
   $query_errors = count($query->error_list);
+  $query_insert_id = $query->insert_id;
   $query->close();
+  $res = conn()->query("SELECT c.*, u.username
+      FROM comments c JOIN users u ON c.user_id=u.id WHERE c.id='$query_insert_id'");
   if ($query_errors == 0) {
     $following = followPost($userId, $comment['post_id']);
-    return $following;
+    return convertToArray($res)[0];
   }
   return false;
 }
@@ -101,9 +104,11 @@ function addLike($userId, $postId) {
   $query->execute();
   $query_errors = count($query->error_list);
   $query->close();
+  $res = conn()->query("SELECT * FROM likes
+          WHERE post_id='$postId' AND user_id='$userId'");
   if ($query_errors == 0) {
-    $following = followPost($userId, $comment['post_id']);
-    return $following;
+    $following = followPost($userId, $postId);
+    return convertToArray($res)[0];
   }
   return false;
 }
@@ -201,6 +206,8 @@ function getAllPostswithComments() {
   $posts = convertToArray($res);
   foreach ($posts as $ind => $post) {
     $posts[$ind]['comments'] = getPostComments($post['id']);
+    $posts[$ind]['liked'] = isLiked($_SESSION["user_id"], $post['id']);
+    $posts[$ind]['likes'] = getPostLikes($post['id']);
   }
   return $posts;
 }
@@ -214,6 +221,8 @@ function getUserPostswithComments($userId) {
   $posts = convertToArray($res);
   foreach ($posts as $ind => $post) {
     $posts[$ind]['comments'] = getPostComments($post['id']);
+    $posts[$ind]['liked'] = isLiked($_SESSION["user_id"], $post['id']);
+    $posts[$ind]['likes'] = getPostLikes($post['id']);
   }
   return $posts;
 }
@@ -224,6 +233,8 @@ function getPostWithComments($postId) {
   $posts = convertToArray($res);
   foreach ($posts as $ind => $post) {
     $posts[$ind]['comments'] = getPostComments($post['id']);
+    $posts[$ind]['liked'] = isLiked($_SESSION["user_id"], $post['id']);
+    $posts[$ind]['likes'] = getPostLikes($post['id']);
   }
   return $posts;
 }
@@ -231,6 +242,12 @@ function getPostWithComments($postId) {
 function getPostComments($postId) {
   $res = conn()->query("SELECT c.*, u.username
       FROM comments c JOIN users u ON c.user_id=u.id WHERE post_id='$postId'");
+  return convertToArray($res);
+}
+
+function getPostLikes($postId) {
+  $res = conn()->query("SELECT * FROM likes
+          WHERE post_id='$postId'");
   return convertToArray($res);
 }
 
@@ -271,7 +288,7 @@ function isUserIdExists($userId) {
   else           return false;
 }
 
-function isliked($userId, $postId) {
+function isLiked($userId, $postId) {
   $res = conn()->query("SELECT * FROM likes
           WHERE user_id='$userId' AND post_id='$postId'");
   $rows = $res->num_rows;
@@ -310,7 +327,7 @@ function acceptFriendRequest($userId) {
 }
 
 function followPost($userId, $postId) {
-  if (!isFollowing($userId)) {
+  if (!isFollowing($userId, $postId)) {
     $query = conn()->prepare("INSERT INTO following (follower_id, post_id)
           VALUES (?, ?)");
     if (true || $userId == $_SESSION["user_id"]) {
@@ -342,12 +359,6 @@ function seePost($userId, $postId) {
 
   if ($query_errors == 0)    return true;
   else                       return false;
-}
-
-function likeCount($postId) {
-  $res = conn()->query("SELECT * FROM likes
-          WHERE post_id='$postId'");
-  return $rows = $res->num_rows;
 }
 
 

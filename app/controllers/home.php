@@ -86,6 +86,7 @@ class Home extends Controller
     $response['signed'] = false;
     $response['valid'] = false;
     $response['succeeded'] = false;
+    $response['comment'] = array();
 
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata);
@@ -105,8 +106,13 @@ class Home extends Controller
     if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
       $response['signed'] = true;
       if ($response['valid']) {
-        addComment($_SESSION['user_id'], $comment);
+        $response['comment'] = addComment($_SESSION['user_id'], $comment);
         $response['succeeded'] = true;
+
+        // $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
+        // trigger on my_channel' an event called 'my_event' with this payload:
+        // $data['comment'] = json_encode($comment);
+        // $pusher->trigger('notifications', 'new_notification', $data);
       } else {
         print_r($result->getFailures());
       }
@@ -115,38 +121,53 @@ class Home extends Controller
     echo json_encode($response);
   }
 
-
-  public function deleteComment() {
+  public function addLike($postId = -1) {
     $response['signed'] = false;
-    $response['valid'] = false;
+    $response['succeeded'] = false;
+    $response['like'] = array();
+
+    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0
+        && $postId != -1) {
+      $response['signed'] = true;
+      $response['like'] = addLike($_SESSION['user_id'], $postId);
+      $response['succeeded'] = true;
+
+      // $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
+      // trigger on my_channel' an event called 'my_event' with this payload:
+      // $data['like'] = json_encode($comment);
+      // $pusher->trigger('notifications', 'new_notification', $data);
+    }
+
+    echo json_encode($response);
+  }
+
+  public function deleteComment($commentId = -1) {
+    $response['signed'] = false;
     $response['succeeded'] = false;
 
-    $postdata = file_get_contents("php://input");
-    $request = json_decode($postdata);
-
-    $comment = [
-      'comment_id' => $comment_id = $request->comment_id,
-    ];
-
-    $v = new Validator();
-
-    $v->required('comment_id')->digits();
-    $result = $v->validate($comment);
-    $response['valid'] = $result->isValid();
-
-    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
+    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0
+      && $commentId != -1) {
       $response['signed'] = true;
-      if ($response['valid']) {
-        deleteComment($comment['comment_id']);
-        $response['succeeded'] = true;
-      } else {
-        print_r($result->getFailures());
-      }
+      deleteComment($commentId);
+      $response['succeeded'] = true;
     }
 
     echo json_encode($response);
   }
 
+  public function deleteLike($postId = -1) {
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0
+        && $postId != -1) {
+      $response['signed'] = true;
+      deleteLike($_SESSION['user_id'], $postId);
+      $response['succeeded'] = true;
+    }
+
+    echo json_encode($response);
+  }
 
   public function getFriends() {
     $response['friends'] = array();
