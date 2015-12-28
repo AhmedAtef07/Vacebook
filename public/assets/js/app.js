@@ -30,10 +30,15 @@ angular.module('app', ['ui.router', 'ngSanitize', 'emojiApp'])
       controller: 'homeController'
     })
     .state('profile', {
-        url: '/people/:userId',
-        templateUrl: 'partials/profile.html',
-        controller: 'userPorfileController'
-      });
+      url: '/people/:userId',
+      templateUrl: 'partials/profile.html',
+      controller: 'userPorfileController'
+    })
+    .state('post', {
+      url: '/post/:postId',
+      templateUrl: 'partials/post.html',
+      controller: 'postController'
+    });
 
 })
 

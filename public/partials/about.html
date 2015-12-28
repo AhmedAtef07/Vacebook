@@ -9,7 +9,7 @@
   </p>
   <p><strong>720 posts</strong></p>
 
-  <div ng-if="visitedUser.id!=user.id && !visitedUser.state" class="btn btn-success"
+  <div ng-if="visitedUser.id!=user.id && visitedUser.state=='none'" class="btn btn-success"
       ng-click="addFriend(visitedUser.id)">
     Add friend
   </div>
@@ -34,7 +34,8 @@
     <p class="info-point">
       <strong>{{ visitedUser.gender }}</strong>
     </p>
-    <p class="info-point">
+    <p class="info-point"
+      ng-if="!visitedUser.state || visitedUser.state=='friend'">
       <strong>{{ visitedUser.birthdate }}</strong>
     </p>
     <p class="info-point" ng-if="visitedUser.phone_number">

@@ -32,7 +32,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
         user_id: $rootScope.visitedUser.id
       }
     };
-    console.log(req);
+    // console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
       if (response.data.signed) {
@@ -53,7 +53,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
       data: {
       }
     };
-    console.log(req);
+    // console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
       if (response.data.signed) {
@@ -74,11 +74,11 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
       data: {
       }
     };
-    console.log(req);
+    // console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
       if (response.data.signed) {
-        $rootScope.visitedUser.state = '';
+        $rootScope.visitedUser.state = 'none';
       }
     }, function error(response) {
       alert("Coudn't Delete!");
@@ -96,7 +96,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
       data: {
       }
     };
-    console.log(req);
+    // console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
       if (!response.data.signed) {

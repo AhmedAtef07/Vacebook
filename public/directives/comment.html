@@ -4,7 +4,13 @@
       <img src="assets/images/user1.png" alt="User1" class="header_pic" >
     </div>
     <div class="col-lg-4">
-      <h5 class="header_user"><b>User {{comment.user_id}}</b></h5>
+      <h5 class="header_user">
+        <b>
+          <a ng-href="#/people/{{comment.user_id}}" target="_blank" class="header_user">
+          @{{ comment.username }}
+          </a>
+        </b>
+      </h5>
       <h6 class="header_date">{{comment.created_at}}</h6>
     </div>
     <div class="col-lg-1 col-lg-offset-6" ng-if="comment.user_id===user.id">
