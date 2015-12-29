@@ -177,9 +177,40 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
       $rootScope.pusher = new Pusher('f17087409b6bc1746d6e');
       console.log(''+$rootScope.user.id);
       $rootScope.notificationsChannel = $rootScope.pusher.subscribe(''+$rootScope.user.id);
-      $rootScope.notificationsChannel.bind('new_notification', function(notification){
-        var message = notification;
+      $rootScope.notificationsChannel.bind('new_notification', function(notificationMSG){
+
+        var message = notificationMSG;
         console.log((message));
+
+        (function() {
+          var notificationUI = new NotificationFx({
+            message : '<p><i class="fa fa-comments-o lg"></i> ' + notificationMSG.username +
+            ' made a ' + notificationMSG.action + ' on a post you are following. Go <a href="#"> check it out </a> now.</p>',
+            layout : 'other',
+            effect : 'boxspinner',
+            ttl : 5000,
+            type : 'notice', // notice, warning or error
+            onClose : function() {
+            }
+          });
+          notificationUI.show();
+        })();
+
+        // (function() {
+        //   setTimeout( function() {
+        //     var notification = new NotificationFx({
+        //       message : '<div class="ns-thumb"><img src="assets/images/cat.jpg" class="accept-image"/></div><div class="ns-content"><p><a href="#">Zoe Moulder</a> accepted your invitation.</p></div>',
+        //       layout : 'other',
+        //       ttl : 5000,
+        //       effect : 'thumbslider',
+        //       type : 'notice', // notice, warning, error or success
+        //       onClose : function() {
+        //       }
+        //     });
+        //     notification.show();
+        //   }, 500);
+        // })();
+
       });
     }
   }

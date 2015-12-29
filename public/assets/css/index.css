@@ -67,3 +67,8 @@ html,body { height:100%; }
 .logo-img path {
   fill: red;
 }
+
+.accept-image{
+  width: 64px;
+  height:64px;
+}

@@ -198,6 +198,12 @@ function getUserInfo($userId) {
     }
 }
 
+function getUsername($userId) {
+  $res = conn()->query("SELECT username FROM users WHERE id='$userId'");
+    $user = convertToArray($res)[0]['username'];
+    return $user;
+}
+
 function getAllUsers() {
   $res = conn()->query("SELECT * FROM users");
   return convertToArray($res);
@@ -364,12 +370,16 @@ function seePost($userId, $postId) {
 }
 
 function trigPostFollowers($postId, $userId, $state = 'Action') {
-  $res = conn()->query("SELECT follower_id FROM following WHERE post_id='$postId'");
+  $res = conn()->query("SELECT follower_id FROM following
+    WHERE post_id='$postId' AND follower_id!='$userId'");
   $followers = convertToArray($res);
+  $username = getUsername($userId);
 
   $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
   $data['action'] = ('new ' . $state);
   $data['user_id'] = $userId;
+  $data['post_id'] = $postId;
+  $data['username'] = $username;
   foreach ($followers as $ind => $follower) {
     $pusher->trigger((string)$follower['follower_id'], 'new_notification', $data);
   }
