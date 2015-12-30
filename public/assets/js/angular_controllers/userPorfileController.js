@@ -25,7 +25,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
   $rootScope.addFriend = function(friendId) {
     var req = {
       method: 'POST',
-      url: 'home/addNewFriend',
+      url: 'users/addNewFriend',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -48,7 +48,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
   $rootScope.acceptFriendRequest = function(friendId) {
     var req = {
       method: 'POST',
-      url: 'home/acceptFriendRequest/' + friendId,
+      url: 'users/acceptFriendRequest/' + friendId,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -69,7 +69,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
   $rootScope.removeRelation = function(friendId) {
     var req = {
       method: 'POST',
-      url: 'home/removeRelation/' + friendId,
+      url: 'users/removeRelation/' + friendId,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -162,7 +162,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
   function update() {
     var req = {
       method: 'GET',
-      url: 'home/getUserInfo/' + $stateParams.userId,
+      url: 'users/getUserInfo/' + $stateParams.userId,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -186,7 +186,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     then(function () {
       var req2 = {
         method: 'GET',
-        url: 'home/getUserPostswithComments/' + $rootScope.visitedUser.id,
+        url: 'posts/getUserPostswithComments/' + $rootScope.visitedUser.id,
         header: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },

@@ -1,4 +1,4 @@
-angular.module('app').controller('newPostController', function($rootScope, $scope, $http, $sce) {
+angular.module('app').controller('newPostBlockController', function($rootScope, $scope, $http, $sce) {
 
   $scope.caption = '';
 
@@ -6,7 +6,7 @@ angular.module('app').controller('newPostController', function($rootScope, $scop
     console.log($scope.caption);
     var req = {
       method: 'POST',
-      url: 'home/addNewPost',
+      url: 'posts/addNewPost',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

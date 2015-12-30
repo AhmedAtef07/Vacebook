@@ -3,7 +3,7 @@ angular.module('app').controller('notificationsController', function($rootScope,
   if (!$rootScope.user) {
     var req = {
       method: 'GET',
-      url: 'home/getUserInfo',
+      url: 'users/getUserInfo',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -96,7 +96,7 @@ angular.module('app').controller('notificationsController', function($rootScope,
   function update() {
     var req = {
       method: 'GET',
-      url: 'home/getNotifications',
+      url: 'posts/getNotifications',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

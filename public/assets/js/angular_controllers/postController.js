@@ -5,7 +5,7 @@ angular.module('app').controller('postController', function($rootScope, $scope, 
   if (!$rootScope.user) {
     var req = {
       method: 'GET',
-      url: 'home/getUserInfo',
+      url: 'users/getUserInfo',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -105,7 +105,7 @@ angular.module('app').controller('postController', function($rootScope, $scope, 
   function update() {
     var req = {
       method: 'GET',
-      url: 'home/getPost/' + $stateParams.postId,
+      url: 'posts/getPost/' + $stateParams.postId,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

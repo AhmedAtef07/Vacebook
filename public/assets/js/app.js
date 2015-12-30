@@ -67,7 +67,7 @@ angular.module('app', ['ui.router', 'ngSanitize', 'emojiApp'])
 .directive('newPost', function() {
   return {
     templateUrl: 'directives/new_post.html',
-    controller: 'newPostController'
+    controller: 'newPostBlockController'
   };
 })
 .directive('comment', function() {

@@ -5,7 +5,7 @@ angular.module('app').controller('postBlockController', function($rootScope, $sc
     console.log('comment ' + post.id);
     var req = {
       method: 'POST',
-      url: 'home/addNewComment',
+      url: 'posts/addNewComment',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -34,7 +34,7 @@ angular.module('app').controller('postBlockController', function($rootScope, $sc
   $scope.deleteComment = function(comment) {
     var req = {
       method: 'POST',
-      url: 'home/deleteComment/' + comment.id,
+      url: 'posts/deleteComment/' + comment.id,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -72,7 +72,7 @@ angular.module('app').controller('postBlockController', function($rootScope, $sc
     console.log('like ' + post.id);
     var req = {
       method: 'POST',
-      url: 'home/addLike/' + post.id,
+      url: 'posts/addLike/' + post.id,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -100,7 +100,7 @@ angular.module('app').controller('postBlockController', function($rootScope, $sc
     console.log('unlike ' + post.id);
     var req = {
       method: 'POST',
-      url: 'home/deleteLike/' + post.id,
+      url: 'posts/deleteLike/' + post.id,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

@@ -3,7 +3,7 @@ angular.module('app').controller('friendsController', function($rootScope, $scop
   if (!$rootScope.user) {
     var req = {
       method: 'GET',
-      url: 'home/getUserInfo',
+      url: 'users/getUserInfo',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -108,7 +108,7 @@ angular.module('app').controller('friendsController', function($rootScope, $scop
   function update() {
     var req = {
       method: 'GET',
-      url: 'home/getFriends',
+      url: 'users/getFriends',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

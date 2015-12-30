@@ -3,7 +3,7 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
   if (!$rootScope.user) {
     var req = {
       method: 'GET',
-      url: 'home/getUserInfo',
+      url: 'users/getUserInfo',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -102,7 +102,7 @@ angular.module('app').controller('homeController', function($rootScope, $scope, 
   function update() {
     var req = {
       method: 'GET',
-      url: 'home/getPosts',
+      url: 'posts/getPosts',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
