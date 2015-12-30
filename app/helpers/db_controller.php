@@ -277,6 +277,31 @@ function getPostLikes($postId) {
   return convertToArray($res);
 }
 
+function getPendingRequests($userId) {
+  $res = conn()->query("SELECT * FROM
+        (SELECT u.id, u.username, u.gender, u.profile_pic, u.first_name, u.last_name, u.hometown
+         FROM friends JOIN users u ON user2_id=id
+              WHERE requester_id='$userId' AND user1_id='$userId' AND relation='request') a
+        UNION
+        (SELECT u.id, u.username, u.gender, u.profile_pic, u.first_name, u.last_name, u.hometown
+         FROM friends JOIN users u ON user1_id=id
+              WHERE requester_id='$userId' AND user2_id='$userId' AND relation='request')");
+  return convertToArray($res);
+}
+
+function getAwaitedRequests($userId) {
+  $res = conn()->query("SELECT * FROM
+        (SELECT u.id, u.username, u.gender, u.profile_pic, u.first_name, u.last_name, u.hometown
+         FROM friends JOIN users u ON user2_id=id
+              WHERE requester_id!='$userId' AND user1_id='$userId' AND relation='request') a
+        UNION
+        (SELECT u.id, u.username, u.gender, u.profile_pic, u.first_name, u.last_name, u.hometown
+         FROM friends JOIN users u ON user1_id=id
+              WHERE requester_id!='$userId' AND user2_id='$userId' AND relation='request')");
+  return convertToArray($res);
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// Checks ///////////////////////////////

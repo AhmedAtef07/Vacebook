@@ -34,6 +34,11 @@ angular.module('app', ['ui.router', 'ngSanitize', 'emojiApp'])
       templateUrl: 'partials/profile.html',
       controller: 'userPorfileController'
     })
+    .state('requests', {
+      url: '/requests',
+      templateUrl: 'partials/requests.html',
+      controller: 'requestsController'
+    })
     .state('notifications', {
       url: '/notifications',
       templateUrl: 'partials/notifications.html',

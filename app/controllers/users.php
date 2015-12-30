@@ -207,4 +207,30 @@ class Users extends Controller
     echo json_encode($response);
   }
 
+  public function pendingRequestsForCurrentUser() {
+    $response['requests'] = array();
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      $response['requests'] = getPendingRequests($_SESSION["user_id"]);
+      $response['succeeded'] = true;
+    }
+    echo json_encode($response);
+  }
+
+  public function awaitedRequestsForCurrentUser() {
+    $response['requests'] = array();
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(true || isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      $response['requests'] = getAwaitedRequests(1);
+      $response['succeeded'] = true;
+    }
+    echo json_encode($response);
+  } 
+
 }

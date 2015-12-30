@@ -44,7 +44,7 @@ angular.module('app').controller('notificationsController', function($rootScope,
 
   function initializePusher() {
     if (!$rootScope.pusher) {
-      $rootScope.pusher = new Pusher('f17087409b6bc1746d6e');
+      $rootScope.pusher = new Pusher('7c1c3e4b734ad304f377');
       console.log(''+$rootScope.user.id);
       $rootScope.notificationsChannel = $rootScope.pusher.subscribe(''+$rootScope.user.id);
 
