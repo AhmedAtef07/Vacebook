@@ -166,7 +166,7 @@ class Home extends Controller
     if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
       $response['signed'] = true;
       $response['user_id'] = $_SESSION["user_id"];
-      $response['friends'] = getAllUsers();
+      $response['friends'] = getUserFriends($_SESSION["user_id"]);
     }
     echo json_encode($response);
   }

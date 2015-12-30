@@ -221,6 +221,16 @@ function getAllUsers() {
   return convertToArray($res);
 }
 
+function getUserFriends($userId) {
+  $res = conn()->query("SELECT * FROM
+        (SELECT u.* FROM friends JOIN users u ON user2_id=id
+              WHERE user1_id='$userId' AND state='friend') a
+        UNION
+        (SELECT s.* FROM friends JOIN users s ON user1_id=id
+              WHERE user2_id='$userId' AND state='friend')");
+  return convertToArray($res);
+}
+
 function getAllPostswithComments() {
   $res = conn()->query("SELECT posts.*, users.username FROM posts INNER JOIN users ON (users.id = posts.user_id)");
   $posts = convertToArray($res);
@@ -268,11 +278,6 @@ function getPostComments($postId) {
 function getPostLikes($postId) {
   $res = conn()->query("SELECT * FROM likes
           WHERE post_id='$postId'");
-  return convertToArray($res);
-}
-
-function getUserFriends($userId) {
-  $res = conn()->query("SELECT * FROM friends WHERE user_id='$userId'");
   return convertToArray($res);
 }
 
