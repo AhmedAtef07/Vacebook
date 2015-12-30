@@ -1,6 +1,11 @@
 <div class="col-md-6 col-xs-12 top-20">
-  <div style="float: left; padding-right: 10px;" >
-    <div class="circle-image-fh" style="background-image:url('assets/images/cat.jpg'); height: 40px"></div>
+  <div style="float: left; padding-right: 10px;">
+    <div ng-if="visitedUser.profile_pic" class="circle-image"
+      style="background-image:url('assets/images/{{visitedUser.id}}/{{visitedUser.profile_pic}}'); height: 40px">
+    </div>
+    <div ng-if="!visitedUser.profile_pic" class="circle-image"
+      style="background-image:url('assets/images/{{visitedUser.gender}}.jpg'); height: 40px">
+    </div>
   </div>
   <div style="float: left;">
     <strong style="color: #2F6390;">

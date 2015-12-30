@@ -1,6 +1,11 @@
 <strong>About</strong>
 <div class="text-center profile-info top-10">
-  <div class="circle-image" style="background-image:url('assets/images/cat.jpg');"></div>
+  <div ng-if="visitedUser.profile_pic" class="circle-image"
+    style="background-image:url('assets/images/{{visitedUser.id}}/{{visitedUser.profile_pic}}');">
+  </div>
+  <div ng-if="!visitedUser.profile_pic" class="circle-image"
+    style="background-image:url('assets/images/{{visitedUser.gender}}.jpg');">
+  </div>
   <br>
   <strong style="font-size: 25px;">{{ visitedUser.first_name }} {{ visitedUser.last_name }}</strong>
   <br>
