@@ -76,7 +76,7 @@ $(document).ready(function() {
       console.log(formData);
       console.log(jsonData);
       $.ajax({
-        url: "home/register",
+        url: "users/register",
         type: "POST",
         contentType: "application/x-www-form-urlencoded",
         dataType: "JSON",
@@ -100,7 +100,7 @@ $(document).ready(function() {
       console.log(formData);
       console.log(jsonDate);
       $.ajax({
-        url: "home/login",
+        url: "users/login",
         type: "POST",
         contentType: "application/x-www-form-urlencoded",
         dataType: "JSON",
@@ -117,7 +117,7 @@ $(document).ready(function() {
 
   $("#mock_data").click(function() {
     $.ajax({
-      url: "home/addMockData",
+      url: "mock/addMockData",
       type: "GET",
       contentType: "application/x-www-form-urlencoded",
       dataType: "JSON",
