@@ -227,10 +227,28 @@ class Users extends Controller
 
     if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
       $response['signed'] = true;
-      $response['requests'] = getAwaitedRequests(1);
+      $response['requests'] = getAwaitedRequests($_SESSION["user_id"]);
       $response['succeeded'] = true;
     }
     echo json_encode($response);
   } 
+
+  public function peopleSuggesstionFromFriends() {
+    // To to be implemented.
+  } 
+
+  public function peopleSuggesstionFromHometown() {
+    $response['suggesstions'] = array();
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      $response['suggesstions'] = getNonFriendsInSameHometown($_SESSION["user_id"]);
+      $response['succeeded'] = true;
+    }
+    echo json_encode($response);
+  } 
+
 
 }

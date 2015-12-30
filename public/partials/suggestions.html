@@ -1,13 +1,24 @@
-<strong>Suggestions</strong>
+<strong>People Near By</strong>
 <!-- <ul style="list-style-type: none; padding: 0px;">
   <li><suggested-friend></suggested-friend></li>
   <li><suggested-friend></suggested-friend></li>
   <li><suggested-friend></suggested-friend></li>
 </ul>
 <div> -->
-  <div suggested-friend style="display: table;"></div>
-  <div suggested-friend style="display: table;"></div>
-  <div suggested-friend style="display: table;"></div>
+
+
+<div ng-controller="peopleSuggesstionsController">
+    <div suggested-friend class="top-10" style="display: table;" ng-repeat="suser in suggesstions"></div>
+</div>
+
+
+
+
+  <!-- <div suggested-friend style="display: table;"></div> -->
+  <!-- <div suggested-friend style="display: table;"></div> -->
+  <!-- <div suggested-friend style="display: table;"></div> -->
+
+
   <!-- <div suggested-friend style="display: -webkit-inline-box;"></div> -->
   <!-- <div suggested-friend style="display: -webkit-inline-box;"></div> -->
   <!-- <div ng-include="'suggestion_friend_block.html'"></div> -->

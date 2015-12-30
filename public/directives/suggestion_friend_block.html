@@ -3,7 +3,7 @@
     <div class="circle-image-fh" style="background-image:url('assets/images/cat.jpg'); height: 40px"></div>
   </div>
   <div style="float: left;">
-    <strong style="color: #2F6390;">Ahmed Emad</strong>
-    <p style="color: gray; font-size: smaller;">Alexandria, Egypt</p>
+    <a ng-href="#/people/{{suser.id}}"><strong>{{ suser.first_name }} {{ suser.last_name }}</strong></a>
+    <p style="color: gray; font-size: smaller;">{{ suser.hometown }}</p>
   </div>
 </div>

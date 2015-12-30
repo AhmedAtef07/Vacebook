@@ -301,6 +301,31 @@ function getAwaitedRequests($userId) {
   return convertToArray($res);
 }
 
+function getFriendsOfFriends($userId) {
+  // To be implemented.
+}
+
+function getNonFriendsInSameHometown($userId) {
+
+  $userHometownRes = conn()->query("SELECT hometown FROM users WHERE id = '$userId'");
+  $userHometown = convertToArray($userHometownRes)[0]['hometown'];
+
+  $res = conn()->query("SELECT * FROM users
+    WHERE hometown = '$userHometown'
+    AND id != '$userId'
+    AND id NOT IN (SELECT * FROM
+      (
+        SELECT user1_id id FROM friends WHERE user2_id='$userId'
+        UNION
+        SELECT user2_id id FROM friends WHERE user1_id='$userId'
+      ) a
+      GROUP BY id
+    )");
+
+  return convertToArray($res);
+
+
+}
 
 
 ////////////////////////////////////////////////////////////////////////////
