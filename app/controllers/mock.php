@@ -235,9 +235,6 @@ class Mock extends Controller
     $query_insert_id = $query->insert_id;
     $query->close();
 
-    $res = conn()->query("INSERT INTO actions (action) VALUES ('liked')");
-    $res = conn()->query("INSERT INTO actions (action) VALUES ('commented')");
-
     if ($query_insert_id == 0) {
         echo 'Error';
     }

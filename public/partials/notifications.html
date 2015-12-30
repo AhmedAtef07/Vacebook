@@ -12,13 +12,13 @@
     <tr ng-repeat="notification in notifications">
       <!-- <notification></notification> -->
       <th scope="row"> {{ notification.username }} </th>
-      <td> {{ notification.action }} </td>
+      <td> {{ notification.action_type }} </td>
       <td>
         <a ng-href="#/post/{{notification.post_id}}">
           {{ notification.post_id }}
         </a>
       </td>
-      <td>{{ notification.read_bool }}</td>
+      <td>{{ notification.is_seen }}</td>
     </tr>
   </tbody>
 </table>

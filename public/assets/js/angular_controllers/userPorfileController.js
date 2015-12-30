@@ -4,19 +4,25 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
   console.log($stateParams.userId);
 
   if (!$rootScope.user) {
-    $http.get('home/getUserInfo').
-    success(function(response, status, headers, config) {
-      console.log(response);
-      if (!response.signed) {
+    var req = {
+      method: 'GET',
+      url: 'users/getUserInfo',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
         window.location.href = '/vacebook/public/homepage.html';
       } else {
-        $rootScope.user = response.user;
+        $rootScope.user = response.data.user;
         initializePusher();
       }
-    }).
-    error(function(response, status, headers, config) {
-      console.log(response);
-      console.log(status);
+    }, function error(response) {
+      console.log("Coudn't get user info!");
     });
   }
 
@@ -38,7 +44,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     $http(req).then(function success(response) {
       console.log(response.data);
       if (response.data.signed) {
-        $rootScope.visitedUser.state = 'waitingAccept';
+        $rootScope.visitedUser.relation = 'waitingAccept';
       }
     }, function error(response) {
       alert("Coudn't add friend!");
@@ -59,7 +65,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     $http(req).then(function success(response) {
       console.log(response.data);
       if (response.data.signed) {
-        $rootScope.visitedUser.state = 'friend';
+        $rootScope.visitedUser.relation = 'friend';
       }
     }, function error(response) {
       alert("Coudn't post for some strange reason!");
@@ -80,7 +86,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     $http(req).then(function success(response) {
       console.log(response.data);
       if (response.data.signed) {
-        $rootScope.visitedUser.state = 'none';
+        $rootScope.visitedUser.relation = 'none';
       }
     }, function error(response) {
       alert("Coudn't Delete!");

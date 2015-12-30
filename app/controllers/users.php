@@ -19,8 +19,8 @@ class Users extends Controller
 
     if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
       if ($userId == -1) $userId = $_SESSION["user_id"];
-      $response['signed'] = true;
       if(isUserIdExists($userId)) {
+        $response['signed'] = true;
         $response['user'] = getUserInfo($userId);
       } else {
         $response['errors'] = ["message" => "user_id does not exists."];
@@ -156,17 +156,17 @@ class Users extends Controller
     $request = json_decode($postdata);
 
     $user = [
-      'first_name' => trim($request->first_name),
-      'last_name' => trim($request->last_name),
-      'username' => trim($request->username),
-      'email' => trim($request->email),
+      'first_name' => strtolower(trim($request->first_name)),
+      'last_name' => strtolower(trim($request->last_name)),
+      'username' => strtolower(trim($request->username)),
+      'email' => strtolower(trim($request->email)),
       'password' => $request->password,
-      'gender' => trim($request->gender),
+      'gender' => strtolower(trim($request->gender)),
       'birthdate' => trim($request->birthdate),
       'phone_number' => trim($request->phone_number),
       'profile_picture' => trim($request->profile_picture_path),
-      'hometown' => trim($request->hometown),
-      'maritalStatus' => trim($request->maritalStatus),
+      'hometown' => strtolower(trim($request->hometown)),
+      'maritalStatus' => strtolower(trim($request->maritalStatus)),
       'about' => trim($request->about)
     ];
     $response['user'] = $user;
@@ -176,8 +176,8 @@ class Users extends Controller
     $max = 50;
     $max_about = 200;
     $username_regex = '/^[\w.-]*$/';
-    $genders = array("Male", "Female");
-    $marital_status = array("Single", "Engaged", "Married");
+    $genders = array("male", "female");
+    $marital_status = array("single", "engaged", "married");
 
     $v->required('first_name')->lengthBetween($min, $max)->alpha();
     $v->required('last_name')->lengthBetween($min, $max)->alpha();

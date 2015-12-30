@@ -116,9 +116,10 @@ $(document).ready(function() {
   });
 
   $("#mock_data").click(function() {
+    console.log("Mock");
     $.ajax({
       url: "mock/addMockData",
-      type: "GET",
+      type: "POST",
       contentType: "application/x-www-form-urlencoded",
       dataType: "JSON",
       success: function(response) {
@@ -126,12 +127,7 @@ $(document).ready(function() {
         if (response.succeeded && response.signed) {
           window.location.href = "/vacebook/public";
         } else {
-          response.messages.forEach(function(element) {
-            console.log(element);
-          });
-          response.errors.forEach(function(element) {
-            console.log(element);
-          });
+
         }
       },
     });

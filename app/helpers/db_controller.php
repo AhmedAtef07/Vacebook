@@ -46,13 +46,13 @@ function tryCreateUser($user) {
   else                       return false;
 }
 
-function addFriend($user1Id, $user2Id, $state, $requester_id) {
-  $query = conn()->prepare("INSERT INTO friends (user1_id, user2_id, state, requester_id)
+function addFriend($user1Id, $user2Id, $relation, $requester_id) {
+  $query = conn()->prepare("INSERT INTO friends (user1_id, user2_id, relation, requester_id)
         VALUES (?, ?, ?, ?)");
   $query->bind_param('iisi',
       min($user1Id, $user2Id),
       max($user1Id, $user2Id),
-      $state,
+      $relation,
       $requester_id);
 
   $query->execute();
@@ -60,17 +60,18 @@ function addFriend($user1Id, $user2Id, $state, $requester_id) {
   $query->close();
 
   if ($query_errors == 0) {
-    $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
     $userId = $requester_id == $user1Id ? $user1Id : $user2Id;
     $user = getUsername($userId);
     $data['action'] = 'sent you a friend request';
     $data['user_id'] = $userId;
     $data['username'] = $user['username'];
     $data['full_name'] = $user['full_name'];
-    $pusher->trigger((string)$requester_id == $user1Id ? $user2Id : $user1Id, 'new_friend', $data);
+    pusher()->trigger((string)$requester_id == $user1Id ? $user2Id : $user1Id, 'new_friend', $data);
     return true;
   }
-  else                       return false;
+  else {
+    return false;
+  }
 }
 
 function addPost($userId, $post) {
@@ -159,47 +160,42 @@ function deleteRelation($userId) {
 ////////////////////////////////////////////////////////////////////////////
 
 function getNotifications($userId) {
-  if (true || $userId == $_SESSION["user_id"]) {
-    $res = conn()->query("SELECT n.*, u.username, a.action FROM
+  if ($userId == $_SESSION["user_id"]) {
+    $res = conn()->query("SELECT n.*, u.username FROM
       (notifications n JOIN users u ON user_id=id)
-      JOIN actions a ON action_id=a.id
       WHERE follower_id='$userId'
-      ORDER BY read_bool, created_at DESC, a.action ASC, n.post_id");
+      ORDER BY created_at DESC, n.post_id");
   }
   if ($res)       return convertToArray($res);
   else            return false;
 }
 
 function getUserInfo($userId) {
-  $res = conn()->query("SELECT id, username, first_name, last_name, gender, birthdate, email,
-    phone_number, hometown, marital_status, about_me, profile_pic FROM users WHERE id='$userId'");
+  $res = conn()->query("SELECT * FROM users WHERE id='$userId'");
     $user = convertToArray($res)[0];
     if ($userId == $_SESSION["user_id"]) {
       return $user;
     } else {
       $user1Id = min($userId, $_SESSION["user_id"]);
       $user2Id = max($userId, $_SESSION["user_id"]);
-      $res2 = conn()->query("SELECT state, requester_id FROM friends
+      $res2 = conn()->query("SELECT relation, requester_id FROM friends
         WHERE user1_id='$user1Id' AND user2_id='$user2Id'");
-      // error_reporting(0);
-      // print_r(convertToArray($res2));
       $relation = convertToArray($res2);
       if (count($relation) > 0) {
         $relation = $relation[0];
-        if ($relation['state'] == 'request') {
+        if ($relation['relation'] == 'request') {
+          $user['birthdate'] = NULL;
+          $user['about_me'] = NULL;
           if ($relation['requester_id'] == $userId) {
-            $user['state'] = 'requested';
-            $user['birthdate'] = NULL;
-            $user['about_me'] = NULL;
+            $user['relation'] = 'requested';
           } else {
-            $user['state'] = 'waitingAccept';
-            $user['about_me'] = NULL;
+            $user['relation'] = 'waitingAccept';
           }
-        } else if ($relation['state'] == 'friend') {
-          $user['state'] = 'friend';
+        } else if ($relation['relation'] == 'friend') {
+          $user['relation'] = 'friend';
         }
       } else {
-        $user['state'] = 'none';
+        $user['relation'] = 'none';
         $user['birthdate'] = NULL;
         $user['about_me'] = NULL;
       }
@@ -224,10 +220,10 @@ function getAllUsers() {
 function getUserFriends($userId) {
   $res = conn()->query("SELECT * FROM
         (SELECT u.* FROM friends JOIN users u ON user2_id=id
-              WHERE user1_id='$userId' AND state='friend') a
+              WHERE user1_id='$userId' AND relation='friend') a
         UNION
-        (SELECT s.* FROM friends JOIN users s ON user1_id=id
-              WHERE user2_id='$userId' AND state='friend')");
+        (SELECT u.* FROM friends JOIN users u ON user1_id=id
+              WHERE user2_id='$userId' AND relation='friend')");
   return convertToArray($res);
 }
 
@@ -301,7 +297,7 @@ function isUserExists($username_or_email, $password) {
   $rows = $res->num_rows;
 
   if($rows == 1) return $res->fetch_assoc()['id'];
-  else                    return false;
+  else            return false;
 }
 
 function isUserIdExists($userId) {
@@ -339,16 +335,15 @@ function acceptFriendRequest($userId) {
   $user2Id = max($userId, $_SESSION["user_id"]);
 
   if (deleteRelation($userId)) {
-    $res = conn()->query("INSERT INTO friends (user1_id, user2_id, state, requester_id)
+    $res = conn()->query("INSERT INTO friends (user1_id, user2_id, relation, requester_id)
         VALUES ('$user1Id', '$user2Id', 'friend', '$userId')");
     if ($res) {
-      $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
       $user = getUsername($_SESSION["user_id"]);
       $data['action'] = 'accepted your friend request';
       $data['user_id'] = $_SESSION["user_id"];
       $data['username'] = $user['username'];
       $data['full_name'] = $user['full_name'];
-      $pusher->trigger((string)$userId, 'new_friend', $data);
+      pusher()->trigger((string)$userId, 'new_friend', $data);
       return true;
     } else {
       return false;
@@ -378,7 +373,7 @@ function followPost($userId, $postId) {
 }
 
 function seePost($userId, $postId) {
-  $query = conn()->prepare("UPDATE notifications SET read_bool=1
+  $query = conn()->prepare("UPDATE notifications SET is_seen=1
     WHERE  follower_id=? AND post_id=?");
   if (true || $userId == $_SESSION["user_id"]) {
     $query->bind_param('ii',
@@ -393,43 +388,38 @@ function seePost($userId, $postId) {
   else                       return false;
 }
 
-function trigPostFollowers($postId, $userId, $action = '') {
+function trigPostFollowers($postId, $userId, $action_type = '') {
   $res = conn()->query("SELECT follower_id FROM following
     WHERE post_id='$postId' AND follower_id!='$userId'");
   $followers = convertToArray($res);
   $user = getUsername($userId);
-  if ($action) {
-    $res = conn()->query("SELECT id FROM actions
-      WHERE action='$action'");
-    $action_id = convertToArray($res);
-    if (count($action_id) > 0) {
-      $action_id = $action_id[0]['id'];
-      $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
-      $data['action'] = $action;
-      $data['user_id'] = $userId;
-      $data['post_id'] = $postId;
-      $data['username'] = $user['username'];
-      $data['full_name'] = $user['full_name'];
-      $query = conn()->prepare("DELETE FROM notifications
-          WHERE post_id=? AND user_id=? AND action_id=?");
-      $query->bind_param('iii',
+  if ($action_type) {
+    $action_id = $action_id[0]['id'];
+    $data['action'] = $action_type;
+    $data['user_id'] = $userId;
+    $data['post_id'] = $postId;
+    $data['username'] = $user['username'];
+    $data['full_name'] = $user['full_name'];
+    $query = conn()->prepare("DELETE FROM notifications
+        WHERE post_id=? AND user_id=? AND action_type=?");
+    $query->bind_param('iii',
+        $postId,
+        $userId,
+        $action_type);
+    $query->execute();
+    $query->close();
+
+    foreach ($followers as $ind => $follower) {
+      $query = conn()->prepare("INSERT INTO notifications (follower_id, post_id, user_id, action_type) VALUES (?, ?, ?, ?)");
+      $query->bind_param('iiis',
+          $follower['follower_id'],
           $postId,
           $userId,
-          $action_id);
+          $action_type);
       $query->execute();
+      $query_errors = count($query->error_list);
       $query->close();
-      foreach ($followers as $ind => $follower) {
-        $query = conn()->prepare("INSERT INTO notifications (follower_id, post_id, user_id, action_id) VALUES (?, ?, ?, ?)");
-        $query->bind_param('iiii',
-            $follower['follower_id'],
-            $postId,
-            $userId,
-            $action_id);
-        $query->execute();
-        $query_errors = count($query->error_list);
-        $query->close();
-        $pusher->trigger((string)$follower['follower_id'], 'new_notification', $data);
-      }
+      pusher()->trigger((string)$follower['follower_id'], 'new_notification', $data);
     }
   }
 }
@@ -471,10 +461,10 @@ function searchByCaption($text) {
 function suggestedPeople($my_id) {
   $res = conn()->query("SELECT * FROM users WHERE id
                         IN (SELECT f1.user2_id FROM friends f1,friends f2
-                        WHERE f1.state = 'friends'
+                        WHERE f1.relation = 'friends'
                         AND f1.user1_id = f2.user2_id
                         AND f2.user1_id ='$my_id'
-                        AND f2.state ='friends')
+                        AND f2.relation ='friends')
                         ");
   return convertToArray($res);
 }
@@ -483,7 +473,7 @@ function newsFeed($my_id) {
   $res = conn()->query("SELECT * FROM posts WHERE user_id = '$my_id'
                         UNION
                         SELECT * FROM posts WHERE user_id IN (SELECT user2_id FROM friends
-                                                              WHERE user1_id ='$my_id' AND state ='friends')
+                                                              WHERE user1_id ='$my_id' AND relation ='friends')
                         ORDER BY created_at
                       ");
   return convertToArray($res);

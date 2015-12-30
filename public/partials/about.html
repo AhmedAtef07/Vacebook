@@ -14,19 +14,19 @@
   </p>
   <p><strong>720 posts</strong></p>
 
-  <div ng-if="visitedUser.id!=user.id && visitedUser.state=='none'" class="btn btn-success"
+  <div ng-if="visitedUser.id!=user.id && visitedUser.relation=='none'" class="btn btn-success"
       ng-click="addFriend(visitedUser.id)">
     Add friend
   </div>
-  <div ng-if="visitedUser.state==='waitingAccept'" class="btn btn-success"
+  <div ng-if="visitedUser.relation==='waitingAccept'" class="btn btn-success"
       ng-click="removeRelation(visitedUser.id)">
     Cancel Request
   </div>
-  <div ng-if="visitedUser.state==='requested'" class="btn btn-success"
+  <div ng-if="visitedUser.relation==='requested'" class="btn btn-success"
       ng-click="acceptFriendRequest(visitedUser.id)">
     Accept Request
   </div>
-  <div ng-if="visitedUser.state==='friend'" class="btn btn-success"
+  <div ng-if="visitedUser.relation==='friend'" class="btn btn-success"
       ng-click="removeRelation(visitedUser.id)">
     Unfriend
   </div>
