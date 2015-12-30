@@ -27,11 +27,25 @@ angular.module('app').controller('friendsController', function($rootScope, $scop
 
   $rootScope.visitedUser = $rootScope.user;
   update();
-  initImages();
+
+  $scope.$on('$viewContentLoaded', function(){
+    initImages();
+  });
+
+
+  $scope.$on('$viewContentLoaded', function(){
+    console.log('loaded');
+    initImages();
+  });
 
 
   function initImages () {
     $(function () {
+      $('.circle-image').each(function() {
+        $(this).css({
+          height: $(this).width() + 'px'
+        });
+      });
       $('.circle-image-fh').each(function() {
         $(this).css({
           width: $(this).height() + 'px'
@@ -39,7 +53,6 @@ angular.module('app').controller('friendsController', function($rootScope, $scop
       });
     });
   }
-
 
   function initializePusher() {
     if (!$rootScope.pusher) {

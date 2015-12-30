@@ -2,7 +2,6 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     $stateParams, $sce) {
 
   console.log($stateParams.userId);
-  update();
 
   if (!$rootScope.user) {
     $http.get('home/getUserInfo').
@@ -12,6 +11,7 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
         window.location.href = '/vacebook/public/homepage.html';
       } else {
         $rootScope.user = response.user;
+        initializePusher();
       }
     }).
     error(function(response, status, headers, config) {
@@ -19,6 +19,8 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
       console.log(status);
     });
   }
+
+  update();
 
   $rootScope.addFriend = function(friendId) {
     var req = {
@@ -85,100 +87,25 @@ angular.module('app').controller('userPorfileController', function($rootScope, $
     });
   };
 
-  $scope.deleteComment = function(comment) {
-    var req = {
-      method: 'POST',
-      url: 'home/deleteComment/' + comment.id,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data: {
-      }
-    };
-    console.log(req);
-    $http(req).then(function success(response) {
-      console.log(response.data);
-      if (!response.data.signed) {
-        window.location.href = '/vacebook/public/homepage.html';
-      } else {
-        // update();
-        if (response.data.succeeded) {
-          $scope.posts.forEach(function(postElement, postIndex) {
-            if (postElement.id == comment.post_id) {
-              postElement.comments.forEach(function(commentElement, commentIndex){
-                if(commentElement.id == comment.id){
-                    postElement.comments.splice(commentIndex, 1);
-                }
-              });
-            }
-          });
-        }
-      }
-    }, function error(response) {
-      console.log("Coudn't delete comment for some strange reason!");
+  $scope.$on('$viewContentLoaded', function(){
+    initImages();
+  });
+
+
+  function initImages () {
+    $(function () {
+      $('.circle-image').each(function() {
+        $(this).css({
+          height: $(this).width() + 'px'
+        });
+      });
+      $('.circle-image-fh').each(function() {
+        $(this).css({
+          width: $(this).height() + 'px'
+        });
+      });
     });
-  };
-
-  $scope.likePost = function(post) {
-    console.log('like ' + post.id);
-    var req = {
-      method: 'POST',
-      url: 'home/addLike/' + post.id,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data: {
-      }
-    };
-
-    $http(req).then(function success(response) {
-      console.log(response.data);
-      if (!response.data.signed) {
-        window.location.href = '/vacebook/public/homepage.html';
-      } else {
-        // update();
-        if (response.data.succeeded) {
-          post.liked = true;
-          post.likes.push(response.data.like);
-        }
-      }
-    }, function error(response) {
-      console.log("Coudn't like post for some strange reason!");
-    });
-  };
-
-  $scope.unlikePost = function(post) {
-    console.log('unlike ' + post.id);
-    var req = {
-      method: 'POST',
-      url: 'home/deleteLike/' + post.id,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data: {
-      }
-    };
-
-    $http(req).then(function success(response) {
-      console.log(response.data);
-      if (!response.data.signed) {
-        window.location.href = '/vacebook/public/homepage.html';
-      } else {
-        // update();
-        if (response.data.succeeded) {
-          post.liked = false;
-          post.likes.forEach(function(likeElement, likeIndex) {
-            if (likeElement.user_id == $rootScope.user.id) {
-              post.likes.splice(likeIndex, 1);
-            }
-          });
-        }
-      }
-    }, function error(response) {
-      console.log("Coudn't unlike post for some strange reason!");
-    });
-  };
-
+  }
 
   function initializePusher() {
     if (!$rootScope.pusher) {
