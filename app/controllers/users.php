@@ -225,7 +225,7 @@ class Users extends Controller
     $response['signed'] = false;
     $response['succeeded'] = false;
 
-    if(true || isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
       $response['signed'] = true;
       $response['requests'] = getAwaitedRequests(1);
       $response['succeeded'] = true;
