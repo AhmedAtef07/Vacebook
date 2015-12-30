@@ -28,14 +28,13 @@
 
 
   <div id="extra-content">
-    <p class="info-point">
-      <strong><i>xerophagia hardware kiddish omnifidel sarcodous Charruan mesocephal anastomotic derision aphrodisiac dorser talpicide hypodermoclysis voluminosity {{visitedUser.about_me}}</i></strong>
+    <p class="info-point" ng-if="visitedUser.about_me">
+      <strong><i>{{ visitedUser.about_me }}</i></strong>
     </p>
     <p class="info-point">
       <strong>{{ visitedUser.gender }}</strong>
     </p>
-    <p class="info-point"
-      ng-if="!visitedUser.state || visitedUser.state=='friend'">
+    <p class="info-point" ng-if="visitedUser.birthdate">
       <strong>{{ visitedUser.birthdate }}</strong>
     </p>
     <p class="info-point" ng-if="visitedUser.phone_number">

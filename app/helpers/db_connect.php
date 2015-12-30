@@ -39,6 +39,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS posts (
   user_id         INT              NOT NULL,
   caption         TEXT             NOT NULL,
   image_path      VARCHAR(300)             ,
+  private_bool    BIT(1)           NOT NULL DEFAULT 0,
   created_at      TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY(id),

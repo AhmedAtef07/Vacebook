@@ -189,14 +189,19 @@ function getUserInfo($userId) {
         if ($relation['state'] == 'request') {
           if ($relation['requester_id'] == $userId) {
             $user['state'] = 'requested';
+            $user['birthdate'] = NULL;
+            $user['about_me'] = NULL;
           } else {
             $user['state'] = 'waitingAccept';
+            $user['about_me'] = NULL;
           }
         } else if ($relation['state'] == 'friend') {
           $user['state'] = 'friend';
         }
       } else {
         $user['state'] = 'none';
+        $user['birthdate'] = NULL;
+        $user['about_me'] = NULL;
       }
 
       return $user;
