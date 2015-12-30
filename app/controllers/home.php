@@ -108,11 +108,6 @@ class Home extends Controller
       if ($response['valid']) {
         $response['comment'] = addComment($_SESSION['user_id'], $comment);
         $response['succeeded'] = true;
-
-        // $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
-        // // trigger on my_channel' an event called 'my_event' with this payload:
-        // $data['comment'] = json_encode($comment);
-        // $pusher->trigger('notifications', 'new_notification', $data);
       } else {
         print_r($result->getFailures());
       }
@@ -131,11 +126,6 @@ class Home extends Controller
       $response['signed'] = true;
       $response['like'] = addLike($_SESSION['user_id'], $postId);
       $response['succeeded'] = true;
-
-      // $pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
-      // trigger on my_channel' an event called 'my_event' with this payload:
-      // $data['like'] = json_encode($comment);
-      // $pusher->trigger('notifications', 'new_notification', $data);
     }
 
     echo json_encode($response);
@@ -206,6 +196,7 @@ class Home extends Controller
       $user_id = $_SESSION["user_id"];
       $response['signed'] = true;
       $response['post'] = getPostWithComments($postId);
+      seePost($_SESSION["user_id"], $postId);
       // $response['posts'] = getUserPosts($user_id);
       // $response['posts'] = getAllPosts();
     }
@@ -241,18 +232,6 @@ class Home extends Controller
     if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
       $response['signed'] = true;
       $response['notifications'] = getNotifications($_SESSION["user_id"]);
-      $response['succeeded'] = true;
-    }
-    echo json_encode($response);
-  }
-
-  public function updateLastSeen($postId = -1) {
-    $response['signed'] = false;
-    $response['succeeded'] = false;
-
-    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
-      $response['signed'] = true;
-      seePost($_SESSION["user_id"], $postId);
       $response['succeeded'] = true;
     }
     echo json_encode($response);
@@ -624,6 +603,10 @@ class Home extends Controller
     $query->execute();
     $query_insert_id = $query->insert_id;
     $query->close();
+
+    $res = conn()->query("INSERT INTO actions (action) VALUES ('liked')");
+    $res = conn()->query("INSERT INTO actions (action) VALUES ('commented')");
+
     if ($query_insert_id == 0) {
         echo 'Error';
     }

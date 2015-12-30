@@ -28,31 +28,6 @@ angular.module('app').controller('notificationsController', function($rootScope,
   update();
   initImages();
 
-  $scope.updateSeen = function(postId) {
-    console.log('seen ' + postId);
-    var req = {
-      method: 'POST',
-      url: 'home/updateLastSeen/' + postId,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data: {
-      }
-    };
-    $http(req).then(function success(response) {
-      console.log(response.data);
-      if (!response.data.signed) {
-        window.location.href = '/vacebook/public/homepage.html';
-      } else {
-        if (response.data.succeeded) {
-            update();
-        }
-      }
-    }, function error(response) {
-      console.log("Coudn't like post for some strange reason!");
-    });
-  };
-
 
   function initImages () {
     $(function () {

@@ -83,12 +83,33 @@ $conn->query("CREATE TABLE IF NOT EXISTS likes (
 $conn->query("CREATE TABLE IF NOT EXISTS following (
   follower_id     INT              NOT NULL,
   post_id         INT              NOT NULL,
-  last_seen       TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
   created_at      TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   PRIMARY KEY(follower_id, post_id),
   FOREIGN KEY(follower_id)   REFERENCES users(id),
   FOREIGN KEY(post_id)       REFERENCES posts(id)
+  )");
+
+$conn->query("CREATE TABLE IF NOT EXISTS actions (
+  id              INT              AUTO_INCREMENT,
+  action          VARCHAR(20)      NOT NULL,
+
+  PRIMARY KEY(id)
+  )");
+
+$conn->query("CREATE TABLE IF NOT EXISTS notifications (
+  follower_id     INT              NOT NULL,
+  post_id         INT              NOT NULL,
+  user_id         INT              NOT NULL,
+  action_id       INT              NOT NULL,
+  read_bool       BIT(1)           NOT NULL DEFAULT 0,
+  created_at      TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY(follower_id, post_id, user_id, action_id),
+  FOREIGN KEY(follower_id)   REFERENCES users(id),
+  FOREIGN KEY(post_id)       REFERENCES posts(id),
+  FOREIGN KEY(user_id)       REFERENCES users(id),
+  FOREIGN KEY(action_id)     REFERENCES actions(id)
   )");
 
 
