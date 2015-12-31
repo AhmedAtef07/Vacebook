@@ -8,8 +8,20 @@
             <div class="col-lg-8" id="not-content">
                <h5>
                 <b> {{ notification.username }} </b> Commented on your post </h5>
-                <h6>{{ notification.is_seen }}</h6>
+                <h6 class="text-muted">{{ notification.created_at }}</h6>
             </div>
+
+            <div ng-if="notification.is_seen == 0">
+              <div class="col-lg-1" style="padding:20px;">
+                <i class="fa fa-check-circle-o fa-lg" style="color:grey"></i>
+              </div>
+            </div>
+            <div ng-if="notification.is_seen == 1">
+              <div class="col-lg-1" style="padding:20px;">
+                  <i class="fa fa-check-circle fa-lg" style="color:green"></i>
+              </div>
+            </div>
+
             <hr>
       </div>
 
@@ -19,8 +31,17 @@
           </div>
           <div class="col-lg-8" id="not-content">
             <h5><b>{{ notification.username }} </b> Liked your post </h5>
-            
-            <h6>{{ notification.is_seen }}</h6>
+            <h6 class="text-muted">{{ notification.created_at }}</h6>
+          </div>
+          <div ng-if="notification.is_seen == 0">
+            <div class="col-lg-1" style="padding:20px;">
+              <i class="fa fa-check-circle-o fa-lg" style="color:grey"></i>
+            </div>
+          </div>
+          <div ng-if="notification.is_seen == 1">
+            <div class="col-lg-1" style="padding:20px;">
+                <i class="fa fa-check-circle fa-lg" style="color:green"></i>
+            </div>
           </div>
           <hr>
       </div>
