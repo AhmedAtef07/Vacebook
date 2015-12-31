@@ -1,15 +1,19 @@
 <h1>Awaiting Friend Requests</h1>
 
 {{ awaitedRequests.length }}
+
 <div>
-  <div class="row" ng-repeat="request in awaitedRequests" style="padding:20px;">
-    <div class = "col-lg-3" style="float: left; padding-right: 10px;">
+  <div class="top-10" ng-repeat="request in awaitedRequests">
+
+
+    <div style="float: left; padding-right: 10px;">
       <div class="circle-image"
         style="background-image:url('assets/images/{{request.gender}}.jpg'); width: 40px; height: 40px">
       </div>
     </div>
 
-    <div class="col-lg-9" style="float: left;">
+
+    <div style="float: left;">
       <strong style="color: #2F6390;">
         <a ng-href="#/people/{{request.id}}"> {{request.first_name}} {{request.last_name}}</a>
       </strong>
@@ -17,25 +21,31 @@
     </div>
 
   </div>
-  
-  <br>
-  <hr class="top-30">
-  <h1>Your Pending Requests</h1>
-  {{ pendingRequests.length }}
-  <div class="row" ng-repeat="request in awaitedRequests" style="padding:20px;>
-    <div class="col-lg-3" style="float: left; padding-right: 10px;">
-      <div class="circle-image"
-        style="background-image:url('assets/images/{{request.gender}}.jpg'); width: 40px; height: 40px">
-      </div>
+</div>
+
+
+
+<br>
+<hr class="top-30">
+<h1>Your Pending Requests</h1>
+
+{{ pendingRequests.length }}
+
+<div class="top-10" ng-repeat="request in pendingRequests">
+
+
+  <div style="float: left; padding-right: 10px;">
+    <div class="circle-image"
+      style="background-image:url('assets/images/{{request.gender}}.jpg'); width: 40px; height: 40px">
     </div>
-
-
-    <div class="col-lg-9" style="float: left;">
-      <strong style="color: #2F6390;">
-        <a ng-href="#/people/{{request.id}}"> {{request.first_name}} {{request.last_name}}</a>
-      </strong>
-      <p style="color: gray; font-size: smaller;">{{ request.hometown }}</p>
-    </div>
-
   </div>
+
+
+  <div style="float: left;">
+    <strong style="color: #2F6390;">
+      <a ng-href="#/people/{{request.id}}"> {{request.first_name}} {{request.last_name}}</a>
+    </strong>
+    <p style="color: gray; font-size: smaller;">{{ request.hometown }}</p>
+  </div>
+
 </div>
