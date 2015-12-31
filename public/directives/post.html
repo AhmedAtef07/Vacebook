@@ -4,7 +4,7 @@
     <div class="col-lg-1">
       <img alt="User1" class="header_pic" src="{{ post.user_profile_picture }}">
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-11">
       <h4 class="header_user">
           <b>
             <a ng-href="#/people/{{post.user_id}}" target="_blank" class="header_user">
@@ -12,14 +12,24 @@
             </a>
           </b>
       </h4>
-      <h6 class="header_date" ng-if="link">
-          {{ post.created_at }}
-      </h6>
-      <h6 class="header_date" ng-if="!link">
-        <a ng-href="#/post/{{post.id}}" target="_blank" class="header_date">
-          {{ post.created_at }}
-        </a>
-      </h6>
+      <div class="post-footer" style="width: 100%">
+        <div style="float: left;">
+          <h6 class="header_date" ng-if="link">
+              {{ post.created_at }}
+          </h6>
+          <h6 class="header_date" ng-if="!link">
+            <a ng-href="#/post/{{post.id}}" target="_blank" class="header_date">
+              {{ post.created_at }}
+            </a>
+          </h6>
+        </div>
+        <div style="float: right;">
+          &nbsp&nbsp&nbsp
+          <span class="label label-pill label-danger">Private Post</span>
+          <button ng-click="changePrivary()" style="padding: 0px; margin: 0px; border: 0px none;"><span class="label label-pill label-primary"><i class="fa fa-wrench"></i></span></button>
+        </div>
+      </div>
+      
 
     </div>
   </div>
@@ -28,6 +38,9 @@
   <div class="row" id="post_body">
     <div class="col-lg-12" id="post_caption">
       <p ng-bind-html="post.caption | colonToSmiley"/>
+    </div>
+    <div class="col-lg-12" ng-if="post.image_path">
+      <img ng-src="post.image_path" style="max-width:400px">
     </div>
   </div>
 
