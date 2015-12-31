@@ -1,27 +1,27 @@
-#search
-{
+#search {
   margin: 20px;
 }
-#search-bar
-{
+
+#search-bar {
   border-radius:2em;
 }
+
 textarea, input {
-    padding:10px;
+  padding:10px;
   font-family: FontAwesome, "Open Sans", Verdana, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    text-decoration: inherit;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
 }
 
-.header_pic
-{
+.header_pic {
   margin-top: 7px; 
   float:left;
   width:50px; 
   height:50px; 
   border-radius: 50%;
 }
+
 .right-arrow {
   display: none;
   position: relative;
@@ -29,9 +29,8 @@ textarea, input {
   float:right;
   margin: 5px;
   padding: 20px;
-  
-
 }
+
 .right-arrow:after {
   content: '';
   display: block;  
@@ -48,8 +47,13 @@ textarea, input {
   border-bottom: 10px solid transparent;
   border-left: 10px solid #E6EBE0;
 }
-#not-body:hover
-{
+
+#not-body:hover {
   background-color: #5CA4A9;
   color: #ffffff;
+}
+
+.hint-list {
+  padding-left: 0 !important;
+  margin: -9px 20px !important;
 }

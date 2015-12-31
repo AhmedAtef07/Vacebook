@@ -1,9 +1,9 @@
 <div ng-controller="searchController">
-  <div class = "col-lg-12" id="search" style="padding:20px;">
+  <div class="" id="search" style="width: 100%; margin: 0px; padding-bottom: 20px;">
       <input ng-keyup="keyPressed($event)" ng-model="searchText" type="text" class="form-control" list="datalist" id ="search-bar" placeholder="&#xF002; Search for..">
       <div ng-repeat="hint in hints">
         <a ng-href="#/{{hint.link}}" ng-click="clearSearch()">
-          <ul class="list-group">
+          <ul class="list-group hint-list" style="padding-left: 0; margin: -9px 20px;">
             <li class="list-group-item">
               <span class="badge">{{ hint.type }}</span>
               {{ hint.header }}
