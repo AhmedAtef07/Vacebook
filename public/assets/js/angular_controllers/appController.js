@@ -119,7 +119,7 @@ angular.module('app').controller('appController', ['$rootScope', '$scope', '$htt
         (function() {
           setTimeout( function() {
             $scope.notification = new NotificationFx({
-              message : '<div class="ns-thumb"><img src="assets/images/cat.jpg"' +
+              message : '<div class="ns-thumb"><img src="' + notificationMSG.profile_pic + '"' +
                 'class="accept-image"/></div><div class="ns-content">' +
                   '<p><a href="#/people/'  + notificationMSG.user_id + '">' +
                   notificationMSG.full_name + '</a> ' + notificationMSG.action + '.</p>' +
@@ -160,12 +160,15 @@ angular.module('app').controller('appController', ['$rootScope', '$scope', '$htt
     }).then(function (resp) {
         // console.log(resp.config.data);
         console.log(resp.data);
+        if (resp.data.path && resp.data.succeeded) {
+          $rootScope.visitedUser.profile_pic = resp.data.path;
+        }
         // console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
     }, function (resp) {
         console.log('Error status: ' + resp.status);
     }, function (evt) {
         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        // console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
     });
   };
 
@@ -190,6 +193,28 @@ angular.module('app').controller('appController', ['$rootScope', '$scope', '$htt
     var req = {
       method: 'GET',
       url: 'users/removProfilePic',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+      }
+    }, function error(response) {
+      console.log("Coudn't remove Pic!");
+    });
+  };
+
+  $scope.logout = function () {
+    console.log("Logout");
+    var req = {
+      method: 'GET',
+      url: 'users/logout',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

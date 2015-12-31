@@ -9,7 +9,8 @@
 
       <div style="display: inline-flex;">
         <button type="file" ngf-select="upload($file)" class="btn btn-primary" style="float: left;" title="Change Profile Picture" id="change-profile-pic-btn"><i class="fa fa-pencil"></i></button>
-        <button class="btn btn-danger" title="Remove Profile Picture"><i class="fa fa-minus-square" ng-click="removePic()"></i></button>
+        <button ng-click="removePic()" class="btn btn-danger" title="Remove Profile Picture">
+          <i class="fa fa-minus-square" ></i></button>
       </div>
 
     </div>

@@ -147,6 +147,20 @@ class Users extends Controller
     echo json_encode($response);
   }
 
+  public function logout() {
+    $response['succeeded'] = false;
+    $response['signed'] = true;
+
+    $response['succeeded'] = true;
+    if ($response['succeeded']) {
+      $_SESSION['user_id'] = NULL;
+      setcookie("user_id", '', time() + (86400 * 30), '/');
+      if (!$_SESSION['user_id']) {
+        $response['signed'] = false;
+      }
+    }
+    echo json_encode($response);
+  }
 
   public function register() {
     $response['succeeded'] = false;
@@ -253,11 +267,15 @@ class Users extends Controller
   public function uploadProfilePic() {
     $response['signed'] = false;
     $response['succeeded'] = false;
+    $response['path'] = '';
 
     if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
-      $path = 'assets/uploaded_images/' . time() . '_' . $_FILES['file']['name'];
-      move_uploaded_file($_FILES['file']['tmp_name'], $path);
-      $response['succeeded'] = changeProfilePic($_SESSION["user_id"], $path);
+      if ($_FILES['file']['name']) {
+        $path = 'assets/uploaded_images/' . time() . '_' . $_FILES['file']['name'];
+        move_uploaded_file($_FILES['file']['tmp_name'], $path);
+        $response['path'] = $path;
+        $response['succeeded'] = changeProfilePic($_SESSION["user_id"], $path);
+      }
       $response['signed'] = true;
     }
     echo json_encode($response);

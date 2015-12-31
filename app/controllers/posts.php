@@ -16,6 +16,7 @@ class Posts extends Controller
     $response['signed'] = false;
     $response['valid'] = false;
     $response['succeeded'] = false;
+    $response['post'] = array();
 
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata);
@@ -36,7 +37,7 @@ class Posts extends Controller
     if (isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"]))>0) {
       $response['signed'] = true;
       if ($response['valid']) {
-        addPost($_SESSION['user_id'], $post);
+        $response['post'] = addPost($_SESSION['user_id'], $post);
         $response['succeeded'] = true;
       } else {
         print_r($result->getFailures());

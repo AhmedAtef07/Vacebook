@@ -66,6 +66,7 @@ function addFriend($user1Id, $user2Id, $relation, $requester_id) {
     $data['user_id'] = $userId;
     $data['username'] = $user['username'];
     $data['full_name'] = $user['full_name'];
+    $data['profile_pic'] = $user['profile_pic'];
     pusher()->trigger((string)$requester_id == $user1Id ? $user2Id : $user1Id, 'new_friend', $data);
     return true;
   }
@@ -87,7 +88,19 @@ function addPost($userId, $post) {
   $query->execute();
   $query_insert_id = $query->insert_id;
   $query->close();
+  $res = conn()->query("SELECT posts.*, users.username, users.profile_pic, users.gender
+     FROM posts INNER JOIN users ON (users.id = posts.user_id)
+     WHERE posts.id='$query_insert_id'");
   $following = followPost($userId, $query_insert_id);
+  $user = convertToArray($res)[0];
+  if (!$user['profile_pic']) {
+    if ($user['gender'] == 'male') {
+      $user['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+    } else {
+      $user['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+    }
+  }
+  return $user;
 }
 
 function addPostPic($userId, $caption, $path, $isPrivate) {
@@ -242,9 +255,18 @@ function getUserInfo($userId) {
 }
 
 function getUsername($userId) {
-  $res = conn()->query("SELECT username, first_name, last_name FROM users WHERE id='$userId'");
+  $res = conn()->query("SELECT username, first_name, last_name, profile_pic, gender FROM users WHERE id='$userId'");
     $result = convertToArray($res)[0];
     $user['username'] = $result['username'];
+    $user['profile_pic'] = $result['profile_pic'];
+    $user['gender'] = $result['gender'];
+    if (!$user['profile_pic']) {
+      if ($user['gender'] == 'male') {
+        $user['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+      } else {
+        $user['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+      }
+    }
     $user['full_name'] = $result['first_name'] . ' ' . $result['last_name'];
     return $user;
 }
@@ -312,14 +334,14 @@ function getUserPostswithComments($userId) {
   $isFriend = isFriend($userId);
   if ($isFriend || $userId == $_SESSION["user_id"]) {
     $res = conn()->query(
-      "SELECT posts.*, users.username, users.profile_pic, users.gender AS commenter_profile_picture
+      "SELECT posts.*, users.username, users.profile_pic, users.gender
        FROM posts INNER JOIN users ON (users.id = posts.user_id)
        HAVING user_id ='$userId'
        ORDER BY posts.created_at DESC
       ");
   } else {
     $res = conn()->query(
-      "SELECT posts.*, users.username, users.profile_pic, users.gender AS commenter_profile_picture
+      "SELECT posts.*, users.username, users.profile_pic, users.gender
        FROM posts INNER JOIN users ON (users.id = posts.user_id)
        HAVING user_id ='$userId' AND is_private=b'0'
        ORDER BY posts.created_at DESC
@@ -552,6 +574,7 @@ function acceptFriendRequest($userId) {
       $data['user_id'] = $_SESSION["user_id"];
       $data['username'] = $user['username'];
       $data['full_name'] = $user['full_name'];
+      $data['profile_pic'] = $user['profile_pic'];
       pusher()->trigger((string)$userId, 'new_friend', $data);
       return true;
     } else {
@@ -613,6 +636,7 @@ function trigPostFollowers($postId, $userId, $action_type = '') {
     $data['post_id'] = $postId;
     $data['username'] = $user['username'];
     $data['full_name'] = $user['full_name'];
+    $data['profile_pic'] = $user['profile_pic'];
     $query = conn()->prepare("DELETE FROM notifications
         WHERE post_id=? AND user_id=? AND action_type=?");
     $query->bind_param('iii',

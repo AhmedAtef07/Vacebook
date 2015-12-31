@@ -9,13 +9,16 @@
   </div> -->
 
   <div style="text-align: right;" class="top-10">
-    <button class="btn btn-primary" style="" ng-click="addPost()" ng-disabled="!caption">Add</button>
+    <button class="btn btn-primary" style="" ng-click="addPost()" ng-disabled="!caption">
+      POST AS {{privacy}}</button>
     <!-- <button class="btn btn-default" id="btn_pic" onfocus="this.blur();" type="button">
       <i class="fa fa-camera-retro fa-lg"></i>
     </button> -->
     <button type="file" ngf-select="uploadPost($file, caption)" class="btn btn-default" style="float: left;" title="Change Profile Picture" id="btn_pic" onfocus="this.blur();">
       <i class="fa fa-camera-retro fa-lg"></i>
     </button>
+    <button ng-click="togglePrivacy()" style="padding: 0px; margin: 0px; border: 0px none;">
+      <span class="label label-pill label-primary"><i class="fa fa-wrench"></i></span></button>
 
   </div>
 </div>
