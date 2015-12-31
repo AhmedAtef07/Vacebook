@@ -2,7 +2,7 @@
 ///////////////////////////////// Angular /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-angular.module('app', ['ui.router', 'ngSanitize', 'emojiApp'])
+angular.module('app', ['ui.router', 'ngSanitize', 'emojiApp', 'ngFileUpload'])
 .filter('html',function($sce){
     return function(input){
         return $sce.trustAsHtml(input);

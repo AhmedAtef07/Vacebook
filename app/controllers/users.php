@@ -231,11 +231,11 @@ class Users extends Controller
       $response['succeeded'] = true;
     }
     echo json_encode($response);
-  } 
+  }
 
   public function peopleSuggesstionFromFriends() {
     // To to be implemented.
-  } 
+  }
 
   public function peopleSuggesstionFromHometown() {
     $response['suggesstions'] = array();
@@ -248,7 +248,32 @@ class Users extends Controller
       $response['succeeded'] = true;
     }
     echo json_encode($response);
-  } 
+  }
+
+  public function uploadProfilePic() {
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $path = 'assets/uploaded_images/' . time() . '_' . $_FILES['file']['name'];
+      move_uploaded_file($_FILES['file']['tmp_name'], $path);
+      $response['succeeded'] = changeProfilePic($_SESSION["user_id"], $path);
+      $response['signed'] = true;
+    }
+    echo json_encode($response);
+  }
+
+  public function removProfilePic() {
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['succeeded'] = unsetProfilePic($_SESSION["user_id"]);
+      $response['signed'] = true;
+    }
+    echo json_encode($response);
+  }
+
 
 
 }
