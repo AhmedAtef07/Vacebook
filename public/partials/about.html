@@ -1,12 +1,21 @@
 <strong>About</strong>
 <div class="text-center profile-info top-10">
-  <div ng-if="visitedUser.profile_pic" class="circle-image"
-    style="background-image:url('assets/images/{{visitedUser.id}}/{{visitedUser.profile_pic}}');">
+<!--   <div ng-if="visitedUser.profile_pic" class="circle-image"
+    style="background-image:url('assets/images/{{visitedUser.profile_pic}}');">
+  </div> -->
+
+  <div id="profile-pic-container">
+    <div ng-if="!visitedUser.profile_pic" class="circle-image" id="profile-pic" 
+      style="background-image:url('assets/images/{{visitedUser.gender}}.jpg');">
+    </div>
+    <div id="picture-options">
+      <button class="btn btn-primary" title="Change Profile Picture" ng-click="uploadProfileImage()"><i class="fa fa-pencil"></i></button>
+      <button class="btn btn-danger" title="Remove Profile Picture"><i class="fa fa-minus-square"></i></button>
+    </div>
   </div>
-  <div ng-if="!visitedUser.profile_pic" class="circle-image"
-    style="background-image:url('assets/images/{{visitedUser.gender}}.jpg');">
-  </div>
+
   <br>
+  
   <strong style="font-size: 25px;">{{ visitedUser.first_name }} {{ visitedUser.last_name }}</strong>
   <br>
   <p style="color: #557998; font-size: small;">

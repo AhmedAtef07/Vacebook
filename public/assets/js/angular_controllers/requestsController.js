@@ -28,20 +28,6 @@ angular.module('app').controller('requestsController', function($rootScope, $sco
   requestAwaitedUsers();
   requestPendingUsers();
 
-  $scope.$on('$viewContentLoaded', function() {
-    initImages();
-  });
-
-  function initImages () {
-    $(function () {
-      $('.circle-image-fh').each(function() {
-        $(this).css({
-          width: $(this).height() + 'px'
-        });
-      });
-    });
-  }
-
   ///////////////////////// HTTP REQUST TO GET requestPendingUsers /////////////////////////
   function requestPendingUsers() {
     var req = {
