@@ -84,3 +84,14 @@ html,body { height:100%; }
 #profile-pic-container:hover + #picture-options {
   display: block;
 }
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  /*border: 0px solid #ccc;*/
+  display: inline-block;
+  /*padding: 6px 12px;*/
+  cursor: pointer;
+}

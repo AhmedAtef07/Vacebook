@@ -95,7 +95,7 @@ angular.module('app').controller('appController', function($rootScope, $scope, $
     }
   }
 
-  function initImages () {
+  function initImages() {
     $(function () {
       $('.circle-image').each(function() {
         $(this).css({
@@ -109,5 +109,43 @@ angular.module('app').controller('appController', function($rootScope, $scope, $
       });
     });
   }
+
+
+  $scope.changeProfilePicture = function(files) {
+    var fd = new FormData();
+    //Take the first selected file
+    fd.append("file", files[0]);
+    console.log(fd);
+    // var req = {
+    //   method: 'POST',
+    //   withCredentials: true,
+    //   url: 'users/getUserInfo',
+    //   header: {
+    //     'Content-Type': undefined
+    //   },
+    //   transformRequest: angular.identity,
+    //   data: fd
+    // };
+
+    // $http(req).then(function success(response) {
+    //   console.log(response.data);
+    //   if (!response.data.signed) {
+    //     window.location.href = '/vacebook/public/homepage.html';
+    //   } else {
+    //     $rootScope.user = response.data.user;
+    //     $rootScope.visitedUser = $rootScope.user;
+    //     initializePusher();
+    //   }
+    // }, function error(response) {
+    //   console.log("Coudn't get user info!");
+    // });
+
+
+    $http.post("home", fd, {
+        withCredentials: true,
+        headers: {'Content-Type': undefined },
+        transformRequest: angular.identity
+    }).success( console.log("success")).error( console.log("error"));
+  };
 
 });
