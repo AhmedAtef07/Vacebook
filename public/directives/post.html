@@ -2,7 +2,7 @@
   <!--post header-->
   <div class="row" id="post_header">
     <div class="col-lg-1">
-      <img alt="User1" class="header_pic" src="assets/images/user1.png">
+      <img alt="User1" class="header_pic" src="{{ post.user_profile_picture }}">
     </div>
     <div class="col-lg-4">
       <h4 class="header_user">
@@ -34,6 +34,7 @@
   <!--comment_control-->
   <hr class="hr">
   <div id="comment_control">
+
     <div class="btn-group" role="group">
       <button class="btn btn-default" id="btn_like" onfocus="this.blur();"
         ng-if="!post.liked" type="button" ng-click="likePost(post)">
@@ -52,6 +53,15 @@
         <i class="fa fa-commenting-o fa-lg"></i>
         Comment</button>
     </div>
+
+    <div class="like-count" style="float:right; ">
+      <button class="btn btn-default" id="btn_like" onfocus="this.blur();"
+       type="button">
+        <span class="label label-pill label-default"  ng-if="post.likes.length">{{ post.likes.length }} People Liked this</span>
+        <span class="label label-pill label-default"  ng-if="!post.likes.length">Nobody likes this yet</span>
+      </button>
+      
+    </div>
   </div>
   <hr class="hr">
 
@@ -63,7 +73,7 @@
   <!--commenting-->
   <div class="row" id="commenting_body">
     <div class="col-lg-1">
-      <img alt="User1" src="assets/images/user1.png" style="float:left; width:45px; height:45px;border-radius: 30%;">
+      <img alt="User1" src="{{ post.user_profile_picture }}" style="float:left; width:45px; height:45px;border-radius: 30%;">
     </div>
     <div class="col-lg-11">
       <div class="input-group">
