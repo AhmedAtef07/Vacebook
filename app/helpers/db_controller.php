@@ -75,12 +75,14 @@ function addFriend($user1Id, $user2Id, $relation, $requester_id) {
 }
 
 function addPost($userId, $post) {
-  $query = conn()->prepare("INSERT INTO posts (user_id, caption, image_path) VALUES (?, ?, ?)");
+  $query = conn()->prepare("INSERT INTO posts (user_id, caption, image_path, is_private)
+    VALUES (?, ?, ?, ?)");
   // var_dump($query);
   $query->bind_param('iss',
     $userId,
     $post['caption'],
-    $post['image_path']);
+    $post['image_path'],
+    $post['is_private']);
 
   $query->execute();
   $query_insert_id = $query->insert_id;
@@ -461,7 +463,22 @@ function followPost($userId, $postId) {
 function seePost($userId, $postId) {
   $query = conn()->prepare("UPDATE notifications SET is_seen=1
     WHERE  follower_id=? AND post_id=?");
-  if (true || $userId == $_SESSION["user_id"]) {
+  if ($userId == $_SESSION["user_id"]) {
+    $query->bind_param('ii',
+        $userId,
+        $postId);
+    $query->execute();
+    $query_errors = count($query->error_list);
+    $query->close();
+  }
+
+  if ($query_errors == 0)    return true;
+  else                       return false;
+}
+
+function setPostPrivacy($postId, $is_private) {
+  $query = conn()->prepare("UPDATE posts SET is_private=? WHERE id=?");
+  if ($userId == $_SESSION["user_id"]) {
     $query->bind_param('ii',
         $userId,
         $postId);
