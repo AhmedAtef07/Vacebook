@@ -2,7 +2,7 @@
   <!--post header-->
   <div class="row" id="post_header">
     <div class="col-lg-1">
-      <img alt="User1" class="header_pic" src="{{ post.user_profile_picture }}">
+      <img alt="User1" class="header_pic" ng-src="{{ post.profile_pic }}">
     </div>
     <div class="col-lg-11">
       <h4 class="header_user">
@@ -25,11 +25,12 @@
         </div>
         <div style="float: right;">
           &nbsp&nbsp&nbsp
-          <span class="label label-pill label-danger">Private Post</span>
-          <button ng-click="changePrivary()" style="padding: 0px; margin: 0px; border: 0px none;"><span class="label label-pill label-primary"><i class="fa fa-wrench"></i></span></button>
+          <span ng-if="post.is_private == '1'" class="label label-pill label-danger">Private Post</span>
+          <span ng-if="post.is_private != '1'" class="label label-pill label-warning">Public Post</span>
+          <button ng-if="user.id == post.user_id" ng-click="changePrivacy(post)" style="padding: 0px; margin: 0px; border: 0px none;"><span class="label label-pill label-primary"><i class="fa fa-wrench"></i></span></button>
         </div>
       </div>
-      
+
 
     </div>
   </div>
@@ -40,7 +41,7 @@
       <p ng-bind-html="post.caption | colonToSmiley"/>
     </div>
     <div class="col-lg-12" ng-if="post.image_path">
-      <img ng-src="post.image_path" style="max-width:400px">
+      <img ng-src="{{post.image_path}}" style="max-width:400px">
     </div>
   </div>
 
@@ -73,7 +74,7 @@
         <span class="label label-pill label-default"  ng-if="post.likes.length">{{ post.likes.length }} People Liked this</span>
         <span class="label label-pill label-default"  ng-if="!post.likes.length">Nobody likes this yet</span>
       </button>
-      
+
     </div>
   </div>
   <hr class="hr">
@@ -86,15 +87,12 @@
   <!--commenting-->
   <div class="row" id="commenting_body">
     <div class="col-lg-1">
-      <img alt="User1" src="{{ post.user_profile_picture }}" style="float:left; width:45px; height:45px;border-radius: 30%;">
+      <img alt="User1" ng-src="{{ post.profile_pic }}" style="float:left; width:45px; height:45px;border-radius: 30%;">
     </div>
     <div class="col-lg-11">
       <div class="input-group">
         <input class="form-control" id="comment_caption" placeholder="Comment" type="text" ng-keyup="keyPressed($event, post)" ng-model="post.comment">
         <span class="input-group-btn">
-          <button class="btn btn-default" id="btn_pic" onfocus="this.blur();" type="button">
-            <i class="fa fa-camera-retro fa-lg"></i>
-          </button>
           <button class="btn btn-default" id="btn_emoji" onfocus="this.blur();" type="button">
             <i class="fa fa-smile-o fa-lg"></i>
           </button>

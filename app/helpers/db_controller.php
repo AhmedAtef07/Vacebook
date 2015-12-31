@@ -90,6 +90,23 @@ function addPost($userId, $post) {
   $following = followPost($userId, $query_insert_id);
 }
 
+function addPostPic($userId, $caption, $path, $isPrivate) {
+  $query = conn()->prepare("INSERT INTO posts (user_id, caption, image_path, is_private)
+    VALUES (?, ?, ?, ?)");
+  // var_dump($query);
+  $query->bind_param('issi',
+    $userId,
+    $caption,
+    $path,
+    $isPrivate);
+
+  $query->execute();
+  $query_insert_id = $query->insert_id;
+  $query->close();
+  $following = followPost($userId, $query_insert_id);
+  return true;
+}
+
 function addComment($userId, $comment) {
   $query = conn()->prepare("INSERT INTO comments (user_id, post_id, caption) VALUES (?, ?, ?)");
   $query->bind_param('iis',
@@ -253,11 +270,11 @@ function getAllPostswithComments() {
     "SELECT * FROM
     (SELECT posts.*, users.username, users.gender, users.profile_pic
       FROM posts INNER JOIN users ON (users.id = posts.user_id)
-    WHERE is_private=0) a
+    WHERE is_private=b'0') a
     UNION
     (SELECT p.*, users.username, users.gender, users.profile_pic
        FROM posts p INNER JOIN users ON (users.id = p.user_id)
-    WHERE is_private=1 AND (p.user_id='$userId' OR p.user_id IN
+    WHERE is_private=b'1' AND (p.user_id='$userId' OR p.user_id IN
       (SELECT * FROM
         (SELECT user2_id as friend_id FROM friends
             WHERE user1_id='$userId' AND relation='friend') b
@@ -295,16 +312,16 @@ function getUserPostswithComments($userId) {
   $isFriend = isFriend($userId);
   if ($isFriend || $userId == $_SESSION["user_id"]) {
     $res = conn()->query(
-      "SELECT posts.*, users.username, users.profile_pic AS commenter_profile_picture
+      "SELECT posts.*, users.username, users.profile_pic, users.gender AS commenter_profile_picture
        FROM posts INNER JOIN users ON (users.id = posts.user_id)
        HAVING user_id ='$userId'
        ORDER BY posts.created_at DESC
       ");
   } else {
     $res = conn()->query(
-      "SELECT posts.*, users.username, users.profile_pic AS commenter_profile_picture
+      "SELECT posts.*, users.username, users.profile_pic, users.gender AS commenter_profile_picture
        FROM posts INNER JOIN users ON (users.id = posts.user_id)
-       HAVING user_id ='$userId' AND is_private=0
+       HAVING user_id ='$userId' AND is_private=b'0'
        ORDER BY posts.created_at DESC
       ");
   }
@@ -313,18 +330,44 @@ function getUserPostswithComments($userId) {
     $posts[$ind]['comments'] = getPostComments($post['id']);
     $posts[$ind]['liked'] = isLiked($_SESSION["user_id"], $post['id']);
     $posts[$ind]['likes'] = getPostLikes($post['id']);
+    if (!$posts[$ind]['profile_pic']) {
+      if ($posts[$ind]['gender'] == 'male') {
+        $posts[$ind]['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+      } else {
+        $posts[$ind]['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+      }
+    }
+    foreach ($posts[$ind]['comments'] as $ind2 => $comment) {
+      if (!$posts[$ind]['comments'][$ind2]['profile_pic']) {
+        if ($posts[$ind]['comments'][$ind2]['gender'] == 'male') {
+          $posts[$ind]['comments'][$ind2]['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+        } else {
+          $posts[$ind]['comments'][$ind2]['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+        }
+      }
+    }
   }
   return $posts;
 }
 
 function getPostWithComments($postId) {
-  $res = conn()->query("SELECT p.*, users.username, users.gender FROM (SELECT * FROM posts WHERE id='$postId') p
+  $res = conn()->query("SELECT p.*, users.*
+    FROM (SELECT * FROM posts WHERE id='$postId') p
     INNER JOIN users ON (users.id = p.user_id);");
   $posts = convertToArray($res);
   foreach ($posts as $ind => $post) {
     $posts[$ind]['comments'] = getPostComments($post['id']);
     $posts[$ind]['liked'] = isLiked($_SESSION["user_id"], $post['id']);
     $posts[$ind]['likes'] = getPostLikes($post['id']);
+    foreach ($posts[$ind]['comments'] as $ind2 => $comment) {
+      if (!$posts[$ind]['comments'][$ind2]['profile_pic']) {
+        if ($posts[$ind]['comments'][$ind2]['gender'] == 'male') {
+          $posts[$ind]['comments'][$ind2]['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+        } else {
+          $posts[$ind]['comments'][$ind2]['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+        }
+      }
+    }
   }
   return $posts;
 }
@@ -383,7 +426,17 @@ function getNonFriendsInSameHometown($userId) {
       ) a
       GROUP BY id
     )");
-  return convertToArray($res);
+  $users =  convertToArray($res);
+  foreach ($users as $ind => $user) {
+    if (!$users[$ind]['profile_pic']) {
+      if ($users[$ind]['gender'] == 'male') {
+        $users[$ind]['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+      } else {
+        $users[$ind]['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+      }
+    }
+  }
+  return $users;
 }
 
 function getPostsCount($userId) {
@@ -478,6 +531,8 @@ function changeProfilePic($userId, $path) {
   $res = conn()->query("UPDATE users SET profile_pic='$path'
       WHERE id='$userId'");
   if ($res) {
+    $res = conn()->query("INSERT INTO posts (user_id, caption, image_path, is_private)
+    VALUES ('$userId', 'I have just changed my profile picture', '$path', b'1')");
     return true;
   } else {
     return false;
@@ -543,18 +598,8 @@ function seePost($userId, $postId) {
 }
 
 function setPostPrivacy($postId, $is_private) {
-  $query = conn()->prepare("UPDATE posts SET is_private=? WHERE id=?");
-  if ($userId == $_SESSION["user_id"]) {
-    $query->bind_param('ii',
-        $userId,
-        $postId);
-    $query->execute();
-    $query_errors = count($query->error_list);
-    $query->close();
-  }
-
-  if ($query_errors == 0)    return true;
-  else                       return false;
+  $query = conn()->query("UPDATE posts SET is_private=b'$is_private' WHERE id='$postId'");
+  return true;
 }
 
 function trigPostFollowers($postId, $userId, $action_type = '') {
@@ -645,7 +690,7 @@ function searchByHometown($hometown) {
 
 function searchByCaption($text) {
   $res = conn()->query("SELECT * FROM users JOIN posts ON users.id = posts.user_id
-      WHERE caption LIKE '%$text%' AND is_private=0");
+      WHERE caption LIKE '%$text%' AND is_private=b'0'");
   $arr = convertToArray($res);
   foreach ($arr as $ind => $result) {
     $arr[$ind]['link'] = 'post/' . $result['id'];

@@ -61,6 +61,36 @@ angular.module('app').controller('postBlockController', function($rootScope, $sc
     });
   };
 
+  $scope.changePrivacy = function(post) {
+    var req = {
+      method: 'POST',
+      url: 'posts/togglePrivacy/' + post.id + '/' + post.is_private,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    console.log(req);
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+        // update();
+        if (response.data.succeeded) {
+          $scope.posts.forEach(function(postElement, postIndex){
+            if(postElement.id == post.id){
+                $scope.posts[postIndex].is_private = !$scope.posts[postIndex].is_private;
+            }
+          });
+        }
+      }
+    }, function error(response) {
+      console.log("Coudn't delete comment for some strange reason!");
+    });
+  };
+
   $scope.keyPressed = function(event, post) {
     if (event.keyCode == 13) {
       console.log(post.id);

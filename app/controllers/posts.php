@@ -208,4 +208,29 @@ class Posts extends Controller
     }
     echo json_encode($response);
   }
+
+  public function togglePrivacy($postId, $isPrivate) {
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      $response['succeeded'] = setPostPrivacy($postId, 1 - $isPrivate) ;
+    }
+    echo json_encode($response);
+  }
+
+  public function uploadPostPic($caption, $isPrivate) {
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $path = 'assets/uploaded_images/' . time() . '_' . $_FILES['file']['name'];
+      move_uploaded_file($_FILES['file']['tmp_name'], $path);
+      $response['succeeded'] = addPostPic($_SESSION["user_id"], $caption, $path, $isPrivate);
+      $response['signed'] = true;
+    }
+    echo json_encode($response);
+  }
+
 }

@@ -3,9 +3,9 @@
 
   <div id="profile-pic-container">
     <div class="circle-image" id="profile-pic"
-      style="background-image:url('{{visitedUser.profile_pic}}');">
+      style="background-image:url('{{visitedUser.profile_pic}}');width:290px;height:293px;">
     </div>
-    <div id="picture-options">
+    <div id="picture-options" ng-if="visitedUser.id===user.id">
 
       <div style="display: inline-flex;">
         <button type="file" ngf-select="upload($file)" class="btn btn-primary" style="float: left;" title="Change Profile Picture" id="change-profile-pic-btn"><i class="fa fa-pencil"></i></button>

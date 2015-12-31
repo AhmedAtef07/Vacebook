@@ -169,7 +169,24 @@ angular.module('app').controller('appController', ['$rootScope', '$scope', '$htt
     });
   };
 
-  $scope.removePic = function (file) {
+  $scope.uploadPost = function (file, caption) {
+    Upload.upload({
+        url: 'posts/uploadPostPic/' + caption + '/' + '1',
+        data: {file: file}
+    }).then(function (resp) {
+        // console.log(resp.config.data);
+        console.log(resp.data);
+        // console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+    }, function (resp) {
+        console.log('Error status: ' + resp.status);
+    }, function (evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+    });
+  };
+
+  $scope.removePic = function () {
+    console.log("Remove Pic");
     var req = {
       method: 'GET',
       url: 'users/removProfilePic',
