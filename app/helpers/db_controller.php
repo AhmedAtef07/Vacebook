@@ -571,7 +571,7 @@ function searchByPartOfName($name) {
   foreach ($arr as $ind => $result) {
     $arr[$ind]['link'] = 'people/' . $result['id'];
     $arr[$ind]['header'] = $result['username'];
-    $arr[$ind]['type'] = 'User ByPart Of Name';
+    $arr[$ind]['type'] = 'User By Name';
   }
   return $arr;
 }
