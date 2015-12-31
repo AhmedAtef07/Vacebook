@@ -251,10 +251,12 @@ function getAllPostswithComments() {
   $userId = $_SESSION["user_id"];
   $res = conn()->query(
     "SELECT * FROM
-    (SELECT posts.*, users.username FROM posts INNER JOIN users ON (users.id = posts.user_id)
+    (SELECT posts.*, users.username, users.gender, users.profile_pic
+      FROM posts INNER JOIN users ON (users.id = posts.user_id)
     WHERE is_private=0) a
     UNION
-    (SELECT p.*, users.username FROM posts p INNER JOIN users ON (users.id = p.user_id)
+    (SELECT p.*, users.username, users.gender, users.profile_pic
+       FROM posts p INNER JOIN users ON (users.id = p.user_id)
     WHERE is_private=1 AND (p.user_id='$userId' OR p.user_id IN
       (SELECT * FROM
         (SELECT user2_id as friend_id FROM friends
@@ -269,6 +271,22 @@ function getAllPostswithComments() {
     $posts[$ind]['comments'] = getPostComments($post['id']);
     $posts[$ind]['liked'] = isLiked($_SESSION["user_id"], $post['id']);
     $posts[$ind]['likes'] = getPostLikes($post['id']);
+    if (!$posts[$ind]['profile_pic']) {
+      if ($posts[$ind]['gender'] == 'male') {
+        $posts[$ind]['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+      } else {
+        $posts[$ind]['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+      }
+    }
+    foreach ($posts[$ind]['comments'] as $ind2 => $comment) {
+      if (!$posts[$ind]['comments'][$ind2]['profile_pic']) {
+        if ($posts[$ind]['comments'][$ind2]['gender'] == 'male') {
+          $posts[$ind]['comments'][$ind2]['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+        } else {
+          $posts[$ind]['comments'][$ind2]['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+        }
+      }
+    }
   }
   return $posts;
 }
@@ -277,14 +295,14 @@ function getUserPostswithComments($userId) {
   $isFriend = isFriend($userId);
   if ($isFriend || $userId == $_SESSION["user_id"]) {
     $res = conn()->query(
-      "SELECT posts.*, users.username
+      "SELECT posts.*, users.username, users.profile_pic AS commenter_profile_picture
        FROM posts INNER JOIN users ON (users.id = posts.user_id)
        HAVING user_id ='$userId'
        ORDER BY posts.created_at DESC
       ");
   } else {
     $res = conn()->query(
-      "SELECT posts.*, users.username
+      "SELECT posts.*, users.username, users.profile_pic AS commenter_profile_picture
        FROM posts INNER JOIN users ON (users.id = posts.user_id)
        HAVING user_id ='$userId' AND is_private=0
        ORDER BY posts.created_at DESC
@@ -300,7 +318,7 @@ function getUserPostswithComments($userId) {
 }
 
 function getPostWithComments($postId) {
-  $res = conn()->query("SELECT p.*, users.username FROM (SELECT * FROM posts WHERE id='$postId') p
+  $res = conn()->query("SELECT p.*, users.username, users.gender FROM (SELECT * FROM posts WHERE id='$postId') p
     INNER JOIN users ON (users.id = p.user_id);");
   $posts = convertToArray($res);
   foreach ($posts as $ind => $post) {
@@ -312,7 +330,7 @@ function getPostWithComments($postId) {
 }
 
 function getPostComments($postId) {
-  $res = conn()->query("SELECT c.*, u.username
+  $res = conn()->query("SELECT c.*, u.username, u.gender
       FROM comments c JOIN users u ON c.user_id=u.id WHERE post_id='$postId'");
   return convertToArray($res);
 }
