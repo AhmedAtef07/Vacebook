@@ -175,6 +175,7 @@ function getNotifications($userId) {
 function getUserInfo($userId) {
   $res = conn()->query("SELECT * FROM users WHERE id='$userId'");
     $user = convertToArray($res)[0];
+    $user['posts_count'] = getPostsCount($userId);
     if ($userId == $_SESSION["user_id"]) {
       return $user;
     } else {
@@ -334,10 +335,8 @@ function getFriendsOfFriends($userId) {
 }
 
 function getNonFriendsInSameHometown($userId) {
-
   $userHometownRes = conn()->query("SELECT hometown FROM users WHERE id = '$userId'");
   $userHometown = convertToArray($userHometownRes)[0]['hometown'];
-
   $res = conn()->query("SELECT * FROM users
     WHERE hometown = '$userHometown'
     AND id != '$userId'
@@ -349,10 +348,32 @@ function getNonFriendsInSameHometown($userId) {
       ) a
       GROUP BY id
     )");
-
   return convertToArray($res);
+}
 
+function getPostsCount($userId) {
+  $res = conn()->query("SELECT * FROM posts
+    WHERE user_id='$userId'");
+  $rows = $res->num_rows;
+  return $rows;
+}
 
+function getRequstsCount($userId) {
+  $res = conn()->query("SELECT * FROM
+        (SELECT u.* FROM friends JOIN users u ON user2_id=id
+              WHERE user1_id='$userId' AND relation='request') a
+        UNION
+        (SELECT u.* FROM friends JOIN users u ON user1_id=id
+              WHERE user2_id='$userId' AND relation='request')");
+  $rows = $res->num_rows;
+  return $rows;
+}
+
+function getNotificationsCount($userId) {
+  $res = conn()->query("SELECT * FROM notifications
+    WHERE follower_id='$userId' AND is_seen=0");
+  $rows = $res->num_rows;
+  return $rows;
 }
 
 

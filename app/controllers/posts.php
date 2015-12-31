@@ -182,4 +182,30 @@ class Posts extends Controller
     }
     echo json_encode($response);
   }
+
+  public function getRequstsCount() {
+    $response['count'] = 0;
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      $response['count'] = getRequstsCount($_SESSION["user_id"]);
+      $response['succeeded'] = true;
+    }
+    echo json_encode($response);
+  }
+
+  public function getNotificationsCount() {
+    $response['count'] = 0;
+    $response['signed'] = false;
+    $response['succeeded'] = false;
+
+    if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
+      $response['signed'] = true;
+      $response['count'] = getNotificationsCount($_SESSION["user_id"]);
+      $response['succeeded'] = true;
+    }
+    echo json_encode($response);
+  }
 }
