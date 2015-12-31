@@ -532,74 +532,59 @@ function trigPostFollowers($postId, $userId, $action_type = '') {
 
 
 function searchByEmail($email) {
-  $res = conn()->query("SELECT * FROM users WHERE e_mail='$email'");
-  return convertToArray($res);
+  $res = conn()->query("SELECT * FROM users WHERE email LIKE '%$email%'");
+  $arr = convertToArray($res);
+  foreach ($arr as $ind => $result) {
+    $arr[$ind]['link'] = 'people/' . $result['id'];
+    $arr[$ind]['header'] = $result['username'];
+    $arr[$ind]['type'] = 'User By Email';
+  }
+  return $arr;
 }
 
-function searchByName($firstName, $lastName) {
-  $res = conn()->query("SELECT * FROM users WHERE first_name='$firstName' AND last_name ='$lastName'");
-  return convertToArray($res);
+function searchByPartOfName($name) {
+  $res = conn()->query("SELECT *, CONCAT(first_name, last_name) AS name FROM users
+    HAVING name LIKE '%$name%'");
+    // var_dump($res);
+  $arr = convertToArray($res);
+  foreach ($arr as $ind => $result) {
+    $arr[$ind]['link'] = 'people/' . $result['id'];
+    $arr[$ind]['header'] = $result['username'];
+    $arr[$ind]['type'] = 'User ByPart Of Name';
+  }
+  return $arr;
 }
-/*using auto-complete*/
-function searchByPartOfName($name)
-{
-  $res = conn()->query("SELECT * FROM users WHERE first_name LIKE '%'$firstName'%' OR last_name LIKE '%'$lastName'%' ");
-  return convertToArray($res);
-}
+
 function searchByPhone($phoneNumber) {
-  $res = conn()->query("SELECT * FROM users WHERE phone_number='$phoneNumber'");
-  return convertToArray($res);
+  $res = conn()->query("SELECT * FROM users WHERE phone_number LIKE '%$phoneNumber%'");
+  $arr = convertToArray($res);
+  foreach ($arr as $ind => $result) {
+    $arr[$ind]['link'] = 'people/' . $result['id'];
+    $arr[$ind]['header'] = $result['username'];
+    $arr[$ind]['type'] = 'User By Phone';
+  }
+  return $arr;
+}
+
+function searchByHometown($hometown) {
+  $res = conn()->query("SELECT * FROM users WHERE hometown LIKE '%$hometown%'");
+  $arr = convertToArray($res);
+  foreach ($arr as $ind => $result) {
+    $arr[$ind]['link'] = 'people/' . $result['id'];
+    $arr[$ind]['header'] = $result['username'];
+    $arr[$ind]['type'] = 'User By Hometown';
+  }
+  return $arr;
 }
 
 function searchByCaption($text) {
   $res = conn()->query("SELECT * FROM users JOIN posts ON users.id = posts.user_id
-      WHERE caption LIKE '%'$text'%'");
-  return convertToArray($res);
-}
-
-
-
-
-function suggestedPeople($my_id) {
-  $res = conn()->query("SELECT * FROM users WHERE id
-                        IN (SELECT f1.user2_id FROM friends f1,friends f2
-                        WHERE f1.relation = 'friends'
-                        AND f1.user1_id = f2.user2_id
-                        AND f2.user1_id ='$my_id'
-                        AND f2.relation ='friends')
-                        ");
-  return convertToArray($res);
-}
-
-function newsFeed($my_id) {
-  $res = conn()->query("SELECT * FROM posts WHERE user_id = '$my_id'
-                        UNION
-                        SELECT * FROM posts WHERE user_id IN (SELECT user2_id FROM friends
-                                                              WHERE user1_id ='$my_id' AND relation ='friends')
-                        ORDER BY created_at
-                      ");
-  return convertToArray($res);
-}
-
-function commentNotifications($my_id) {
-  $res = conn()->query("SELECT c1.id , c1.post_id , c1.user_id , c1.caption , c1.created_at FROM comments c1,comments c2
-                        WHERE c1.post_id = c2.post_id
-                        AND c2.user_id ='$my_id'
-                        AND c1.created_at > c2.created_at
-
-                        UNION
-
-                        SELECT * FROM comments
-                        WHERE post_id IN (SELECT id FROM posts WHERE user_id ='$my_id')
-
-                        ORDER BY created_at
-                        ");
-  return convertToArray($res);
-}
-function likeNotifications($my_id) {
-  $res = conn()->query("SELECT * FROM likes
-                        WHERE post_id IN (SELECT id FROM posts WHERE user_id ='$my_id')
-                        ORDER BY created_at
-                        ");
-  return convertToArray($res);
+      WHERE caption LIKE '%$text%' AND is_private=0");
+  $arr = convertToArray($res);
+  foreach ($arr as $ind => $result) {
+    $arr[$ind]['link'] = 'post/' . $result['id'];
+    $arr[$ind]['header'] = $result['caption'];
+    $arr[$ind]['type'] = 'Post By Caption';
+  }
+  return $arr;
 }
