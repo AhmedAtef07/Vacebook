@@ -1,4 +1,6 @@
-angular.module('app').controller('appController', function($rootScope, $scope, $http) {
+angular.module('app').controller('appController', ['$rootScope', '$scope', '$http', 'Upload', function
+  ($rootScope,$scope, $http, Upload) {
+  // app.controller('MyCtrl', ['$scope', 'Upload', function ($rootScope, $scope, $http, Upload) {
 
   loadUserInfo();
   initLiveCounters();
@@ -151,42 +153,41 @@ angular.module('app').controller('appController', function($rootScope, $scope, $
     });
   }
 
-
-  $scope.changeProfilePicture = function(files) {
-    var fd = new FormData();
-    //Take the first selected file
-    fd.append("file", files[0]);
-    console.log(fd);
-    // var req = {
-    //   method: 'POST',
-    //   withCredentials: true,
-    //   url: 'users/getUserInfo',
-    //   header: {
-    //     'Content-Type': undefined
-    //   },
-    //   transformRequest: angular.identity,
-    //   data: fd
-    // };
-
-    // $http(req).then(function success(response) {
-    //   console.log(response.data);
-    //   if (!response.data.signed) {
-    //     window.location.href = '/vacebook/public/homepage.html';
-    //   } else {
-    //     $rootScope.user = response.data.user;
-    //     $rootScope.visitedUser = $rootScope.user;
-    //     initializePusher();
-    //   }
-    // }, function error(response) {
-    //   console.log("Coudn't get user info!");
-    // });
-
-
-    $http.post("home", fd, {
-        withCredentials: true,
-        headers: {'Content-Type': undefined },
-        transformRequest: angular.identity
-    }).success( console.log("success")).error( console.log("error"));
+  $scope.upload = function (file) {
+    Upload.upload({
+        url: 'users/uploadProfilePic',
+        data: {file: file}
+    }).then(function (resp) {
+        // console.log(resp.config.data);
+        console.log(resp.data);
+        // console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+    }, function (resp) {
+        console.log('Error status: ' + resp.status);
+    }, function (evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+    });
   };
 
-});
+  $scope.removePic = function (file) {
+    var req = {
+      method: 'GET',
+      url: 'users/removProfilePic',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+      }
+    };
+    $http(req).then(function success(response) {
+      console.log(response.data);
+      if (!response.data.signed) {
+        window.location.href = '/vacebook/public/homepage.html';
+      } else {
+      }
+    }, function error(response) {
+      console.log("Coudn't remove Pic!");
+    });
+  };
+
+}]);

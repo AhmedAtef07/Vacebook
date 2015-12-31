@@ -156,6 +156,16 @@ function deleteRelation($userId) {
   }
 }
 
+function unsetProfilePic($userId) {
+  $res = conn()->query("UPDATE users SET profile_pic=''
+      WHERE id='$userId'");
+  if ($res) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// Gets ////////////////////////////////////
@@ -176,6 +186,13 @@ function getUserInfo($userId) {
   $res = conn()->query("SELECT * FROM users WHERE id='$userId'");
     $user = convertToArray($res)[0];
     $user['posts_count'] = getPostsCount($userId);
+    if (!$user['profile_pic']) {
+      if ($user['gender'] == 'male') {
+        $user['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+      } else {
+        $user['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+      }
+    }
     if ($userId == $_SESSION["user_id"]) {
       return $user;
     } else {
@@ -438,6 +455,16 @@ function isFriend ($userId) {
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// Actions /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
+
+function changeProfilePic($userId, $path) {
+  $res = conn()->query("UPDATE users SET profile_pic='$path'
+      WHERE id='$userId'");
+  if ($res) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 function acceptFriendRequest($userId) {
   $user1Id = min($userId, $_SESSION["user_id"]);
