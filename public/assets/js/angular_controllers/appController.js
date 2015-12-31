@@ -1,10 +1,17 @@
 angular.module('app').controller('appController', function($rootScope, $scope, $http) {
 
   loadUserInfo();
+  initLiveCounters();
 
   $scope.$on('$viewContentLoaded', function(){
     initImages();
   });
+
+
+  function initLiveCounters() {
+    $rootScope.friendRequestsCount = 0;
+    $rootScope.notificationRequestsCount = 1;
+  }
 
 
   function loadUserInfo() {
@@ -48,7 +55,9 @@ angular.module('app').controller('appController', function($rootScope, $scope, $
           $scope.notificationUI = new NotificationFx({
             message :
             '<p><i class="fa fa-comments-o lg"></i> ' +
-              notificationMSG.full_name + ' ' + notificationMSG.action + ' a post you are following. Go <a href="#/post/' + notificationMSG.post_id + '"> check it out </a> now.' +
+              notificationMSG.full_name + ' ' + notificationMSG.action + 
+              ' a post you are following. Go <a href="#/post/'
+               + notificationMSG.post_id + '"> check it out </a> now.' +
             '</p>',
             layout : 'other',
             effect : 'boxspinner',
@@ -61,7 +70,7 @@ angular.module('app').controller('appController', function($rootScope, $scope, $
         })();
       });
 
-      $rootScope.notificationsChannel.bind('new_friend', function(notificationMSG){
+      $rootScope.notificationsChannel.bind('new_friend', function(notificationMSG) {
         var message = notificationMSG;
         console.log((message));
         (function() {
@@ -100,5 +109,5 @@ angular.module('app').controller('appController', function($rootScope, $scope, $
       });
     });
   }
-  
+
 });

@@ -27,6 +27,7 @@
   <div>
     <i class="fa fa-plus button-img"></i>
     <br>
+    <div style="float: left;" ng-if="friendRequestsCount"><span class="label label-pill label-danger">{{ friendRequestsCount }}</span>&nbsp&nbsp</div>
     Requests
   </div>
 </a>
@@ -34,6 +35,7 @@
   <div>
     <i class="fa fa-globe button-img"></i>
     <br>
+    <div style="float: left;" ng-if="notificationRequestsCount"><span class="label label-pill label-danger">{{ notificationRequestsCount }}</span>&nbsp&nbsp</div>
     Notifications
   </div>
 </a>
