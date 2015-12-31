@@ -78,7 +78,7 @@ function addPost($userId, $post) {
   $query = conn()->prepare("INSERT INTO posts (user_id, caption, image_path, is_private)
     VALUES (?, ?, ?, ?)");
   // var_dump($query);
-  $query->bind_param('iss',
+  $query->bind_param('issi',
     $userId,
     $post['caption'],
     $post['image_path'],

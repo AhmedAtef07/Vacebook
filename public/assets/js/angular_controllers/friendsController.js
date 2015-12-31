@@ -1,6 +1,5 @@
 angular.module('app').controller('friendsController', function($rootScope, $scope, $http) {
 
-
   $rootScope.visitedUser = $rootScope.user;
   update();
   

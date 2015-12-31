@@ -11,14 +11,15 @@ angular.module('app').controller('newPostBlockController', function($rootScope, 
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       data: {
-        caption: $scope.caption
+        caption: $scope.caption,
+        is_private: 0
       }
     };
     console.log(req);
     $http(req).then(function success(response) {
       console.log(response.data);
       if (!response.data.signed) {
-        window.location.href = '/vacebook/public/homepage.html';
+        // window.location.href = '/vacebook/public/homepage.html';
       } else {
         $scope.caption = '';
       }

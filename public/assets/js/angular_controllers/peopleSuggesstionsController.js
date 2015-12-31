@@ -1,8 +1,6 @@
 angular.module('app').controller('peopleSuggesstionsController', function($rootScope, $scope, $http) {
 
-
   requestSuggestions();
-
 
   function requestSuggestions() {
     var req = {

@@ -22,7 +22,8 @@ class Posts extends Controller
 
     $post = [
       'caption' => $caption = $request->caption,
-      'image_path' => ""
+      'image_path' => "",
+      'is_private' => $request->is_private
     ];
 
     $v = new Validator();
