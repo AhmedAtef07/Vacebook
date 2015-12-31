@@ -112,9 +112,9 @@ function conn() {
   return $conn;
 }
 
+$pusher = new Pusher('f17087409b6bc1746d6e', '137778da510cdcd4fce3', '163351');
 
 function pusher() {
-  $pusher = new Pusher('7c1c3e4b734ad304f377', '52f3113a2fbc677c4077', '163104');
   global $pusher;
   return $pusher;
 }

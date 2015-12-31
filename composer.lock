@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "6a0a0b28647808d60157e4b3ea0231a4",
+    "content-hash": "b5c95ca1c993b5051c18da4261d1596f",
     "packages": [
         {
             "name": "particle/validator",

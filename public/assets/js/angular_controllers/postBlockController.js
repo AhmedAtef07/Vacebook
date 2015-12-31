@@ -83,7 +83,7 @@ angular.module('app').controller('postBlockController', function($rootScope, $sc
     $http(req).then(function success(response) {
       console.log(response.data);
       if (!response.data.signed) {
-        window.location.href = '/vacebook/public/homepage.html';
+        // window.location.href = '/vacebook/public/homepage.html';
       } else {
         // update();
         if (response.data.succeeded) {
