@@ -1,4 +1,33 @@
-{{ notifications.length }}
+
+  <div class ="row" id="not-body" ng-repeat="notification in notifications">
+      
+      <div ng-if="notification.action_type == 'commented'">
+            <div class="col-lg-1 col-lg-offset-1" id="not-pic" ng-if="">
+              <i class="fa fa-comment-o fa-2x" id="symbol"></i>
+            </div>
+            <div class="col-lg-8" id="not-content">
+               <h5>
+                <b> {{ notification.username }} </b> Commented on your post </h5>
+                <h6>{{ notification.is_seen }}</h6>
+            </div>
+            <hr>
+      </div>
+
+      <div ng-if="notification.action_type == 'liked'">
+          <div class="col-lg-1 col-lg-offset-1" id="not-pic">
+            <i class="fa fa-heart-o fa-2x" id="symbol" ></i>
+          </div>
+          <div class="col-lg-8" id="not-content">
+            <h5><b>{{ notification.username }} </b> Liked your post </h5>
+            
+            <h6>{{ notification.is_seen }}</h6>
+          </div>
+          <hr>
+      </div>
+    
+  </div>
+
+<!--{{ notifications.length }}
 <table class="table table-hover" id="table">
   <thead>
     <tr>
@@ -10,7 +39,6 @@
   </thead>
   <tbody>
     <tr ng-repeat="notification in notifications">
-      <!-- <notification></notification> -->
       <th scope="row"> {{ notification.username }} </th>
       <td> {{ notification.action_type }} </td>
       <td>
@@ -22,3 +50,4 @@
     </tr>
   </tbody>
 </table>
+-->
