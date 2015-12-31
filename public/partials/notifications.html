@@ -2,15 +2,15 @@
   <div class ="row" id="not-body" ng-repeat="notification in notifications">
       
       <div ng-if="notification.action_type == 'commented'">
-            <div class="col-lg-1 col-lg-offset-1" id="not-pic" ng-if="">
+            <div class="col-lg-1 col-lg-offset-1" id="not-pic">
               <i class="fa fa-comment-o fa-2x" id="symbol"></i>
             </div>
             <div class="col-lg-8" id="not-content">
-               <h5>
-                <b> {{ notification.username }} </b> Commented on your post </h5>
-                <h6 class="text-muted">{{ notification.created_at }}</h6>
+              <h5 scope="row" ><b>{{ notification.username }} </b></h5>
+                <a ng-href="#/post/{{notification.post_id}}">
+                  Commented on your post
+                </a>
             </div>
-
             <div ng-if="notification.is_seen == 0">
               <div class="col-lg-1" style="padding:20px;">
                 <i class="fa fa-check-circle-o fa-lg" style="color:grey"></i>
@@ -30,9 +30,13 @@
             <i class="fa fa-heart-o fa-2x" id="symbol" ></i>
           </div>
           <div class="col-lg-8" id="not-content">
-            <h5><b>{{ notification.username }} </b> Liked your post </h5>
+            <h5 scope="row" ><b>{{ notification.username }} </b></h5>
+              <a ng-href="#/post/{{notification.post_id}}">
+                Liked your post
+              </a>
             <h6 class="text-muted">{{ notification.created_at }}</h6>
           </div>
+
           <div ng-if="notification.is_seen == 0">
             <div class="col-lg-1" style="padding:20px;">
               <i class="fa fa-check-circle-o fa-lg" style="color:grey"></i>
