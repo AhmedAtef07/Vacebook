@@ -228,7 +228,22 @@ function getUserFriends($userId) {
 }
 
 function getAllPostswithComments() {
-  $res = conn()->query("SELECT posts.*, users.username FROM posts INNER JOIN users ON (users.id = posts.user_id)");
+  $userId = $_SESSION["user_id"];
+  $res = conn()->query(
+    "SELECT * FROM
+    (SELECT posts.*, users.username FROM posts INNER JOIN users ON (users.id = posts.user_id)
+    WHERE is_private=0) a
+    UNION
+    (SELECT p.*, users.username FROM posts p INNER JOIN users ON (users.id = p.user_id)
+    WHERE is_private=1 AND (p.user_id='$userId' OR p.user_id IN
+      (SELECT * FROM
+        (SELECT user2_id as friend_id FROM friends
+            WHERE user1_id='$userId' AND relation='friend') b
+        UNION
+        (SELECT user1_id as friend_id FROM friends
+            WHERE user2_id='$userId' AND relation='friend')))
+    )
+   ORDER BY created_at DESC");
   $posts = convertToArray($res);
   foreach ($posts as $ind => $post) {
     $posts[$ind]['comments'] = getPostComments($post['id']);
@@ -239,18 +254,22 @@ function getAllPostswithComments() {
 }
 
 function getUserPostswithComments($userId) {
-
-  // if ($userId is friend with $_SESSION['user_id']) {
-  //   // Return all posts including public ones
-  // } else {
-  //   // Return only public posts
-  // }
-
-  $res = conn()->query(
-    "SELECT posts.*, users.username
-     FROM posts INNER JOIN users ON (users.id = posts.user_id)
-     HAVING user_id ='$userId'
-    ");
+  $isFriend = isFriend($userId);
+  if ($isFriend || $userId == $_SESSION["user_id"]) {
+    $res = conn()->query(
+      "SELECT posts.*, users.username
+       FROM posts INNER JOIN users ON (users.id = posts.user_id)
+       HAVING user_id ='$userId'
+       ORDER BY posts.created_at DESC
+      ");
+  } else {
+    $res = conn()->query(
+      "SELECT posts.*, users.username
+       FROM posts INNER JOIN users ON (users.id = posts.user_id)
+       HAVING user_id ='$userId' AND is_private=0
+       ORDER BY posts.created_at DESC
+      ");
+  }
   $posts = convertToArray($res);
   foreach ($posts as $ind => $post) {
     $posts[$ind]['comments'] = getPostComments($post['id']);
@@ -382,6 +401,16 @@ function isFollowing($userId, $postId) {
   else               return false;
 }
 
+function isFriend ($userId) {
+  $user1Id = min($userId, $_SESSION["user_id"]);
+  $user2Id = max($userId, $_SESSION["user_id"]);
+  $res = conn()->query("SELECT * FROM friends
+          WHERE user1_id='$user1Id' AND user2_id='$user2Id' AND relation='friend'");
+  $rows = $res->num_rows;
+  if($rows == 1)     return true;
+  else               return false;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// Actions /////////////////////////////////
@@ -451,7 +480,6 @@ function trigPostFollowers($postId, $userId, $action_type = '') {
   $followers = convertToArray($res);
   $user = getUsername($userId);
   if ($action_type) {
-    $action_id = $action_id[0]['id'];
     $data['action'] = $action_type;
     $data['user_id'] = $userId;
     $data['post_id'] = $postId;
