@@ -19,6 +19,7 @@
     <!-- <link rel="stylesheet" href="assets/css/demo.css" type="text/css"/> -->
     <link rel="stylesheet" href="assets/css/ns-default.css" type="text/css"/>
     <link rel="stylesheet" href="assets/css/ns-style-other.css" type="text/css"/>
+    <link rel="stylesheet" href="assets/css/search_bar.css" type="text/css"/>
     <!-- <link rel="stylesheet" type="text/css" href="css/ns-style-bar.css" /> -->
     <!-- <link rel="stylesheet" type="text/css" href="css/ns-style-growl.css" /> -->
   </head>
@@ -46,7 +47,10 @@
           <div ng-include="'partials/about.html'"></div>
         </div>
 
-        <div class="middle-col">
+        <div class="middle-col"> 
+          <div class="col-xs-12">
+            <div ng-include="'partials/search_bar.html'"></div>
+          </div>
           <div ui-view style="width: 100%;"></div>
         </div>
 
