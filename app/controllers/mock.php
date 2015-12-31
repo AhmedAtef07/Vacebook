@@ -100,8 +100,8 @@ class Mock extends Controller
         echo 'Error';
     }
     $query = conn()->prepare("INSERT INTO users (username, first_name, last_name, gender, birthdate, email, password, hometown, marital_status, about_me)
-            VALUES ('sherine',
-                    'sherine_sameh',
+            VALUES ('sherine_sameh',
+                    'sherine',
                     'sameh',
                     'Female',
                     '1996-10-20',
