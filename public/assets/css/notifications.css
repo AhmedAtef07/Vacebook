@@ -36,3 +36,6 @@
 a {
 text-decoration: none;
 }
+a.action_link {
+text-decoration: none;
+}
