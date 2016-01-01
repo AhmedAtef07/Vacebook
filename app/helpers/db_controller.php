@@ -131,12 +131,20 @@ function addComment($userId, $comment) {
   $query_errors = count($query->error_list);
   $query_insert_id = $query->insert_id;
   $query->close();
-  $res = conn()->query("SELECT c.*, u.username
+  $res = conn()->query("SELECT c.*, u.username, u.gender, u.profile_pic
       FROM comments c JOIN users u ON c.user_id=u.id WHERE c.id='$query_insert_id'");
   if ($query_errors == 0) {
     $following = followPost($userId, $comment['post_id']);
     trigPostFollowers($comment['post_id'], $userId, 'commented');
-    return convertToArray($res)[0];
+    $comment = convertToArray($res)[0];
+    if (!$comment['profile_pic']) {
+      if ($comment['gender'] == 'male') {
+        $comment['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+      } else {
+        $comment['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+      }
+    }
+    return $comment;
   }
   return false;
 }
