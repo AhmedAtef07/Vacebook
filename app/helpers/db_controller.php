@@ -113,7 +113,7 @@ function addPostPic($userId, $caption, $path, $isPrivate) {
     $path,
     $isPrivate);
 
-  $query->execute();  
+  $query->execute();
   $query_errors = count($query->error_list);
   $query_insert_id = $query->insert_id;
   $query->close();
@@ -296,7 +296,17 @@ function getUserFriends($userId) {
         UNION
         (SELECT u.* FROM friends JOIN users u ON user1_id=id
               WHERE user2_id='$userId' AND relation='friend')");
-  return convertToArray($res);
+  $users = convertToArray($res);
+  foreach ($users as $ind => $user) {
+    if (!$users[$ind]['profile_pic']) {
+      if ($users[$ind]['gender'] == 'male') {
+        $users[$ind]['profile_pic'] = 'assets/uploaded_images/default/male.jpg';
+      } else {
+        $users[$ind]['profile_pic'] = 'assets/uploaded_images/default/female.jpg';
+      }
+    }
+  }
+  return $users;
 }
 
 function getAllPostswithComments() {
