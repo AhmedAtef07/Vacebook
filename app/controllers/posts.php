@@ -221,9 +221,10 @@ class Posts extends Controller
     echo json_encode($response);
   }
 
-  public function uploadPostPic($caption, $isPrivate) {
+  public function uploadPostPic($caption = '', $isPrivate = 1) {
     $response['signed'] = false;
     $response['succeeded'] = false;
+
 
     if(isset($_SESSION["user_id"]) && strlen(trim($_SESSION["user_id"])) > 0) {
       $path = 'assets/uploaded_images/' . time() . '_' . $_FILES['file']['name'];

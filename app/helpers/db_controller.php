@@ -113,11 +113,16 @@ function addPostPic($userId, $caption, $path, $isPrivate) {
     $path,
     $isPrivate);
 
-  $query->execute();
+  $query->execute();  
+  $query_errors = count($query->error_list);
   $query_insert_id = $query->insert_id;
   $query->close();
   $following = followPost($userId, $query_insert_id);
-  return true;
+  if ($query_errors == 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function addComment($userId, $comment) {

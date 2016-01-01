@@ -173,9 +173,12 @@ angular.module('app').controller('appController', ['$rootScope', '$scope', '$htt
   };
 
   $scope.uploadPost = function (file, caption) {
+    console.log(caption);
     Upload.upload({
         url: 'posts/uploadPostPic/' + caption + '/' + '1',
-        data: {file: file}
+        data: {
+          file: file
+        }
     }).then(function (resp) {
         // console.log(resp.config.data);
         console.log(resp.data);
