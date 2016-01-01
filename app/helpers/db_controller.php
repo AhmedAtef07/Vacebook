@@ -381,7 +381,7 @@ function getUserPostswithComments($userId) {
 }
 
 function getPostWithComments($postId) {
-  $res = conn()->query("SELECT p.*, users.*
+  $res = conn()->query("SELECT p.*, users.username, users.gender, users.profile_pic
     FROM (SELECT * FROM posts WHERE id='$postId') p
     INNER JOIN users ON (users.id = p.user_id);");
   $posts = convertToArray($res);
@@ -557,12 +557,14 @@ function isFriend ($userId) {
 ///////////////////////////////// Actions /////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
+// addPostPic($userId, $caption, $path, $isPrivate)
 function changeProfilePic($userId, $path) {
   $res = conn()->query("UPDATE users SET profile_pic='$path'
       WHERE id='$userId'");
   if ($res) {
-    $res = conn()->query("INSERT INTO posts (user_id, caption, image_path, is_private)
-    VALUES ('$userId', 'I have just changed my profile picture', '$path', b'1')");
+    addPostPic($userId, 'I have just changed my profile picture', $path, 1);
+    // $res = conn()->query("INSERT INTO posts (user_id, caption, image_path, is_private)
+    // VALUES ('$userId', 'I have just changed my profile picture', '$path', b'1')");
     return true;
   } else {
     return false;
@@ -675,7 +677,7 @@ function trigPostFollowers($postId, $userId, $action_type = '') {
 
 
 function searchByEmail($email) {
-  $res = conn()->query("SELECT * FROM users WHERE email LIKE '%$email%'");
+  $res = conn()->query("SELECT * FROM users WHERE email='$email'");
   $arr = convertToArray($res);
   foreach ($arr as $ind => $result) {
     $arr[$ind]['link'] = 'people/' . $result['id'];
@@ -699,7 +701,7 @@ function searchByPartOfName($name) {
 }
 
 function searchByPhone($phoneNumber) {
-  $res = conn()->query("SELECT * FROM users WHERE phone_number LIKE '%$phoneNumber%'");
+  $res = conn()->query("SELECT * FROM users WHERE phone_number='$phoneNumber'");
   $arr = convertToArray($res);
   foreach ($arr as $ind => $result) {
     $arr[$ind]['link'] = 'people/' . $result['id'];
